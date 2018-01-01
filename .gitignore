@@ -1,0 +1,6 @@
+/.vscode
+/static
+/build
+*.pyc
+*.sqlite3
+.env
