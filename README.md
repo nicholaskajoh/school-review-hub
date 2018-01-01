@@ -18,8 +18,8 @@ SRH is team Code Sauce's entry for the SauceCode Hackathon. It's a comparison-ba
 - Create a *.env* file from *.env.example*.
 - Create a MySQL DB and start the DB server.
 - Run migrations using `python manage.py migrate`.
-- Run API using `python manage.py runserver`.
-- Install SPA dependencies with `npm install` in `app/school-review-hub`. 
+- Run API (Django) using `python manage.py runserver`.
+- Install SPA (React) dependencies with `npm install`. 
 - Run SPA with `npm start`.
 - Build SPA using `npm run build`.
 

@@ -9,8 +9,13 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && mv build ../..",
+    "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "npm run build"
+  },
+  "engines": {
+    "node": "8.9.3",
+    "npm": "5.5.1"
   }
 }
