@@ -1,2 +1,2 @@
-release: npm run build && python manage.py collectstatic --noinput
+release: python manage.py migrate
 web: gunicorn SchoolReviewHub.wsgi --log-file -
