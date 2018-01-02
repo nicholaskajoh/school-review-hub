@@ -7,9 +7,13 @@ function getCurrentYear () {
 
 const Footer = () => {
   return (
-    <div className="footer">
-      <p>&copy;{getCurrentYear()}. School Review Hub</p>
-    </div>
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <p>&copy; School Review Hub</p>
+        </div>
+      </div>
+    </footer>
   );
 };
 
