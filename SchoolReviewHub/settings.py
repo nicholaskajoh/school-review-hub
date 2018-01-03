@@ -37,6 +37,11 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',') if os.getenv('ALLOWED_HOST
 INSTALLED_APPS = [
   'api',
 
+  # 3rd party
+  'rest_framework', # api
+  'rest_framework.authtoken', # api auth
+
+  # django
   'django.contrib.admin',
   'django.contrib.auth',
   'django.contrib.contenttypes',
@@ -138,3 +143,14 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+REST_FRAMEWORK = {
+  'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework.authentication.TokenAuthentication',
+  ),
+  # Use Django's standard `django.contrib.auth` permissions,
+  # or allow read-only access for unauthenticated users.
+  'DEFAULT_PERMISSION_CLASSES': [
+      'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+  ]
+}
