@@ -34,6 +34,13 @@ class CommentSerializer(serializers.ModelSerializer):
     fields = ('id', 'comment', 'commenter', 'review', 'created_at', 'updated_at')
     read_only_fields = ('id', 'commenter', 'review', 'created_at')
 
+class CriterionSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = Criterion
+    fields = ('id', 'description', 'created_at', 'updated_at')
+    read_only_fields = ('id', 'description', 'created_at')
+
 class ComparisonSerializer(serializers.ModelSerializer):
   criterion = CriterionSerializer()
   comparer = UserSerializer()
@@ -46,22 +53,14 @@ class ComparisonSerializer(serializers.ModelSerializer):
     fields = ('id', 'criterion', 'school1', 'school2', 'choice', 'comparer')
     read_only_fields = ('id', 'criterion', 'school1', 'school2', 'choice', 'comparer')
 
-class CriterionSerializer(serializers.ModelSerializer):
-
-  class Meta:
-    model = Criterion
-    fields = ('id', 'description', 'created_at', 'updated_at')
-    read_only_fields = ('id', 'description', 'created_at')
-
 class ReportSerializer(serializers.ModelSerializer):
   school = SchoolSerializer()
-  reporter = ReportSerializer()
+  reporter = UserSerializer()
 
   class Meta:
     model = Report
     fields = ('id', 'school', 'content', 'reporter', 'created_at', 'updated_at')
     read_only_fields = ('id', 'school', 'content', 'reporter', 'created_at')
-
 
 class UpvoteSerializer(serializers.ModelSerializer):
   upvoter = UserSerializer()
