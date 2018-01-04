@@ -19,8 +19,8 @@ class SchoolView(generics.RetrieveAPIView):
     except School.DoesNotExist:
       raise Http404("School does not exist!")
 
-  # def get_queryset(self):
-  #   return self.get_school(self.request.)
+  def get_queryset(self):
+    return self.get_school(self.kwargs['school_id'])
 
   # single school
   def get(self, request, school_id, format=None):
