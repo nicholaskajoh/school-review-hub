@@ -1,19 +1,39 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Switch, Redirect } from 'react-router-dom';
 import './App.css';
+import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
+import IndexLanding from './pages/IndexLanding/IndexLanding';
+import Home from './pages/Home/Home';
+import SRHIndex from './pages/SRHIndex/SRHIndex';
+import Match from './pages/Match/Match';
+import Search from './pages/Search/Search';
+import Profile from './pages/Profile/Profile';
+import Help from './pages/Help/Help';
+import ReviewForm from './pages/ReviewForm/ReviewForm';
+import Review from './pages/Review/Review';
+import School from './pages/School/School';
+import Report from './pages/Report/Report';
+import NotFound from './pages/NotFound/NotFound';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <BrowserRouter>
+        <Switch>
+          <DefaultLayout path="/" exact component={IndexLanding}/>
+          <DefaultLayout path="/home" component={Home}/>
+          <DefaultLayout path="/srh-index" component={SRHIndex}/>
+          <DefaultLayout path="/match" component={Match}/>
+          <DefaultLayout path="/search" component={Search}/>
+          <DefaultLayout path="/profile" component={Profile}/>
+          <DefaultLayout path="/help" component={Help}/>
+          <DefaultLayout path="/review-form" component={ReviewForm}/>
+          <DefaultLayout path="/review/:id" component={Review}/>
+          <DefaultLayout path="/school/:name" component={School}/>
+          <DefaultLayout path="/report/:id" component={Report}/>
+          <DefaultLayout component={NotFound}/>
+        </Switch>
+      </BrowserRouter>
     );
   }
 }
