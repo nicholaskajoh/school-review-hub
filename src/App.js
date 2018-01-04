@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch } from 'react-router-dom';
 import './App.css';
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
 import IndexLanding from './pages/IndexLanding/IndexLanding';
