@@ -7,6 +7,8 @@ import Home from './pages/Home/Home';
 import SRHIndex from './pages/SRHIndex/SRHIndex';
 import Match from './pages/Match/Match';
 import Search from './pages/Search/Search';
+import Register from './pages/Register/Register';
+import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';
 import Help from './pages/Help/Help';
 import ReviewForm from './pages/ReviewForm/ReviewForm';
@@ -25,6 +27,8 @@ class App extends Component {
           <DefaultLayout path="/srh-index" component={SRHIndex}/>
           <DefaultLayout path="/match" component={Match}/>
           <DefaultLayout path="/search" component={Search}/>
+          <DefaultLayout path="/register" component={Register}/>
+          <DefaultLayout path="/login" component={Login}/>
           <DefaultLayout path="/profile" component={Profile}/>
           <DefaultLayout path="/help" component={Help}/>
           <DefaultLayout path="/review-form" component={ReviewForm}/>

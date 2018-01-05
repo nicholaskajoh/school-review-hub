@@ -52,13 +52,13 @@ class Header extends Component {
               </div>
             </div>
 
-            <div class="navbar-item">
-              <div class="field is-grouped">
-                <p class="control">
-                  <Link class="button is-success" to="/sign-up">Register</Link>
+            <div className="navbar-item">
+              <div className="field is-grouped">
+                <p className="control">
+                  <Link className="button is-success" to="/register">Register</Link>
                 </p>
                 <p>
-                  <Link class="button is-info" to="/login">Login</Link>
+                  <Link className="button is-info" to="/login">Login</Link>
                 </p>
               </div>
             </div>
