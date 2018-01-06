@@ -58,7 +58,7 @@ class Header extends Component {
                   <Link class="button is-success" to="/sign-up">Sign Up</Link>
                 </p>
                 <p>
-                  <Link class="button is-info" to="/login">Login</Link>
+                  <Link className="button is-info" to="/login">Login</Link>
                 </p>
               </div>
             </div>

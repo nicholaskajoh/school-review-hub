@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import School from './School';
+import Login from './Login';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<School />, div);
+  ReactDOM.render(<Login />, div);
 });
