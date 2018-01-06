@@ -37,7 +37,7 @@ class Header extends Component {
           <div className="navbar-end">
             <Link className="navbar-item" to="/home">Home</Link>
             <Link className="navbar-item" to="/srh-index">SRH Index</Link>
-            <Link className="navbar-item" to="/match">Match & Review</Link>
+            <Link className="navbar-item" to="/match">Match & Rate</Link>
             <Link className="navbar-item" to="/search">
               <i className="fa fa-search"></i>
             </Link>
@@ -55,7 +55,7 @@ class Header extends Component {
             <div class="navbar-item">
               <div class="field is-grouped">
                 <p class="control">
-                  <Link class="button is-success" to="/sign-up">Register</Link>
+                  <Link class="button is-success" to="/sign-up">Sign Up</Link>
                 </p>
                 <p>
                   <Link class="button is-info" to="/login">Login</Link>
