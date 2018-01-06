@@ -5,6 +5,7 @@ class School(models.Model):
   name = models.CharField(max_length=150)
   description = models.TextField(blank=True)
   location = models.CharField(max_length=200)
+  logo_url = models.URLField(max_length=300, default="")
   website = models.URLField()
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
