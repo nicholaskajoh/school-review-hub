@@ -9,7 +9,7 @@ import Match from './pages/Match/Match';
 import Search from './pages/Search/Search';
 import Profile from './pages/Profile/Profile';
 import Help from './pages/Help/Help';
-import ReviewForm from './pages/ReviewForm/ReviewForm';
+import RatingForm from './pages/RatingForm/RatingForm';
 import Review from './pages/Review/Review';
 import School from './pages/School/School';
 import Report from './pages/Report/Report';
@@ -27,9 +27,9 @@ class App extends Component {
           <DefaultLayout path="/search" component={Search}/>
           <DefaultLayout path="/profile" component={Profile}/>
           <DefaultLayout path="/help" component={Help}/>
-          <DefaultLayout path="/review-form" component={ReviewForm}/>
+          <DefaultLayout path="/rate/:school1_id/:school2_id" component={RatingForm}/>
           <DefaultLayout path="/review/:id" component={Review}/>
-          <DefaultLayout path="/school/:name" component={School}/>
+          <DefaultLayout path="/school/:id" component={School}/>
           <DefaultLayout path="/report/:id" component={Report}/>
           <DefaultLayout component={NotFound}/>
         </Switch>
