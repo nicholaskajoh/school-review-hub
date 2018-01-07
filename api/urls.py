@@ -5,6 +5,6 @@ from .views import *
 
 urlpatterns = [
 	path('token-auth', obtain_auth_token),
-	path('school/<int:school_id>', SchoolView.as_view(), name='school'),
+	path('school/<int:id>', SchoolView.as_view(), name='school'),
 	path('schools-list', SchoolsListView.as_view(), name='schools_list'),
 ]

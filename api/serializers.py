@@ -14,8 +14,8 @@ class SchoolSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = School
-    fields = ('id', 'name', 'description', 'location', 'website', 'created_at', 'updated_at')
-    read_only_fields = ('id', 'name', 'created_at')
+    fields = ('id', 'name', 'description', 'location', 'logo_url', 'website')
+    read_only_fields = ('id', 'name')
 
 
 class SchoolsListSerializer(serializers.ModelSerializer):
