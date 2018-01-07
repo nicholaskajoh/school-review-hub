@@ -27,7 +27,7 @@ Sample data:
 ]
 ```
 
-### /suggested-reviews/{n}
+### /suggested-matches/{n}
 Get n suggested matches (i.e School 1 vs School 2).
 
 Request: GET
