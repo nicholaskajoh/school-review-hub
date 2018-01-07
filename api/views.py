@@ -27,3 +27,8 @@ class SchoolView(generics.RetrieveAPIView):
     school = self.get_school(school_id)
     serializer = SchoolSerializer(school)
     return Response(serializer.data)
+
+
+class SchoolsListView(generics.ListAPIView):
+  queryset = School.objects.all()
+  serializer_class = SchoolsListSerializer

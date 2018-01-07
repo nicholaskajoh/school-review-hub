@@ -9,12 +9,22 @@ class UserSerializer(serializers.ModelSerializer):
     fields = ('id', 'username', 'email', 'first_name', 'last_name', 'date_joined', 'is_active', 'last_login')
     read_only_fields = ('id', 'username', 'date_joined', 'is_active', 'last_login')
 
+
 class SchoolSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = School
     fields = ('id', 'name', 'description', 'location', 'website', 'created_at', 'updated_at')
     read_only_fields = ('id', 'name', 'created_at')
+
+
+class SchoolsListSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = School
+    fields = ('id', 'name')
+    read_only_fields = ('id', 'name')
+
 
 class ReviewSerializer(serializers.ModelSerializer):
   school = SchoolSerializer()
@@ -25,6 +35,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     fields = ('id', 'school', 'content', 'reviewer', 'created_at', 'updated_at')
     read_only_fields = ('id', 'school', 'reviewer', 'created_at')
 
+
 class CommentSerializer(serializers.ModelSerializer):
   commenter = UserSerializer()
   review = ReviewSerializer()
@@ -34,12 +45,14 @@ class CommentSerializer(serializers.ModelSerializer):
     fields = ('id', 'comment', 'commenter', 'review', 'created_at', 'updated_at')
     read_only_fields = ('id', 'commenter', 'review', 'created_at')
 
+
 class CriterionSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Criterion
     fields = ('id', 'description', 'created_at', 'updated_at')
     read_only_fields = ('id', 'description', 'created_at')
+
 
 class ComparisonSerializer(serializers.ModelSerializer):
   criterion = CriterionSerializer()
@@ -53,6 +66,7 @@ class ComparisonSerializer(serializers.ModelSerializer):
     fields = ('id', 'criterion', 'school1', 'school2', 'choice', 'comparer')
     read_only_fields = ('id', 'criterion', 'school1', 'school2', 'choice', 'comparer')
 
+
 class ReportSerializer(serializers.ModelSerializer):
   school = SchoolSerializer()
   reporter = UserSerializer()
@@ -61,6 +75,7 @@ class ReportSerializer(serializers.ModelSerializer):
     model = Report
     fields = ('id', 'school', 'content', 'reporter', 'created_at', 'updated_at')
     read_only_fields = ('id', 'school', 'content', 'reporter', 'created_at')
+
 
 class UpvoteSerializer(serializers.ModelSerializer):
   upvoter = UserSerializer()

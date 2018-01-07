@@ -10,6 +10,9 @@ class School(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
+  def __str__(self):
+    return self.name
+
 
 class Review(models.Model):
   school = models.ForeignKey('School', related_name='school_reviewed', on_delete=models.CASCADE)
@@ -18,6 +21,9 @@ class Review(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
+  def __str__(self):
+    return self.content
+
 
 class Comment(models.Model):
   review = models.ForeignKey('Review', related_name='review', null=True, on_delete=models.SET_NULL)
@@ -25,6 +31,9 @@ class Comment(models.Model):
   commenter = models.ForeignKey(User, related_name='commenter', on_delete=models.CASCADE)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
+
+  def __str__(self):
+    return self.comment
 
 
 class Comparison(models.Model):
@@ -40,6 +49,9 @@ class Criterion(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
+  def __str__(self):
+    return self.description
+
 
 class Report(models.Model):
   school = models.ForeignKey('School', related_name='school_reported', on_delete=models.CASCADE)
@@ -47,6 +59,9 @@ class Report(models.Model):
   reporter = models.ForeignKey(User, related_name='reporter', null=True, on_delete=models.SET_NULL)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
+
+  def __str__(self):
+    return self.content
 
 
 class Upvote(models.Model):
