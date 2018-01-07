@@ -2,7 +2,7 @@
 See **API.md** for more information.
 
 - `GET /top-schools/{n}`
-- `GET /suggested-reviews/{n}`
+- `GET /suggested-matches/{n}`
 - `GET /top-reviews/{n}`
 - `GET /top-reports/{n}`
 - `GET /srh-index/{page}`
