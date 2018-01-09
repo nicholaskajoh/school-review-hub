@@ -27,3 +27,5 @@ See **API.md** for more information.
 - `GET /report/{id}/comments/{page}`
 - `PUT /report/{id}`
 - `DELETE /report/{id}`
+- `DELETE /rating/{school1_id}/{school2_id}`
+- `PUT /criteria`
