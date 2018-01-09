@@ -8,14 +8,17 @@ export const SchoolsList = ({schools}) => {
       {
         schools.map((school, index) =>
           <tr key={index}>
-          <th><img src={school.logo_url} alt='School Logo'/></th>
-          <td>{school.rank}</td>
-          <Link to={school.website} target='_blank'><td>{school.name}</td></Link>
-          <td>{school.points}</td>
-          <td>{school.reviews}</td>
-          <td>0</td>
+            <td>{school.rank}</td>
+            <td>
+              <img className="image is-48x48" src={school.logo_url} alt={school.name + " logo"} />
+            </td>
+            <td>
+              <Link to={"/school/" + school.id}>{school.name}</Link>
+            </td>
+            <td>{school.rating}</td>
+            <td>{school.reviews_count}</td>
+            <td>{school.reports_count}</td>
           </tr>
-          
         )
       }
     </tbody>

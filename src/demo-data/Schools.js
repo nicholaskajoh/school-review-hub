@@ -1,12 +1,13 @@
-export const Schools= [
+export const Schools = [
   {
     rank: 1,
     id: 19,
     name: "Covenant University, Ogun",
     website: "http://covenantuniversity.edu.ng",
-    logo_url: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Ahmadu_Bello_University_logo.png",
-    points: 76,
-    reviews: 102
+    logo_url: "http://covenantuniversity.edu.ng/extension/cuextension/design/cudesign4/images/logo.png",
+    rating: 76,
+    reviews_count: 102,
+    reports_count: 10
   },
   {
     rank: 2,
@@ -14,8 +15,9 @@ export const Schools= [
     name: "Ahmadu Bello University, Zaria",
     website: "http://abu.edu.ng",
     logo_url: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Ahmadu_Bello_University_logo.png",
-    points: 70,
-    reviews: 100
+    rating: 70,
+    reviews_count: 100,
+    reports_count: 22
   },
   {
     rank: 4,
@@ -23,8 +25,9 @@ export const Schools= [
     name: "Babcock University, Lagos",
     website: "http://abu.edu.ng",
     logo_url: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Ahmadu_Bello_University_logo.png",
-    points: 69,
-    reviews: 102
+    rating: 69,
+    reviews_count: 102,
+    reports_count: 0
   },
 ];
 
