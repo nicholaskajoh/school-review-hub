@@ -25,17 +25,6 @@ class Review(models.Model):
     return self.content
 
 
-class Comment(models.Model):
-  review = models.ForeignKey('Review', related_name='review', null=True, on_delete=models.SET_NULL)
-  comment = models.TextField()
-  commenter = models.ForeignKey(User, related_name='commenter', on_delete=models.CASCADE)
-  created_at = models.DateTimeField(auto_now_add=True)
-  updated_at = models.DateTimeField(auto_now=True)
-
-  def __str__(self):
-    return self.comment
-
-
 class Comparison(models.Model):
   criterion = models.ForeignKey('Criterion', related_name='criterion', on_delete=models.CASCADE)
   school1 = models.ForeignKey('School', related_name='school1', on_delete=models.CASCADE)
@@ -62,6 +51,22 @@ class Report(models.Model):
 
   def __str__(self):
     return self.content
+
+
+class Comment(models.Model):
+  ENTITY_CHOICES = (
+    ('review', 'Review'),
+    ('report', 'Report'),
+  )
+  entity = models.CharField(max_length=15, choices=ENTITY_CHOICES)
+  entity_id = models.IntegerField()
+  comment = models.TextField()
+  commenter = models.ForeignKey(User, related_name='commenter', on_delete=models.CASCADE)
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
+
+  def __str__(self):
+    return self.comment
 
 
 class Upvote(models.Model):
