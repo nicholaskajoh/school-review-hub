@@ -1,7 +1,9 @@
 # API Documentation
 This documentation describes the format for sending to and receiving data from all the endpoints of the API. See **ENDPOINTS_LIST.md** for a list of all endpoints.
 
-**NB:** Prefix all urls with `/api` e.g `/api/srh-index/3`.
+**NB:**
+- Prefix all urls with `/api` e.g `/api/srh-index/3`.
+- Starred (**) endpoints require authentication.
 
 ### /top-schools/{n}
 Get the top n schools (see **RATING\_AND\_RANKING.md**).
@@ -20,8 +22,7 @@ Sample data:
     name: "Ahmadu Bello University, Zaria",
     website: "http://abu.edu.ng",
     logo_url: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Ahmadu_Bello_University_logo.png",
-    points: 76,
-    reviews: 102
+    rating: 76
   },
   ...
 ]
@@ -116,8 +117,9 @@ Sample data:
     description: "ABU is a federal government research university in Zaria, Kaduna State. It was founded on October 4, 1962, as the University of Northern Nigeria. The university operates...",
     website: "http://abu.edu.ng",
     logo_url: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Ahmadu_Bello_University_logo.png",
-    points: 76,
-    reviews: 102
+    rating: 76,
+    reviews_count: 52,
+    reports_count: 7
   },
   ...
 ]
@@ -247,16 +249,105 @@ Sample data:
 ```
 
 ### /user/{id}/ratings/{page}
-...
+Get the ratings made by a given user.
+
+Request: GET
+
+Params:
+- id: id of the user.
+- page: page number.
+
+Sample data:
+```
+[
+  {
+    school1_id: 23,
+    school2_id: 12,
+    school1: "Lagos State University",
+    school2: "University of Nigeria",
+    choice: 12
+  },
+  ...
+]
+```
 
 ### /user/{id}/reviews/{page}
-...
+Get the reviews made by a given user.
+
+Request: GET
+
+Params:
+- id: id of the user.
+- page: page number.
+
+Sample data:
+```
+[
+  {
+    id: 273,
+    content: "UNN is arguably the...",
+    created_at: "05-01-2018 23:01:34",
+    edited: true,
+    school: {
+      id: 13,
+      name: "Benue State University"
+    },
+    comments_count: 7,
+    upvotes: 12
+  },
+  ...
+]
+```
 
 ### /user/{id}/comments/{page}
-...
+Get the comments made by a given user.
+
+Request: GET
+
+Params:
+- id: id of the user.
+- page: page number.
+
+Sample data:
+```
+[
+  {
+    comment: "Blah blah blah...",
+    created_at: "08-01-2018 19:04:22",
+    edited: true,
+    upvotes: 0
+  },
+  ...
+]
+```
 
 ### /user/{id}/reports/{page}
-...
+Get the reports made by a given user.
+
+Request: GET
+
+Params:
+- id: id of the user.
+- page: page number.
+
+Sample data:
+```
+[
+  {
+    id: 20,
+    content: "There has been great...",
+    created_at: "05-01-2018 23:01:34",
+    edited: true,
+    school: {
+      id: 13,
+      name: "Covenant University"
+    },
+    comments_count: 10,
+    upvotes: 54
+  },
+  ...
+]
+```
 
 ### /school/{id}
 Get a school.
@@ -278,31 +369,207 @@ Sample data:
 ```
 
 ### /school/{id}/reviews/{page}
-...
+Get the reviews of a school.
+
+Request: GET
+
+Params:
+- id: id of the user.
+- page: page number.
+
+Sample data:
+```
+[
+  {
+    id: 273,
+    content: "UNN is arguably the...",
+    created_at: "05-01-2018 23:01:34",
+    edited: true,
+    comments_count: 12,
+    upvotes: 223
+  },
+  ...
+]
+```
 
 ### /school/{id}/reports/{page}
-...
+Get the reports of a school.
+
+Request: GET
+
+Params:
+- id: id of the user.
+- page: page number.
+
+Sample data:
+```
+[
+  {
+    id: 20,
+    content: "There has been great...",
+    created_at: "05-01-2018 23:01:34",
+    edited: true,
+    comments_count: 10,
+    upvotes: 54
+  },
+  ...
+]
+```
 
 ### /review/{id}
-...
+Get a single review
+
+Request: GET
+
+Params:
+- id: id of review
+
+Sample data:
+```
+{
+  id: 273,
+  content: "UNN is arguably the...",
+  created_at: "05-01-2018 23:01:34",
+  edited: true,
+  school: {
+    id: 13,
+    name: "Benue State University"
+  },
+  comments_count: 7,
+  upvotes: 12
+}
+```
 
 ### /review/{id}/comments/{page}
-...
+Review comments.
+
+Request: GET
+
+Params:
+- id: id of the review.
+- page: page number.
+
+Sample data:
+```
+[
+  {
+    comment: "Blah blah blah...",
+    created_at: "08-01-2018 19:04:22",
+    edited: true,
+    upvotes: 0
+  },
+  ...
+]
+```
 
 ### /review/{id}
-...
+Edit a review
+
+Request: PUT
+
+Params:
+- id: id of the review.
+
+Sample data:
+```
+{
+  content: "UNN is arguably the..."
+}
+```
 
 ### /review/{id}
-...
+Delete a review.
+
+Request: DELETE
+
+Params:
+- id: id of the review.
 
 ### /report/{id}
-...
+Get a report.
+
+Request: GET
+
+Params:
+- id: id of the report.
+
+Sample data:
+```
+{
+  id: 20,
+  content: "There has been great...",
+  created_at: "05-01-2018 23:01:34",
+  edited: true,
+  comments_count: 10,
+  upvotes: 54
+}
+```
 
 ### /report/{id}/comments/{page}
-...
+Report comments.
+
+Request: GET
+
+Params:
+- id: id of the report.
+- page: page number.
+
+Sample data:
+```
+[
+  {
+    comment: "Blah blah blah...",
+    created_at: "08-01-2018 19:04:22",
+    edited: true,
+    upvotes: 0
+  },
+  ...
+]
+```
 
 ### /report/{id}
-...
+Edit a report.
+
+Request: PUT
+
+Params:
+- id: id of the report.
+
+Sample data:
+```
+{
+  content: "There has been great..."
+}
+```
 
 ### /report/{id}
-...
+Delete a report.
+
+Request: DELETE
+
+Params:
+- id: id of the report.
+
+### /rating/{school1\_id}/{school2\_id}**
+Delete a user's rating.
+
+Request: DELETE
+
+Params:
+- school1_id & 2: school ids.
+
+### /rating
+Update a user's rating.
+
+Request: PUT
+
+Sample data:
+```
+[
+  {
+    comparison_id: 1,
+    choice: 23
+  },
+  ...
+]
+```
