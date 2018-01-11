@@ -33,7 +33,7 @@ class SRHIndex extends Component {
 	prevPage() {
 		var linkUrl;
 		if(this.has_previous_page)
-			linkUrl = `/srh-index/${parseInt(this.props.match.params.page) - 1}`;
+			linkUrl = `/srh-index/${parseInt(this.props.match.params.page, 10) - 1}`;
 		else linkUrl = "/srh-index/1";
 		return linkUrl;
 	}
@@ -41,7 +41,7 @@ class SRHIndex extends Component {
 	nextPage() {
 		var linkUrl = "";
 		if(this.has_next_page)
-			linkUrl = `/srh-index/${parseInt(this.props.match.params.page) + 1}`;
+			linkUrl = `/srh-index/${parseInt(this.props.match.params.page, 10) + 1}`;
 		else linkUrl = `/srh-index/${this.props.match.params.page}`;
 		return linkUrl;
 	}
