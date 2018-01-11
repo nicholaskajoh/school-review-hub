@@ -84,3 +84,14 @@ class UpvoteSerializer(serializers.ModelSerializer):
     model = Upvote
     fields = ('id', 'entity', 'entity_id', 'upvoter', 'created_at')
     read_only_fields = ('id', 'entity', 'entity_id', 'upvoter', 'created_at')
+
+
+class SRHIndexSerializer(serializers.ModelSerializer):
+  rating = serializers.DecimalField(max_digits=6, decimal_places=2)
+  rank = serializers.IntegerField()
+  reviews_count = serializers.IntegerField()
+  reports_count = serializers.IntegerField()
+
+  class Meta:
+    model = School
+    fields = ('rank', 'id', 'name', 'description', 'location', 'logo_url', 'website', 'rating', 'reviews_count', 'reports_count')

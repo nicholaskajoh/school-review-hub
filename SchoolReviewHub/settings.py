@@ -40,6 +40,7 @@ INSTALLED_APPS = [
   # 3rd party
   'rest_framework', # api
   'rest_framework.authtoken', # api auth
+  'corsheaders',
 
   # django
   'django.contrib.admin',
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
   'django.middleware.security.SecurityMiddleware',
   'django.contrib.sessions.middleware.SessionMiddleware',
+  'corsheaders.middleware.CorsMiddleware',
   'django.middleware.common.CommonMiddleware',
   'django.middleware.csrf.CsrfViewMiddleware',
   'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -150,3 +152,8 @@ REST_FRAMEWORK = {
     'rest_framework.authentication.TokenAuthentication',
   )
 }
+
+
+CORS_ORIGIN_WHITELIST = os.getenv('CORS_ORIGIN_WHITELIST').split(',') if os.getenv('CORS_ORIGIN_WHITELIST') else []
+
+CORS_EXPOSE_HEADERS = ['X-Has-Previous', 'X-Has-Next']
