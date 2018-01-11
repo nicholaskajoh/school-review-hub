@@ -32,6 +32,14 @@ class Comparison(models.Model):
   choice = models.ForeignKey('School', related_name='choice', on_delete=models.CASCADE)
   comparer = models.ForeignKey(User, related_name='comparer', null=True, on_delete=models.SET_NULL)
 
+  def __str__(self):
+    return ("{0} (vs) {1} [{2}], {3}"
+      .format(
+        self.school1,
+        self.school2,
+        self.criterion,
+        self.comparer))
+
 
 class Criterion(models.Model):
   description = models.CharField(max_length=200)
