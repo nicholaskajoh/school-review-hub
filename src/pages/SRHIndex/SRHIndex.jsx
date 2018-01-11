@@ -4,11 +4,11 @@ import {Schools} from '../../demo-data/Schools';
 import './SRHIndex.css';
 
 const SRHIndex = () => ( 
-	<div class="container">
-		<h1 class="title">
+	<div className="container">
+		<h1 className="title">
 			SRH Index
 		</h1>
-		<h2 class="subtitle">
+		<h2 className="subtitle">
 			SchoolReviewHub rankings
 		</h2>
 		<table className="table is-fullwidth">
