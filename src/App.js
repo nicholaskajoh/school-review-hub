@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch } from 'react-router-dom';
+import { BrowserRouter, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
 import IndexLanding from './pages/IndexLanding/IndexLanding';
@@ -24,7 +24,8 @@ class App extends Component {
         <Switch>
           <DefaultLayout path="/" exact component={IndexLanding}/>
           <DefaultLayout path="/home" component={Home}/>
-          <DefaultLayout path="/srh-index" component={SRHIndex}/>
+          <DefaultLayout path="/srh-index/:page" component={SRHIndex}/>
+          <Redirect from="/srh-index" to="/srh-index/1"/>
           <DefaultLayout path="/match" component={Match}/>
           <DefaultLayout path="/search" component={Search}/>
           <DefaultLayout path="/register" component={Register}/>
