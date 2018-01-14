@@ -1,7 +1,7 @@
 import React from 'react';
 import './CommentCard.css';
 
-const CommentCards = () => (
+const CommentCard = () => (
   <div className="box">
     <article className="media">
 
@@ -31,4 +31,4 @@ const CommentCards = () => (
   </div>
 );
 
-export default CommentCards;
+export default CommentCard;
