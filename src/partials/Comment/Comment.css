@@ -1,5 +1,6 @@
 .textarea {
   /* height: 20px; */
+  width: 100% !important;
   min-height: 20px !important;
   resize: none;
   overflow: hidden;

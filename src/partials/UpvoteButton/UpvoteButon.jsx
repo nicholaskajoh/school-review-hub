@@ -5,6 +5,7 @@ import { Burst, Timeline } from 'mo-js';
 import { TweenMax, TimelineLite, DrawSVGPlugin, Elastic, Power4, Expo } from "gsap";
 
 var check_status = false;
+var upvote_count = 25;
 
 const configureOnClick = () => {
   var like_cnt = document.getElementsByClassName('like-cnt');
@@ -35,7 +36,8 @@ const configureOnClick = () => {
     t2.to('.like-btn', 0.65, { scale: 1, color: '#FF3860', ease: Elastic.easeOut.config(1, 0.3) }, '+=0.2');
     check_status = true;
     burst.replay();
-    upvote_btn_text.innerHTML = "Upvoted";
+    upvote_count += 1;
+    upvote_btn_text.innerHTML = `Upvoted (${upvote_count})`;
   }
   else {
     t1.to(like_cnt, 1, { scale: 1 })
@@ -43,7 +45,8 @@ const configureOnClick = () => {
     t2.to('.like-btn', 1, { color: '#22C65B' });
     t1.timeScale(7);
     check_status = false;
-    upvote_btn_text.innerHTML = "Upvote";
+    upvote_count -= 1;
+    upvote_btn_text.innerHTML = `Upvote (${upvote_count})`;
   }
 };
 
@@ -54,7 +57,7 @@ const UpvoteButton = () => (
         <i className="like-btn  fa fa-arrow-up fa-1x"></i>
       </div>
     </div>
-    <h6 id="upvote-btn-text">Upvote</h6>
+    <h6 id="upvote-btn-text">Upvote ({upvote_count})</h6>
   </div>
 );
 

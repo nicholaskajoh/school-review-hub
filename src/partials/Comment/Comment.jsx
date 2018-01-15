@@ -3,15 +3,18 @@ import './Comment.css';
 
 const Comment = () => (
   <div className="content">
-    <div className="field">
+    <div className="field is-grouped is-centered">
+      <p className="control is-expanded">
+        <textarea className="textarea" placeholder="What do you feel?"></textarea>
+      </p>
+
       <p className="control">
-        <textarea className="textarea" placeholder="Add a comment..."></textarea>
+        <button className="button is-danger">
+          <i class="fa fa-comment" aria-hidden="true"></i>&nbsp;Post comment</button>
       </p>
     </div>
     <div className="field">
-      <p className="control">
-        <button className="button">Post comment</button>
-      </p>
+
     </div>
   </div>
 );
