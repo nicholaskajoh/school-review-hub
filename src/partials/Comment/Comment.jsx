@@ -10,7 +10,7 @@ const Comment = () => (
 
       <p className="control">
         <button className="button is-danger">
-          <i class="fa fa-comment" aria-hidden="true"></i>&nbsp;Post comment</button>
+          <i className="fa fa-comment" aria-hidden="true"></i>&nbsp;Post comment</button>
       </p>
     </div>
     <div className="field">

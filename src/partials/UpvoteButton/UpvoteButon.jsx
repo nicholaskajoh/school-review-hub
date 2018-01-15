@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './UpvoteButton.css';
-import { Burst, Timeline } from 'mo-js';
+import { Burst } from 'mo-js';
 
-import { TweenMax, TimelineLite, DrawSVGPlugin, Elastic, Power4, Expo } from "gsap";
+import { TimelineLite, Elastic, Power4, Expo } from "gsap";
 
 var check_status = false;
 var upvote_count = 25;
@@ -10,7 +10,6 @@ var upvote_count = 25;
 const configureOnClick = () => {
   var like_cnt = document.getElementsByClassName('like-cnt');
   var like_parent = document.getElementsByClassName('like-container');
-  var like_btn = document.getElementsByClassName('like-btn');
   var upvote_btn_text = document.getElementById('upvote-btn-text');
 
   var burst = new Burst({
