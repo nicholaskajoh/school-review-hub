@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Footer from './CommentCard';
+import CommentCard from './CommentCard';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

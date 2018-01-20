@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Footer from './UpvoteButton';
+import UpvoteButton from './UpvoteButton';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
