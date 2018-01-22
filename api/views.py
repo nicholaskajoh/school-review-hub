@@ -6,39 +6,68 @@ from rest_framework import status, generics
 from django.contrib.auth.models import User
 from .models import *
 from .serializers import *
-from .srh_index import SRHIndex
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+# Pagination function.
 def paginate(input_list, page, results_per_page=10):
-  paginator = Paginator(input_list, results_per_page)
-  try:
-    output_list = paginator.page(page)
-  except PageNotAnInteger:
-    # If page is not an integer, deliver 1st page.
-    output_list = paginator.page(1)
-  except EmptyPage:
-    # If page is out of range (e.g. 9999), return last page
-    output_list = paginator.page(paginator.num_pages)
-  return output_list
+    paginator = Paginator(input_list, results_per_page)
+    try:
+        output_list = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver 1st page.
+        output_list = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), return last page.
+        output_list = paginator.page(paginator.num_pages)
+    return output_list
 
 class SchoolView(generics.RetrieveAPIView):
-  queryset = School.objects.all()
-  lookup_field = 'id'
-  serializer_class = SchoolSerializer
+    queryset = School.objects.all()
+    lookup_field = 'id'
+    serializer_class = SchoolSerializer
+
+
+class SchoolReviewsView(APIView):
+    def get(self, request, id, page=1):
+        reviews = Review.objects.filter(school__id=id)
+        reviews = paginate(reviews, page, 10)
+        serializer =  ReviewSerializer(reviews, many=True)
+        response = Response(serializer.data)
+        # add pagination headers
+        response['X-Has-Previous'] = reviews.has_previous()
+        response['X-Has-Next'] = reviews.has_next()
+        return response
+
+
+class SchoolReportsView(APIView):
+    def get(self, request, id, page=1):
+        reports = Report.objects.filter(school__id=id)
+        reports = paginate(reports, page, 10)
+        serializer =  ReportSerializer(reports, many=True)
+        response = Response(serializer.data)
+        # add pagination headers
+        response['X-Has-Previous'] = reports.has_previous()
+        response['X-Has-Next'] = reports.has_next()
+        return response
 
 
 class SchoolsListView(generics.ListAPIView):
-  queryset = School.objects.all()
-  serializer_class = SchoolsListSerializer
+    queryset = School.objects.all()
+    serializer_class = SchoolsListSerializer
+
+
+class TopSchoolsView(generics.ListAPIView):
+    queryset = School.objects.all()[:5]
+    serializer_class = SchoolSerializer
 
 
 class SRHIndexView(APIView):
-  def get(self, request, page=1):
-    srhi = SRHIndex()
-    srhi = paginate(srhi.get(), page, 20)
-    serializer =  SRHIndexSerializer(srhi, many=True)
-    response = Response(serializer.data)
-    # add pagination headers
-    response['X-Has-Previous'] = srhi.has_previous()
-    response['X-Has-Next'] = srhi.has_next()
-    return response
+    def get(self, request, page=1):
+        srhi = School.objects.all().order_by('rank')
+        srhi = paginate(srhi, page, 20)
+        serializer =  SchoolSerializer(srhi, many=True)
+        response = Response(serializer.data)
+        # add pagination headers
+        response['X-Has-Previous'] = srhi.has_previous()
+        response['X-Has-Next'] = srhi.has_next()
+        return response

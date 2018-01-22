@@ -5,13 +5,10 @@ This documentation describes the format for sending to and receiving data from a
 - Prefix all urls with `/api` e.g `/api/srh-index/3`.
 - Starred (**) endpoints require authentication.
 
-### /top-schools/{n}
-Get the top n schools (see **RATING\_AND\_RANKING.md**).
+### /top-schools
+Get the top 5 schools.
 
 Request: GET
-
-Params:
-- n: number of schools to return (max: 10).
 
 Sample data:
 ```
@@ -374,7 +371,7 @@ Get the reviews of a school.
 Request: GET
 
 Params:
-- id: id of the user.
+- id: id of the school.
 - page: page number.
 
 Sample data:
@@ -398,7 +395,7 @@ Get the reports of a school.
 Request: GET
 
 Params:
-- id: id of the user.
+- id: id of the school.
 - page: page number.
 
 Sample data:
