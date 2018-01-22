@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
-import logo from '../../logo.svg';
+import logo from '../../logo.png';
 
 class Header extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class Header extends Component {
       <nav className="navbar is-warning is-fixed-top">
         <div className="navbar-brand">
           <Link className="navbar-item" to="/">
-            <img src={logo} alt="SchoolReviewHub" width="200" height="auto" />
+            <img src={logo} alt="SchoolReviewHub" width="40px" height="auto"/>
           </Link>
           <div className={"navbar-burger burger" + (this.state.isNavbarActive ? " is-active" : "")} onClick={this.toggleNavbar}>
             <span></span>
