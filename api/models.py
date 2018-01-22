@@ -7,6 +7,8 @@ class School(models.Model):
   location = models.CharField(max_length=200)
   logo_url = models.URLField(max_length=300, default="")
   website = models.URLField()
+  rank = models.IntegerField()
+  rating = models.DecimalField(max_digits=12, decimal_places=2)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
