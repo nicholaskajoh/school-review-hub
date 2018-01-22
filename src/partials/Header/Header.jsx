@@ -43,7 +43,7 @@ class Header extends Component {
             </Link>
 
             <div className="navbar-item has-dropdown is-hoverable">
-              <a className="navbar-link">Accounts</a>
+              <a className="navbar-link">Account</a>
               
               <div className="navbar-dropdown is-boxed">
                 <Link className="navbar-item" to="/profile">Profile</Link>
