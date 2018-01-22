@@ -22,6 +22,7 @@ SRH is team Code Sauce's entry for the SauceCode Hackathon. It's a comparison-ba
 - Install SPA (React) dependencies with `npm install`. 
 - Run SPA with `npm start`.
 - Build SPA using `npm run build`.
+- Run tests for SPA using 'npm test' .
 
 ## Notes
 - Please, do not track/commit build or local config files.

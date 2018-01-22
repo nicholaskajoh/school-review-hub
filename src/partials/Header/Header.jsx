@@ -20,7 +20,7 @@ class Header extends Component {
       <nav className="navbar is-warning is-fixed-top">
         <div className="navbar-brand">
           <Link className="navbar-item" to="/">
-            <img src={logo} alt="SchoolReviewHub" width="100" height="auto" />
+            <img src={logo} alt="SchoolReviewHub" width="200" height="auto" />
           </Link>
           <div className={"navbar-burger burger" + (this.state.isNavbarActive ? " is-active" : "")} onClick={this.toggleNavbar}>
             <span></span>

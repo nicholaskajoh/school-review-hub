@@ -1,0 +1,16 @@
+.downvote-fa{
+  color: #FF3860;
+}
+
+.upvote-fa{
+color: #23D260;
+}
+.bookmark-fa{
+color: #353535;
+opacity: 0.8;
+}
+
+.level-item small {
+  color: #353535;
+  opacity: 0.4;
+}
