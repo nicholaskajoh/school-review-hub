@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
-import {SchoolsList} from './SchoolsList';
+import axios from 'axios';
 import './SRHIndex.css';
 
 class SRHIndex extends Component {
@@ -66,7 +65,23 @@ class SRHIndex extends Component {
 							<th><i className="fa fa-comment-alt"></i> Reports</th>
 						</tr>
 					</thead>
-					<SchoolsList schools={this.state.schools}/>
+
+					<tbody>
+						{this.state.schools.map((school, index) =>
+							<tr key={index}>
+								<td>{school.rank}</td>
+								<td>
+									<img className="image is-48x48" src={school.logo_url} alt={school.name + " logo"} />
+								</td>
+								<td>
+									<Link to={"/school/" + school.id}>{school.name}</Link>
+								</td>
+								<td>{school.rating}</td>
+								<td>{school.reviews_count}</td>
+								<td>{school.reports_count}</td>
+							</tr>
+						)} 
+    			</tbody>
 				</table>
 
 				<nav className="pagination">
