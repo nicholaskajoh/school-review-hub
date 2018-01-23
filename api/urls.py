@@ -14,4 +14,6 @@ urlpatterns = [
 	path('review/<int:id>', ReviewView.as_view(), name='review'),
 	path('<entity>/<int:id>/comments/<int:page>', CommentsView.as_view(), name='comments'),
 	path('criteria', CriteriaListView.as_view(), name='criteria_list'),
+	path('top-reviews', TopReviewsView.as_view(), name='top_reviews'),
+	path('top-reports', TopReportsView.as_view(), name='top_reports'),
 ]

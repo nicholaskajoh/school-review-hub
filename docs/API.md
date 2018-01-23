@@ -46,13 +46,10 @@ Sample data:
 ]
 ```
 
-### /top-reviews/{n}
-Get the top n reviews (written) in the last 6 months.
+### /top-reviews
+Get the top 5 reviews (written) in the last 3 months.
 
 Request: GET
-
-Params:
-- n: number of reviews to return
 
 Sample data:
 ```
@@ -71,13 +68,10 @@ Sample data:
 ]
 ```
 
-### /top-reports/{n}
-Get the top n reports in the last 6 months.
+### /top-reports
+Get the top 5 reports in the last 3 months.
 
 Request: GET
-
-Params:
-- n: number of reports to return
 
 Sample data:
 ```

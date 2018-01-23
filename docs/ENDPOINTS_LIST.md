@@ -3,8 +3,8 @@ See **API.md** for more information.
 
 - [x] `GET /top-schools`
 - [ ] `GET /suggested-matches/{n}`
-- [ ] `GET /top-reviews/{n}`
-- [ ] `GET /top-reports/{n}`
+- [x] `GET /top-reviews`
+- [x] `GET /top-reports`
 - [x] `GET /srh-index/{page}`
 - [x] `GET /schools-list`
 - [x] `GET /criteria`

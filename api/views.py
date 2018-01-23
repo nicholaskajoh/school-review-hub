@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from .models import *
 from .serializers import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import datetime
 
 # Pagination function.
 def paginate(input_list, page, results_per_page=10):
@@ -100,3 +101,13 @@ class CommentsView(APIView):
 class CriteriaListView(generics.ListAPIView):
     queryset = Criterion.objects.all()
     serializer_class = CriterionSerializer
+
+
+class TopReviewsView(generics.ListAPIView):
+    queryset = Review.objects.filter(created_at__gt=datetime.datetime.today() - datetime.timedelta(days=30 * 3))[:5]
+    serializer_class = ReviewSerializer
+
+
+class TopReportsView(generics.ListAPIView):
+    queryset = Report.objects.filter(created_at__gt=datetime.datetime.today() - datetime.timedelta(days=30 * 3))[:5]
+    serializer_class = ReportSerializer
