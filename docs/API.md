@@ -25,13 +25,10 @@ Sample data:
 ]
 ```
 
-### /suggested-matches/{n}
+### /suggested-matches
 Get n suggested matches (i.e School 1 vs School 2).
 
 Request: GET
-
-Params:
-- n: number of matches to return
 
 Sample data:
 ```
