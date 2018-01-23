@@ -16,4 +16,5 @@ urlpatterns = [
 	path('criteria', CriteriaListView.as_view(), name='criteria_list'),
 	path('top-reviews', TopReviewsView.as_view(), name='top_reviews'),
 	path('top-reports', TopReportsView.as_view(), name='top_reports'),
+	path('rated-higher-than/<int:school_id>', RatedHigherThanView.as_view(), name='rated_higher_than'),
 ]

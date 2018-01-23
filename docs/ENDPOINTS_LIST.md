@@ -29,3 +29,4 @@ See **API.md** for more information.
 - [ ] `DELETE /report/{id}`
 - [ ] `DELETE /rating/{school1_id}/{school2_id}`
 - [ ] `PUT /criteria`
+- [x] `GET /rated-higher-than/{school_id}`

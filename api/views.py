@@ -111,3 +111,11 @@ class TopReviewsView(generics.ListAPIView):
 class TopReportsView(generics.ListAPIView):
     queryset = Report.objects.filter(created_at__gt=datetime.datetime.today() - datetime.timedelta(days=30 * 3))[:5]
     serializer_class = ReportSerializer
+
+
+class RatedHigherThanView(APIView):
+    def get(self, request, school_id):
+        school = School.objects.get(id=school_id)
+        lower_rated_schools = School.objects.filter(rating__lt=school.rating)
+        serializer =  SchoolSerializer(lower_rated_schools, many=True)
+        return Response(serializer.data)
