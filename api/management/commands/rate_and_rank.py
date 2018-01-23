@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = "Rates and ranks all schools on SRH."
 
     def handle(self, *args, **options):
-        schools = School.objects.all()
+        schools = School.objects.all().order_by('name')
 
         # Add ratings.
         for school in schools:
@@ -16,20 +16,25 @@ class Command(BaseCommand):
             rating = Comparison.objects.filter(Q(school1__id=school.id) | Q(school2=school.id))
             # Group them by comparer (user).
             rating = rating.values('comparer')
-            # Calculate the number of times a comparer chose the school as better, divided by the total number of comparisons they made.
-            rating = rating.annotate(wins_fraction=Cast(Count('comparer', filter=Q(choice__id=school.id)), FloatField()) / Cast(Count('comparer'), FloatField()))
-            # Calculate the average win (win_fraction) of a school multiplied by 1000; 1000 is arbitrary.
-            rating = rating.aggregate(score=Avg('wins_fraction') * 1000)['score']
-            school.rating = rating
+            # Calculate the number of times a comparer chose the school as better than another.
+            rating = rating.annotate(wins=Cast(Count('comparer', filter=Q(choice__id=school.id)), FloatField()))
+            # Calculate the average wins of the school, multiplied by 10; 10 is arbitrary.
+            rating = rating.aggregate(score=Avg('wins') * 10)['score']
+            school.rating = rating if rating != None else 0
 
         # Sort the schools in descending order of rating rating.
         schools = sorted(schools, key=lambda s: s.rating, reverse=True)
 
         # Add ranks and save to DB.
         rank = 1
+        previously_rated_school = None
         for school in schools:
-            school.rank = rank
+            if previously_rated_school != None and previously_rated_school.rating == school.rating:
+                school.rank = previously_rated_school.rank
+            else:
+                school.rank = rank
             school.save()
+            previously_rated_school = school
             (self.stdout.write(self.style.SUCCESS("{0}, rating: {1}, rank: {2}"
                 .format(school.name, school.rating, school.rank))))
             rank += 1
