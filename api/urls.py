@@ -17,4 +17,5 @@ urlpatterns = [
 	path('top-reviews', TopReviewsView.as_view(), name='top_reviews'),
 	path('top-reports', TopReportsView.as_view(), name='top_reports'),
 	path('rated-higher-than/<int:school_id>', RatedHigherThanView.as_view(), name='rated_higher_than'),
+	path('suggested-matches', SuggestedMatchesView.as_view(), name='suggested_matches'),
 ]

@@ -2,7 +2,7 @@
 See **API.md** for more information.
 
 - [x] `GET /top-schools`
-- [ ] `GET /suggested-matches/{n}`
+- [x] `GET /suggested-matches`
 - [x] `GET /top-reviews`
 - [x] `GET /top-reports`
 - [x] `GET /srh-index/{page}`
@@ -30,3 +30,4 @@ See **API.md** for more information.
 - [ ] `DELETE /rating/{school1_id}/{school2_id}`
 - [ ] `PUT /criteria`
 - [x] `GET /rated-higher-than/{school_id}`
+- [x] `POST /token-auth`

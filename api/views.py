@@ -4,10 +4,13 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from django.contrib.auth.models import User
-from .models import *
-from .serializers import *
+from api.models import *
+from api.serializers import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
+from django.utils import timezone
+from django.db.models import Q
+from random import shuffle
 
 # Pagination function.
 def paginate(input_list, page, results_per_page=10):
@@ -104,12 +107,12 @@ class CriteriaListView(generics.ListAPIView):
 
 
 class TopReviewsView(generics.ListAPIView):
-    queryset = Review.objects.filter(created_at__gt=datetime.datetime.today() - datetime.timedelta(days=30 * 3))[:5]
+    queryset = Review.objects.filter(created_at__gt=timezone.now() - datetime.timedelta(days=30 * 3))[:5]
     serializer_class = ReviewSerializer
 
 
 class TopReportsView(generics.ListAPIView):
-    queryset = Report.objects.filter(created_at__gt=datetime.datetime.today() - datetime.timedelta(days=30 * 3))[:5]
+    queryset = Report.objects.filter(created_at__gt=timezone.now() - datetime.timedelta(days=30 * 3))[:5]
     serializer_class = ReportSerializer
 
 
@@ -119,3 +122,24 @@ class RatedHigherThanView(APIView):
         lower_rated_schools = School.objects.filter(rating__lt=school.rating)
         serializer =  SchoolSerializer(lower_rated_schools, many=True)
         return Response(serializer.data)
+
+
+class SuggestedMatchesView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        matches = []
+        schools = School.objects.all()
+        for school1 in schools:
+            for school2 in schools.order_by('-id'):
+                # school1 and school2 must not have been compared (rated) by the current user.
+                if not Comparison.objects.filter(Q(school1=school1, school2=school2) | Q(school1=school2, school2=school1), comparer=request.user).exists():
+                    # school1 and school2 must not be the same.
+                    if not school1 == school2:
+                        # Avoid duplicates i.e school1 vs school2 and school2 vs school1
+                        match_a = {'school1_id': school1.id, 'school2_id': school2.id, 'school1': school1.name, 'school2': school2.name}
+                        match_b = {'school1_id': school2.id, 'school2_id': school1.id, 'school1': school2.name, 'school2': school1.name}
+                        if match_a not in matches and match_b not in matches:
+                            matches.append(match_a)
+        shuffle(matches)
+        return Response(matches[:5])
