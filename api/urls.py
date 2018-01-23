@@ -13,4 +13,5 @@ urlpatterns = [
 	path('srh-index/<int:page>', SRHIndexView.as_view(), name='srh_index'),
 	path('review/<int:id>', ReviewView.as_view(), name='review'),
 	path('<entity>/<int:id>/comments/<int:page>', CommentsView.as_view(), name='comments'),
+	path('criteria', CriteriaListView.as_view(), name='criteria_list'),
 ]

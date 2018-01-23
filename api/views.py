@@ -95,3 +95,8 @@ class CommentsView(APIView):
         response['X-Has-Previous'] = comments.has_previous()
         response['X-Has-Next'] = comments.has_next()
         return response
+
+
+class CriteriaListView(generics.ListAPIView):
+    queryset = Criterion.objects.all()
+    serializer_class = CriterionSerializer

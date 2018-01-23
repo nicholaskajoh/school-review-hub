@@ -45,19 +45,23 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    upvotes = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        fields = ('id', 'comment', 'created_at', 'updated_at')
+        fields = ('id', 'comment', 'upvotes', 'created_at', 'updated_at')
         read_only_fields = ('id', 'created_at')
+
+    def get_upvotes(self, obj):
+        return Upvote.objects.filter(entity='report', entity_id=obj.id).count()
 
 
 class CriterionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Criterion
-        fields = ('id', 'description', 'created_at', 'updated_at')
-        read_only_fields = ('id', 'description', 'created_at')
+        fields = ('id', 'description')
+        read_only_fields = ('id', 'description')
 
 
 class ComparisonSerializer(serializers.ModelSerializer):

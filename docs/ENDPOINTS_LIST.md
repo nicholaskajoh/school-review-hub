@@ -7,7 +7,7 @@ See **API.md** for more information.
 - [ ] `GET /top-reports/{n}`
 - [x] `GET /srh-index/{page}`
 - [x] `GET /schools-list`
-- [ ] `GET /criteria`
+- [x] `GET /criteria`
 - [ ] `POST /rating`
 - [ ] `POST /review`
 - [ ] `GET /search`
