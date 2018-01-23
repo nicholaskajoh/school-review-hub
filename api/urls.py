@@ -11,4 +11,6 @@ urlpatterns = [
 	path('schools-list', SchoolsListView.as_view(), name='schools_list'),
 	path('top-schools', TopSchoolsView.as_view(), name='top_schools'),
 	path('srh-index/<int:page>', SRHIndexView.as_view(), name='srh_index'),
+	path('review/<int:id>', ReviewView.as_view(), name='review'),
+	path('<entity>/<int:id>/comments/<int:page>', CommentsView.as_view(), name='comments'),
 ]

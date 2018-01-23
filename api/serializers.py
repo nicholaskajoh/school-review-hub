@@ -29,21 +29,27 @@ class SchoolsListSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     school = SchoolSerializer()
+    comments_count = serializers.SerializerMethodField()
+    upvotes = serializers.SerializerMethodField()
 
     class Meta:
         model = Review
-        fields = ('id', 'school', 'content', 'created_at', 'updated_at')
+        fields = ('id', 'school', 'content', 'comments_count', 'upvotes', 'created_at', 'updated_at')
         read_only_fields = ('id', 'school', 'created_at')
+
+    def get_comments_count(self, obj):
+        return Comment.objects.filter(entity='review', entity_id=obj.id).count()
+
+    def get_upvotes(self, obj):
+        return Upvote.objects.filter(entity='review', entity_id=obj.id).count()
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    commenter = UserSerializer()
-    review = ReviewSerializer()
 
     class Meta:
         model = Comment
-        fields = ('id', 'comment', 'commenter', 'review', 'created_at', 'updated_at')
-        read_only_fields = ('id', 'commenter', 'review', 'created_at')
+        fields = ('id', 'comment', 'created_at', 'updated_at')
+        read_only_fields = ('id', 'created_at')
 
 
 class CriterionSerializer(serializers.ModelSerializer):
@@ -69,11 +75,19 @@ class ComparisonSerializer(serializers.ModelSerializer):
 
 class ReportSerializer(serializers.ModelSerializer):
     school = SchoolSerializer()
+    comments_count = serializers.SerializerMethodField()
+    upvotes = serializers.SerializerMethodField()
 
     class Meta:
         model = Report
-        fields = ('id', 'school', 'content', 'created_at', 'updated_at')
+        fields = ('id', 'school', 'content', 'comments_count', 'upvotes', 'created_at', 'updated_at')
         read_only_fields = ('id', 'school', 'created_at')
+
+    def get_comments_count(self, obj):
+        return Comment.objects.filter(entity='report', entity_id=obj.id).count()
+
+    def get_upvotes(self, obj):
+        return Upvote.objects.filter(entity='report', entity_id=obj.id).count()
 
 
 class UpvoteSerializer(serializers.ModelSerializer):

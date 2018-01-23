@@ -19,12 +19,12 @@ See **API.md** for more information.
 - [x] `GET /school/{id}`
 - [x] `GET /school/{id}/reviews/{page}`
 - [x] `GET /school/{id}/reports/{page}`
-- [ ] `GET /review/{id}`
-- [ ] `GET /review/{id}/comments/{page}`
+- [x] `GET /review/{id}`
+- [x] `GET /review/{id}/comments/{page}`
 - [ ] `PUT /review/{id}`
 - [ ] `DELETE /review/{id}`
-- [ ] `GET /report/{id}`
-- [ ] `GET /report/{id}/comments/{page}`
+- [x] `GET /report/{id}`
+- [x] `GET /report/{id}/comments/{page}`
 - [ ] `PUT /report/{id}`
 - [ ] `DELETE /report/{id}`
 - [ ] `DELETE /rating/{school1_id}/{school2_id}`

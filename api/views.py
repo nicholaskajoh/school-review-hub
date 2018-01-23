@@ -71,3 +71,27 @@ class SRHIndexView(APIView):
         response['X-Has-Previous'] = srhi.has_previous()
         response['X-Has-Next'] = srhi.has_next()
         return response
+
+
+class ReviewView(generics.RetrieveAPIView):
+    queryset = Review.objects.all()
+    lookup_field = 'id'
+    serializer_class = ReviewSerializer
+
+
+class ReportView(generics.RetrieveAPIView):
+    queryset = Report.objects.all()
+    lookup_field = 'id'
+    serializer_class = ReportSerializer
+
+
+class CommentsView(APIView):
+    def get(self, request, entity, id, page=1):
+        comments = Comment.objects.filter(entity=entity, entity_id=id)
+        comments = paginate(comments, page, 10)
+        serializer =  CommentSerializer(comments, many=True)
+        response = Response(serializer.data)
+        # add pagination headers
+        response['X-Has-Previous'] = comments.has_previous()
+        response['X-Has-Next'] = comments.has_next()
+        return response
