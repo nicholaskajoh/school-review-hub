@@ -36,7 +36,7 @@ class Header extends Component {
 
           <div className="navbar-end">
             <Link className="navbar-item" to="/home">Home</Link>
-            <Link className="navbar-item" to="/srh-index/1">SRH Index</Link>
+            <Link className="navbar-item" to="/srh-index">SRH Index</Link>
             <Link className="navbar-item" to="/match">Match & Rate</Link>
             <Link className="navbar-item" to="/search">
               <i className="fa fa-search"></i>
