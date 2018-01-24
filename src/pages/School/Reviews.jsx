@@ -1,45 +1,98 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {Component} from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-export const Reviews = ({reviews}) => {
-  return (
-        <div className="review-body">
-            <hr/>
-            <div className="review-section">
-                <small><strong>Anonymous</strong> @johnsmith 31m</small>
-                <br /><br />
-                <div className="box">
-                    <small><strong>Response to:</strong></small>
-                    <br />
+class Reviews extends Component {
+	constructor(props) {
+        super(props);
+		this.state = {
+            reviews: [],
+            page: 1
+        };
+    }
 
-                    <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit illo, nemo ipsum esse eius, excepturi repudiandae odit, facere animi dolore et deserunt earum! Sunt praesentium commodi laboriosam similique vel? Blanditiis.
-                    </p>
-                    <br />
-                    <nav className="level is-mobile">
-                    <div className="level-left">
-                        <a className="level-item">
-                        <span className="icon is-small"><i className="fas fa-arrow-up upvote-fa" aria-hidden="true"></i></span>&nbsp;<small>(25)</small>
-                        </a>
-                        <a className="level-item">
-                        <span className="icon is-small"><i className="fas fa-arrow-down downvote-fa" aria-hidden="true"></i></span>&nbsp;<small>(2)</small>
-                        </a>
-                        <a className="level-item">
-                        <span className="icon is-small"><i className="fa fa-bookmark bookmark-fa" aria-hidden="true"></i></span>&nbsp;<small>(25)</small>
-                        </a>
+    componentWillReceiveProps(nextProps) {
+        this.getReviews(nextProps.schoolId, 1);
+    }
+
+    componentDidMount() {
+        this.getReviews(this.props.schoolId, 1);
+    }
+
+    getReviews(id, page) {
+		axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/school/${id}/reviews/${page}`)
+        .then(res => {
+            const reviews = res.data;
+            this.hasPrevPage = (res.headers['x-has-previous'].toLowerCase() === "true");
+			this.hasNextPage = (res.headers['x-has-next'].toLowerCase() === "true");
+            this.setState({ reviews, page });
+        });
+    }
+
+    prevPage = () => {
+		if(this.hasPrevPage) {
+			this.getReviews(this.props.schoolId, this.state.page - 1);
+		}
+	}
+
+	nextPage = () => {
+		if(this.hasNextPage) {
+			this.getReviews(this.props.schoolId, this.state.page + 1);
+		}
+	}
+    
+    render() {
+		return (
+            <div>
+                <section className="hero is-link">
+                    <div className="hero-body">
+                        <div className="container">
+                            <h1 className="title">
+                                <i className="fa fa-users"></i> Reviews
+                            </h1>
+                        </div>
                     </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    //   {
-    //     reviews.map((review, index) =>
-          
-    //     )
-    //   }
-  );
-};
+                </section>
 
-Reviews.propTypes = {
-  reviews: PropTypes.array.isRequired
-};
+                <section className="section">
+                    {this.state.reviews.map(review => 
+                        <div className="card review">
+                            <header className="card-header">
+                                <p className="card-header-title">
+                                    Last updated {review.updated_at}
+                                </p>
+                            </header>
+                            <div className="card-content">
+                            <div className="content">
+                                {review.content}
+                            </div>
+                            </div>
+                            <footer className="card-footer">
+                                <div className="card-footer-item">
+                                    <Link to={"/review/" + review.id}>Full review</Link>
+                                </div>
+                                <div className="card-footer-item">
+                                    Upvotes ({review.upvotes})
+                                </div>
+                                <div className="card-footer-item">
+                                    Comments ({review.comments_count})
+                                </div>
+                            </footer>
+                        </div>
+                    )}
+
+                    {this.state.reviews.length === 0 ?
+                        <p className="has-text-centered">No reviews yet!</p>
+                    :
+                        <nav className="pagination">
+                            <button className="button is-link" onClick={this.prevPage} disabled={!this.hasPrevPage}>Previous</button>
+                            <button className="button is-link" onClick={this.nextPage} disabled={!this.hasNextPage}>Next</button>
+                        </nav>
+                    }
+                </section>
+            </div>
+        );
+    }
+}
+
+export default Reviews;
