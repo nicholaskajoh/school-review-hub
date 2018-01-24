@@ -27,8 +27,7 @@ class App extends Component {
         <Switch>
           <DefaultLayout path="/" exact component={IndexLanding}/>
           <DefaultLayout path="/home" component={Home}/>
-          <DefaultLayout path="/srh-index/:page" component={SRHIndex}/>
-          <Redirect from="/srh-index" to="/srh-index/1"/>
+          <DefaultLayout path="/srh-index" component={SRHIndex}/>
           <DefaultLayout path="/match" component={Match}/>
           <DefaultLayout path="/search" component={Search}/>
           <DefaultLayout path="/register" component={Register}/>

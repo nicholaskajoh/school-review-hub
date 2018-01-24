@@ -7,46 +7,43 @@ class SRHIndex extends Component {
 	constructor(props) {
     super(props);
 		this.state = {
-			schools: []
+			schools: [],
+			page: 1
 		};
 	}
 	
 	componentWillReceiveProps(nextProps) {
-		this.getSchools(nextProps.match.params.page);
+		this.getSchools(1);
 	}
 
 	componentDidMount() {
-		this.getSchools(this.props.match.params.page);
+		this.getSchools(1);
 	}
 
 	getSchools(page) {
 		axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/srh-index/${page}`)
       .then(res => {
-				const schools = res.data;
-				this.has_previous_page = (res.headers['x-has-previous'].toLowerCase() === "true");
-				this.has_next_page = (res.headers['x-has-next'].toLowerCase() === "true");
-				this.setState({ schools });
+			const schools = res.data;
+			this.hasPrevPage = (res.headers['x-has-previous'].toLowerCase() === "true");
+			this.hasNextPage = (res.headers['x-has-next'].toLowerCase() === "true");
+			this.setState({ schools, page });
       });
 	}
 
-	prevPage() {
-		var linkUrl;
-		if(this.has_previous_page)
-			linkUrl = `/srh-index/${parseInt(this.props.match.params.page, 10) - 1}`;
-		else linkUrl = "/srh-index/1";
-		return linkUrl;
+	prevPage = () => {
+		if(this.hasPrevPage) {
+			this.getSchools(this.state.page - 1);
+		}
 	}
 
-	nextPage() {
-		var linkUrl = "";
-		if(this.has_next_page)
-			linkUrl = `/srh-index/${parseInt(this.props.match.params.page, 10) + 1}`;
-		else linkUrl = `/srh-index/${this.props.match.params.page}`;
-		return linkUrl;
+	nextPage = () => {
+		if(this.hasNextPage) {
+			this.getSchools(this.state.page + 1);
+		}
 	}
 
-  render() {
-    return (
+	render() {
+		return (
 			<div className="container">
 				<h1 className="title">
 					SRH Index
@@ -81,13 +78,15 @@ class SRHIndex extends Component {
 								<td>{school.reports_count}</td>
 							</tr>
 						)} 
-    			</tbody>
+				</tbody>
 				</table>
 
 				<nav className="pagination">
-					<Link className="pagination-previous" to={this.prevPage()}>Previous</Link>
-					<Link className="pagination-next" to={this.nextPage()}>Next</Link>
+					<button className="button is-link" onClick={this.prevPage} disabled={!this.hasPrevPage}>Previous</button>
+					<button className="button is-link" onClick={this.nextPage} disabled={!this.hasNextPage}>Next</button>
 				</nav>
+
+				<br/>
 			</div>
 		);
 	}
