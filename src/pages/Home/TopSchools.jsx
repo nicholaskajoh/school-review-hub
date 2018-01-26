@@ -1,42 +1,53 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-export const TopSchools = ({schools}) => {
+const TopSchools = ({ schools }) => {
   return (
-    <div className="column">
-        <p className="title has-text-centered"><i className="fa fa-trophy"></i>  Top Schools</p>
-        <div className="content">
-          <table className="table is-fullwidth">
-			<thead>
-				<tr>
-					<th><i className="fa fa-trophy"></i> Rank</th>
-					<th><i className="fa fa-shield-alt"></i> Crest</th>
-					<th><i className="fa fa-graduation-cap"></i> Name</th>
-					<th><i className="fa fa-star"></i> Rating</th>
-				</tr>
-			</thead>
-			<tbody>
-		      {
-		        // schools.map((school, index) =>
-		        //   <tr key={index}>
-		        //     <td>{school.rank}</td>
-		        //     <td>
-		        //       <img className="image is-48x48" src={school.logo_url} alt={school.name + " logo"} />
-		        //     </td>
-		        //     <td>
-		        //       <Link to={"/school/" + school.id}>{school.name}</Link>
-		        //     </td>
-		        //     <td>{school.rating}</td>
-		        //   </tr>
-		        // )
-		      }
-		    </tbody>
-		</table>
-    </div>
-  </div>
+    <div>
+			<section className="section">
+				<div className="container">
+					<h1 className="title">
+						<i className="fa fa-trophy"></i> Top Schools
+					</h1>
+
+					{schools.map((school, index) =>
+						<div className="box" key={index}>
+							<article className="media">
+								<figure className="media-left">
+									<p className="image is-48x48">
+										<img src={school.logo_url} alt={school.name + " logo"}/>
+									</p>
+								</figure>
+
+								<div className="media-content">
+									<div className="content">
+										<h2 className="title">
+											<Link to={"/school/" + school.id}>{school.name}</Link>
+										</h2>
+
+										<p className="school-stat-tags">
+											<span className="tag is-warning is-rounded" title="Rank">
+												<i className="fa fa-trophy"></i> &nbsp; {school.rank}
+											</span>
+											<span className="tag is-info is-rounded" title="Rating">
+												<i className="fa fa-star"></i> &nbsp; {school.rating}
+											</span>
+											<span className="tag is-success is-rounded" title="Reviews">
+												<i className="fa fa-user"></i> &nbsp; {school.reviews_count}
+											</span>
+											<span className="tag is-danger is-rounded" title="Reports">
+												<i className="fa fa-comment-alt"></i> &nbsp; {school.reports_count}
+											</span>
+										</p>
+									</div>
+								</div>
+							</article>
+						</div>
+					)}
+				</div>
+			</section>
+  	</div>
   );
 };
 
-TopSchools.propTypes = {
-  schools: PropTypes.array.isRequired
-};
+export default TopSchools;

@@ -1,34 +1,44 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-export const TopReviews = ({reviews}) => {
+const TopReviews = ({ reviews }) => {
   return (
-    <div className="column">
-      <p className="title has-text-centered"><i className="fa fa-comment-alt"></i>  Top Reviews</p>
-      <div className="content">
-      {
-        reviews.map((review, index) =>
-          <div class="card" key={index}>
-            <header class="card-header">
-              <p class="card-header-title">
-                {review.school.name}
-              </p>
-            </header>
-            <div class="card-content">
-              <div class="content">
-                {review.content}
-                <br />
-                <time datetime="2016-1-1">{review.created_at}</time>
+    <div>
+      <section className="section">
+				<div className="container">
+					<h1 className="title">
+						<i className="fa fa-comment-alt"></i> Top Reviews
+					</h1>
+
+          {reviews.map((review, index) =>
+            <div className="card" style={{marginBottom: 15}}>
+              <header className="card-header">
+                  <p className="card-header-title">
+                    {review.school.name}
+                  </p>
+              </header>
+              <div className="card-content">
+              <div className="content">
+                  {review.content.substring(0, 150).trim() + (review.content.length > 150 ? "..." : "")} - Last updated {review.updated_at}
               </div>
+              </div>
+              <footer className="card-footer">
+                  <div className="card-footer-item">
+                      <Link to={"/review/" + review.id}>Full review</Link>
+                  </div>
+                  <div className="card-footer-item">
+                      Upvotes ({review.upvotes})
+                  </div>
+                  <div className="card-footer-item">
+                      Comments ({review.comments_count})
+                  </div>
+              </footer>
             </div>
-          </div>
-        )
-      }
-      </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 };
 
-TopReviews.propTypes = {
-  reviews: PropTypes.array.isRequired
-};
+export default TopReviews;

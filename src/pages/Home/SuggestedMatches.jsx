@@ -1,38 +1,39 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-export const SuggestedMatches = ({matches}) => {
+const SuggestedMatches = ({ matches }) => {
   return (
-    <div className="column">
-      <p className="title has-text-centered"><i className="fa fa-flag"></i>  Suggested Matches</p>
-      <div className="section">
-      {
-        matches.map((match, index) =>
-          <div class="level" key={index}>
-            <div class="level-item has-text-centered">
-              <div>
-                <p class="heading">{match.school1}</p>
+    <section className="section">
+      <div className="container">
+        <h1 className="title">
+          <i className="fa fa-flag"></i> Suggested matches
+        </h1>
+
+
+        {matches.map((match, index) =>
+          <div className="box">
+            <div className="columns has-text-centered">
+              <div className="column is-5">
+                <div>
+                  <h4 className="subtitle">{match.school1}</h4>
+                </div>
               </div>
-            </div>
-            <div class="level-item has-text-centered">
-              <div>
-                <span class="button is-danger">VS</span>
+              <div className="column is-2">
+                <span className="tag is-link is-rounded" style={{marginBottom: 10}}>vs</span>
+                <br/>
+                <Link className="button is-success is-small" to={"/rate/" + match.school1_id + "/" + match.school2_id}>Rate</Link>
               </div>
-            </div>
-            <div class="level-item has-text-centered">
-              <div>
-                <p class="heading">{match.school2}</p>
+              <div className="column is-5">
+                <div>
+                  <h4 className="subtitle">{match.school2}</h4>
+                </div>
               </div>
             </div>
           </div>
-        )
-      }
-    </div>
-  </div>
-
+        )}
+      </div>
+    </section>
   );
 };
 
-SuggestedMatches.propTypes = {
-  matches: PropTypes.array.isRequired
-};
+export default SuggestedMatches;

@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {SuggestedMatches} from './SuggestedMatches';
-import {TopReviews} from './TopReviews';
-import {TopSchools} from './TopSchools'; 
+import TopSchools from './TopSchools'; 
+import SuggestedMatches from './SuggestedMatches';
+import TopReviews from './TopReviews';
 import './Home.css';
 
 class Home extends Component{
 	constructor(props) {
     super(props);
 		this.state = {
-			schools: [],
-			matches: [],
-			reviews: []
+			topSchools: [],
+			suggestedMatches: [],
+			topReviews: []
 		};
 	}
 	
@@ -22,58 +22,45 @@ class Home extends Component{
 	}
 
 	getSchools() {
-		axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/top-schools/10`)
+		axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/top-schools`)
       .then(res => {
-				const schools = res.data;
+				const topSchools = res.data;
 				console.log(res.data);
-				this.setState({ schools });
+				this.setState({ topSchools });
       });
 	}
 
 	getMatches() {
-		axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/suggested-matches/10`)
-      .then(res => {
-				const matches = res.data;
-				console.log(res.data);
-				this.setState({ matches });
-      });
+    axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/suggested-matches`, {
+      "headers": {
+        "Authorization": `Token ${localStorage.getItem("authToken")}`
+      }
+    })
+    .then(res => {
+      const suggestedMatches = res.data;
+      console.log(res.data);
+      this.setState({ suggestedMatches });
+    });
 	}
 
 	getReviews() {
-		axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/top-reviews/10`)
+		axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/top-reviews`)
       .then(res => {
-				const reviews = res.data;
+				const topReviews = res.data;
 				console.log(res.data);
-				this.setState({ reviews });
+				this.setState({ topReviews });
       });
 	}
 
 	render () {
 		return (
 			<div>
-				<section className="hero is-link">
-					<div className="hero-body">
-						<div className="container">
-						<h1 className="title">
-							Home
-						</h1>
-						</div>
-					</div>
-				</section>
-				<div className="section">
-					<div className="container">
-						<div className="columns is-desktop">
-							<TopSchools schools={this.state.schools}/>
-							<SuggestedMatches matches={this.state.matches}/>
-							<TopReviews reviews={this.state.reviews}/>
-						</div>
-					</div>
-				</div>
+        <TopSchools schools={this.state.topSchools}/>
+        <SuggestedMatches matches={this.state.suggestedMatches}/>
+        <TopReviews reviews={this.state.topReviews}/>
 			</div>			
 		);
 	}
-} 
-
-
+}
 
 export default Home;
