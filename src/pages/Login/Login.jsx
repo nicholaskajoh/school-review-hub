@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import axios from 'axios';
 import './Login.css';
 
 
@@ -7,67 +8,74 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: ''
+      username: "",
+      password: "",
+      isAuth: false
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
+  handleChange = (event) => {
     this.setState({
-      email: event.target.email,
-      password: event.target.password      
+      [event.target.name]: event.target.value.trim()
     });
   }
 
-  handleSubmit(event) {
-    alert('You have attemted to login with: ' + this.state.email);
+  handleSubmit = (event) => {
+    this.login(this.state.username, this.state.password);
     event.preventDefault();
   }
 
+  async login(username, password) {
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/token-auth`, {
+        username, password
+      });
+      localStorage.setItem("authToken", res.data.token);
+      this.setState({ isAuth: true });
+    } catch(e) {
+      alert("Invalid username or password!");
+    }
+  }
+
   render() {
+    if(this.state.isAuth) {
+      return <Redirect to="/home" push={true}/>
+    }
+
     return (
-      <section class="hero is-success is-fullheight">
-      <div class="hero-body">
-        <div class="container has-text-centered">
-          <div class="column is-4 is-offset-4">
-            <h3 class="title has-text-grey">Login</h3>
-            <p class="subtitle has-text-grey">Please login to proceed.</p>
-            <div class="box">
-              <figure class="avatar">
-                <img src="https://placehold.it/128x128" alt=""/>
-              </figure>
-              <form onSubmit={this.handleSubmit}>
-                <div class="field">
-                  <div class="control">
-                    <input class="input is-medium" type="email" placeholder="Your Email" autoFocus value={this.state.email} onChange={this.handleChange}/>
+      <section className="hero is-light">
+        <div className="hero-body">
+          <div className="container has-text-centered">
+            <div className="column is-4 is-offset-4">
+              <h2 className="title has-text-grey">Login</h2>
+
+              <h4 className="subtitle">Please, login to proceed</h4>
+              
+              <div className="box">
+                <form onSubmit={this.handleSubmit} autoComplete="off">
+                  <div className="field">
+                    <div className="control">
+                      <input className="input is-medium" type="text" name="username" placeholder="Username" autoFocus value={this.state.username} onChange={this.handleChange}/>
+                    </div>
                   </div>
-                </div>
   
-                <div class="field">
-                  <div class="control">
-                    <input class="input is-medium" type="password" placeholder="Your Password" value={this.state.password} onChange={this.handleChange}/>
+                  <div className="field">
+                    <div className="control">
+                      <input className="input is-medium" type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
+                    </div>
                   </div>
-                </div>
-                <div class="field">
-                  <label class="checkbox">
-                    <input type="checkbox" />
-                    Remember me
-                  </label>
-                </div>
-                <a type="submit" class="button is-block is-info is-large">Login</a>
-              </form>
+
+                  <button type="submit" className="button is-fullwidth is-info is-large" disabled={this.state.username === "" || this.state.password === ""}>Login</button>
+                </form>
+              </div>
+
+              <p className="has-text-grey">
+                <Link to="/register">Sign Up</Link>
+              </p>
             </div>
-            <p class="has-text-grey">
-              <Link to="/register">Register</Link> &nbsp;·&nbsp;
-              <Link to="/help">Need Help?</Link>
-            </p>
           </div>
         </div>
-      </div>
-    </section>  
+      </section>  
     );
   }
 }
