@@ -21,12 +21,12 @@ class SRHIndex extends Component {
 	}
 
 	getSchools(page) {
-		axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/srh-index/${page}`)
+    axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/srh-index/${page}`)
       .then(res => {
-			const schools = res.data;
-			this.hasPrevPage = (res.headers['x-has-previous'].toLowerCase() === "true");
-			this.hasNextPage = (res.headers['x-has-next'].toLowerCase() === "true");
-			this.setState({ schools, page });
+        const schools = res.data;
+        this.hasPrevPage = (res.headers['x-has-previous'].toLowerCase() === "true");
+        this.hasNextPage = (res.headers['x-has-next'].toLowerCase() === "true");
+        this.setState({ schools, page });
       });
 	}
 
@@ -86,7 +86,7 @@ class SRHIndex extends Component {
 					<button className="button is-link" onClick={this.nextPage} disabled={!this.hasNextPage}>Next</button>
 				</nav>
 
-				<br/>
+			  <br/>
 			</div>
 		);
 	}
