@@ -8,7 +8,7 @@ import PrivateRoute from './auth';
 import IndexLanding from './pages/IndexLanding/IndexLanding';
 import Home from './pages/Home/Home';
 import SRHIndex from './pages/SRHIndex/SRHIndex';
-import Match from './pages/Match/Match';
+// import Match from './pages/Match/Match';
 import Search from './pages/Search/Search';
 import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
@@ -30,7 +30,7 @@ class App extends Component {
           <DefaultLayout path="/" exact component={IndexLanding}/>
           <PrivateRoute path="/home" component={Home}/>
           <DefaultLayout path="/srh-index" component={SRHIndex}/>
-          <PrivateRoute path="/match" component={Match}/>
+          {/* <PrivateRoute path="/match" component={Match}/> */}
           <DefaultLayout path="/search" component={Search}/>
           <DefaultLayout path="/register" component={Register}/>
           <DefaultLayout path="/login" component={Login}/>
