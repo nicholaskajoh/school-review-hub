@@ -1,7 +1,6 @@
 import React from 'react';
 import './Review.css';
 import Comment from './../../partials/Comment/Comment';
-import UpvoteButon from './../../partials/UpvoteButton/UpvoteButon';
 import CommentCard from './../../partials/CommentCard/CommentCard';
 
 const _handleOnLoadMoreClick = () => {
@@ -71,7 +70,6 @@ const Review = () => (
 
         <hr className="review-hr" />
         <div className="review-section upvote-section">
-          <UpvoteButon />
 
           <div id="upvote-text">
             <h3 className="text-bold">What's your view towards this review?</h3>
