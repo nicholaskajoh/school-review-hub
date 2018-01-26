@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './assets/css/bulma.min.css';
 import './index.css';
-import { BrowserRouter, Switch, Redirect } from 'react-router-dom';
+import { Route, BrowserRouter, Switch } from 'react-router-dom';
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
+import PrivateRoute from './auth';
 import IndexLanding from './pages/IndexLanding/IndexLanding';
 import Home from './pages/Home/Home';
 import SRHIndex from './pages/SRHIndex/SRHIndex';
@@ -11,6 +12,7 @@ import Match from './pages/Match/Match';
 import Search from './pages/Search/Search';
 import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
+import Logout from './pages/Logout/Logout';
 import Profile from './pages/Profile/Profile';
 import Help from './pages/Help/Help';
 import RatingForm from './pages/RatingForm/RatingForm';
@@ -26,18 +28,19 @@ class App extends Component {
       <BrowserRouter>
         <Switch>
           <DefaultLayout path="/" exact component={IndexLanding}/>
-          <DefaultLayout path="/home" component={Home}/>
+          <PrivateRoute path="/home" component={Home}/>
           <DefaultLayout path="/srh-index" component={SRHIndex}/>
-          <DefaultLayout path="/match" component={Match}/>
+          <PrivateRoute path="/match" component={Match}/>
           <DefaultLayout path="/search" component={Search}/>
           <DefaultLayout path="/register" component={Register}/>
           <DefaultLayout path="/login" component={Login}/>
-          <DefaultLayout path="/profile" component={Profile}/>
+          <PrivateRoute path="/profile" component={Profile}/>
           <DefaultLayout path="/help" component={Help}/>
-          <DefaultLayout path="/rate/:school1_id/:school2_id" component={RatingForm}/>
+          <PrivateRoute path="/rate/:school1_id/:school2_id" component={RatingForm}/>
           <DefaultLayout path="/review/:id" component={Review}/>
           <DefaultLayout path="/school/:id" component={School}/>
           <DefaultLayout path="/report/:id" component={Report}/>
+          <Route path="/logout" component={Logout}/>
           <DefaultLayout component={NotFound}/>
         </Switch>
       </BrowserRouter>
