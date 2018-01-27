@@ -23,4 +23,5 @@ urlpatterns = [
 	path('profile', ProfileView.as_view(), name='profile'),
 	path('profile/ratings/<int:page>', ProfileRatingsView.as_view(), name='profile_ratings'),
 	path('rating/<int:school1_id>/<int:school2_id>', DeleteRatingView.as_view(), name='delete_rating'),
+	path('register', RegisterView.as_view(), name='register'),	
 ]

@@ -203,6 +203,15 @@ class DeleteRatingView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class RegisterView(APIView):
+    def post(self, request):
+        data = request.data
+        user = User(username=data['username'], email=data['email'])
+        user.set_password(data['password'])
+        user.save()
+        return Response(status=status.HTTP_201_CREATED)
+
+
 class LogoutView(APIView):
     def get(self, request):
         request.user.auth_token.delete()
