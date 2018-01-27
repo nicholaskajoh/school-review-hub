@@ -4,7 +4,8 @@ from rest_framework.authtoken.views import obtain_auth_token
 from .views import *
 
 urlpatterns = [
-	path('token-auth', obtain_auth_token),
+	path('token-auth', obtain_auth_token, name="login"),
+	path('logout', LogoutView.as_view(), name='logout'),
 	path('school/<int:id>', SchoolView.as_view(), name='school'),
 	path('school/<int:id>/reviews/<int:page>', SchoolReviewsView.as_view(), name='school_reviews'),
 	path('school/<int:id>/reports/<int:page>', SchoolReportsView.as_view(), name='school_reports'),
@@ -18,4 +19,5 @@ urlpatterns = [
 	path('top-reports', TopReportsView.as_view(), name='top_reports'),
 	path('rated-higher-than/<int:school_id>', RatedHigherThanView.as_view(), name='rated_higher_than'),
 	path('suggested-matches', SuggestedMatchesView.as_view(), name='suggested_matches'),
+	path('rating', RatingView.as_view(), name='rating'),
 ]

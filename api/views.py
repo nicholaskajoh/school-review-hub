@@ -33,8 +33,8 @@ class SchoolView(generics.RetrieveAPIView):
 
 class SchoolReviewsView(APIView):
     def get(self, request, id, page=1):
-        reviews = Review.objects.filter(school__id=id)
-        reviews = paginate(reviews, page, 10)
+        reviews = Review.objects.filter(school__id=id).order_by('-updated_at')
+        reviews = paginate(reviews, page, 1)
         serializer =  ReviewSerializer(reviews, many=True)
         response = Response(serializer.data)
         # add pagination headers
@@ -45,7 +45,7 @@ class SchoolReviewsView(APIView):
 
 class SchoolReportsView(APIView):
     def get(self, request, id, page=1):
-        reports = Report.objects.filter(school__id=id)
+        reports = Report.objects.filter(school__id=id).order_by('-updated_at')
         reports = paginate(reports, page, 10)
         serializer =  ReportSerializer(reports, many=True)
         response = Response(serializer.data)
@@ -119,7 +119,7 @@ class TopReportsView(generics.ListAPIView):
 class RatedHigherThanView(APIView):
     def get(self, request, school_id):
         school = School.objects.get(id=school_id)
-        lower_rated_schools = School.objects.filter(rating__lt=school.rating)
+        lower_rated_schools = School.objects.filter(rating__lt=school.rating).order_by('rank')
         serializer =  SchoolSerializer(lower_rated_schools, many=True)
         return Response(serializer.data)
 
@@ -143,3 +143,38 @@ class SuggestedMatchesView(APIView):
                             matches.append(match_a)
         shuffle(matches)
         return Response(matches[:5])
+
+
+class RatingView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request):
+        import json
+        data = json.loads(request.POST.get('data'))
+
+        school1_id = data['schools']['school1_id']
+        school2_id = data['schools']['school2_id']
+        choices = data['choices']
+
+        if school1_id != school2_id:
+            # school1 id must be less than school2 id
+            # swap variables if not
+            if school1_id > school2_id:
+                school1_id, school2_id = school2_id, school1_id
+
+            for choice in choices:
+                comparison = Comparison.objects.update_or_create(
+                    criterion=Criterion.objects.get(id=choice['criterion_id']),
+                    school1=School.objects.get(id=school1_id),
+                    school2=School.objects.get(id=school2_id),
+                    choice=School.objects.get(id=choice['choice']),
+                    comparer=request.user)
+                comparison.save()
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class LogoutView(APIView):
+    def get(self, request):
+        request.user.auth_token.delete()
+        return Response(status=status.HTTP_200_OK)

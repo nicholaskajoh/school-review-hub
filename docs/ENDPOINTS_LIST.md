@@ -8,7 +8,7 @@ See **API.md** for more information.
 - [x] `GET /srh-index/{page}`
 - [x] `GET /schools-list`
 - [x] `GET /criteria`
-- [ ] `POST /rating`
+- [x] `POST /rating`
 - [ ] `POST /review`
 - [ ] `GET /search`
 - [ ] `GET /user/{id}`
@@ -28,6 +28,5 @@ See **API.md** for more information.
 - [ ] `PUT /report/{id}`
 - [ ] `DELETE /report/{id}`
 - [ ] `DELETE /rating/{school1_id}/{school2_id}`
-- [ ] `PUT /criteria`
 - [x] `GET /rated-higher-than/{school_id}`
 - [x] `POST /token-auth`
