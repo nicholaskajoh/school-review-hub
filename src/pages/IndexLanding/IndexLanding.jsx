@@ -63,7 +63,7 @@ const IndexLanding = () => (
           </h2>
           <p>What are you waiting for? Sign up for or Login to SchoolReviewHub...</p>
 
-          <Link className="button is-success is-medium" to="/sign-up">Sign Up</Link> &nbsp;
+          <Link className="button is-success is-medium" to="/register">Sign Up</Link> &nbsp;
           <Link className="button is-info is-medium" to="/login">Login</Link>
         </div>
       </div>
