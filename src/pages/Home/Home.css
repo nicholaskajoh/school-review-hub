@@ -2,3 +2,9 @@
     margin-right: 5px;
 }
 
+.react-tabs__tab--selected {
+  background: #fff;
+  border-color: transparent !important;
+  color: black;
+  /* border-radius: 5px05px 0 0; */
+}
