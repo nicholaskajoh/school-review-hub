@@ -11,6 +11,7 @@ import datetime
 from django.utils import timezone
 from django.db.models import Q
 from random import shuffle
+from django.db.models import Count
 
 # Pagination function.
 def paginate(input_list, page, results_per_page=10):
@@ -172,6 +173,34 @@ class RatingView(APIView):
                 comparison.save()
             return Response(status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+
+class ProfileRatingsView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request, page=1):
+        ratings = (list(set(Comparison.objects
+            .filter(comparer=request.user)
+            .order_by('-id')
+            .values_list('school1__id', 'school2__id', 'school1__name', 'school2__name'))))
+        return Response(ratings)
+
+
+class DeleteRatingView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def delete(self, request, school1_id, school2_id):
+        Comparison.objects.filter(school1__id=school1_id, school2__id=school2_id, comparer=request.user).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class LogoutView(APIView):

@@ -220,29 +220,26 @@ Sample data:
 ]
 ```
 
-### /user/{id}
+### /profile
 Get a user.
 
 Request: GET
 
-Params:
-- id: id of the user.
-
 Sample data:
 ```
 {
+  id: 55,
   username: "anonym419",
   email: "johndoe@savage.mail"
 }
 ```
 
-### /user/{id}/ratings/{page}
+### /profile/ratings/{page}
 Get the ratings made by a given user.
 
 Request: GET
 
 Params:
-- id: id of the user.
 - page: page number.
 
 Sample data:
@@ -253,19 +250,19 @@ Sample data:
     school2_id: 12,
     school1: "Lagos State University",
     school2: "University of Nigeria",
-    choice: 12
+    school1_wins: 5,
+    school2_wins: 1
   },
   ...
 ]
 ```
 
-### /user/{id}/reviews/{page}
+### /profile/reviews/{page}
 Get the reviews made by a given user.
 
 Request: GET
 
 Params:
-- id: id of the user.
 - page: page number.
 
 Sample data:
@@ -287,13 +284,12 @@ Sample data:
 ]
 ```
 
-### /user/{id}/comments/{page}
+### /profile/comments/{page}
 Get the comments made by a given user.
 
 Request: GET
 
 Params:
-- id: id of the user.
 - page: page number.
 
 Sample data:
@@ -309,13 +305,12 @@ Sample data:
 ]
 ```
 
-### /user/{id}/reports/{page}
+### /profile/reports/{page}
 Get the reports made by a given user.
 
 Request: GET
 
 Params:
-- id: id of the user.
 - page: page number.
 
 Sample data:

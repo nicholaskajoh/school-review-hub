@@ -20,4 +20,7 @@ urlpatterns = [
 	path('rated-higher-than/<int:school_id>', RatedHigherThanView.as_view(), name='rated_higher_than'),
 	path('suggested-matches', SuggestedMatchesView.as_view(), name='suggested_matches'),
 	path('rating', RatingView.as_view(), name='rating'),
+	path('profile', ProfileView.as_view(), name='profile'),
+	path('profile/ratings/<int:page>', ProfileRatingsView.as_view(), name='profile_ratings'),
+	path('rating/<int:school1_id>/<int:school2_id>', DeleteRatingView.as_view(), name='delete_rating'),
 ]

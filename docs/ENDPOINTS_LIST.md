@@ -11,11 +11,11 @@ See **API.md** for more information.
 - [x] `POST /rating`
 - [ ] `POST /review`
 - [ ] `GET /search`
-- [ ] `GET /user/{id}`
-- [ ] `GET /user/{id}/ratings/{page}`
-- [ ] `GET /user/{id}/reviews/{page}`
-- [ ] `GET /user/{id}/comments/{page}`
-- [ ] `GET /user/{id}/reports/{page}`
+- [x] `GET /profile`
+- [ ] `GET /profile/ratings/{page}`
+- [ ] `GET /profile/reviews/{page}`
+- [ ] `GET /profile/comments/{page}`
+- [ ] `GET /profile/reports/{page}`
 - [x] `GET /school/{id}`
 - [x] `GET /school/{id}/reviews/{page}`
 - [x] `GET /school/{id}/reports/{page}`
