@@ -61,7 +61,7 @@ class SchoolsListView(generics.ListAPIView):
 
 
 class TopSchoolsView(generics.ListAPIView):
-    queryset = School.objects.all()[:5]
+    queryset = School.objects.all().order_by('rank')[:5]
     serializer_class = SchoolSerializer
 
 
