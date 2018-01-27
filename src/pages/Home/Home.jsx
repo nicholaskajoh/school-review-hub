@@ -32,7 +32,7 @@ class Home extends Component{
 
 	getMatches() {
     axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/suggested-matches`, {
-      "headers": {
+      headers: {
         "Authorization": `Token ${localStorage.getItem("authToken")}`
       }
     })

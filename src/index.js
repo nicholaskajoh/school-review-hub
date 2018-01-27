@@ -36,7 +36,7 @@ class App extends Component {
           <DefaultLayout path="/login" component={Login}/>
           <PrivateRoute path="/profile" component={Profile}/>
           <DefaultLayout path="/help" component={Help}/>
-          <PrivateRoute path="/rate/:school1_id/:school2_id" component={RatingForm}/>
+          <PrivateRoute path="/rate/:school1Id/:school2Id" component={RatingForm}/>
           <DefaultLayout path="/review/:id" component={Review}/>
           <DefaultLayout path="/school/:id" component={School}/>
           <DefaultLayout path="/report/:id" component={Report}/>
