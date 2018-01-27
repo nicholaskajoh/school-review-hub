@@ -23,9 +23,9 @@ const TopReviews = ({ reviews }) => {
               </div>
               </div>
               <footer className="card-footer">
-                  <div className="card-footer-item">
+                  {/* <div className="card-footer-item">
                       <Link to={"/review/" + review.id}>Full review</Link>
-                  </div>
+                  </div> */}
                   <div className="card-footer-item">
                       Upvotes ({review.upvotes})
                   </div>

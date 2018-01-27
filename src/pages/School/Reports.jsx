@@ -68,9 +68,9 @@ class Reports extends Component {
                             </div>
                             </div>
                             <footer className="card-footer">
-                                <div className="card-footer-item">
+                                {/* <div className="card-footer-item">
                                     <Link to={"/report/" + report.id}>Full report</Link>
-                                </div>
+                                </div> */}
                                 <div className="card-footer-item">
                                     Upvotes ({report.upvotes})
                                 </div>
