@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import TopSchools from './TopSchools'; 
 import SuggestedMatches from './SuggestedMatches';
 import TopReviews from './TopReviews';
+import 'react-tabs/style/react-tabs.css';
 import './Home.css';
 
 class Home extends Component{
@@ -54,10 +56,51 @@ class Home extends Component{
 
 	render () {
 		return (
-			<div>
-        <TopSchools schools={this.state.topSchools}/>
-        <SuggestedMatches matches={this.state.suggestedMatches}/>
-        <TopReviews reviews={this.state.topReviews}/>
+			<div className='section'>
+				<Tabs>
+					<div className="tabs is-toggle is-fullwidth is-small">
+						<ul>
+							<TabList>
+								<Tab>
+									<li>
+										<a>
+											<span className="icon"><i class="fas fa-trophy"></i></span>
+											<span>Top Schools</span>
+										</a>
+									</li>
+								</Tab>
+								<Tab>
+									<li>
+										<a>
+											<span className="icon"><i class="fas fa-flag"></i></span>
+											<span>Suggested Matches</span>
+										</a>
+									</li>
+								</Tab>
+								<Tab>
+									<li>
+										<a>
+											<span className="icon"><i class="fas fa-comment-alt"></i></span>
+											<span>Top Reviews</span>
+										</a>
+									</li>
+								</Tab>
+							</TabList>
+						</ul>
+					</div>	
+
+					<div className="section">
+						<TabPanel>
+							<TopSchools schools={this.state.topSchools}/>
+						</TabPanel>
+						<TabPanel>
+							<SuggestedMatches matches={this.state.suggestedMatches}/>
+						</TabPanel>
+						<TabPanel>
+							<TopReviews reviews={this.state.topReviews}/>
+						</TabPanel>
+					</div>
+				</Tabs>
 			</div>			
 		);
 	}

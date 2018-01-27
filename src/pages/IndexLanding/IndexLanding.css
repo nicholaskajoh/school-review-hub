@@ -1,0 +1,6 @@
+.has-bg-img { 
+  background: url('../../bg.jpeg')center center; background-size:cover;
+ }
+.has-text-white{
+  color: white;
+}
