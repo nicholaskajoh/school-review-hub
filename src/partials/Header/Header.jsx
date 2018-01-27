@@ -42,9 +42,9 @@ class Header extends Component {
             {this.isAuth() ?<Link className="navbar-item" to="/home">Home</Link>: ""}
             <Link className="navbar-item" to="/srh-index">SRH Index</Link>
             {/* {this.isAuth() ? <Link className="navbar-item" to="/match">Match & Rate</Link>: ""} */}
-            <Link className="navbar-item" to="/search">
-            <i className="fa fa-search"></i>
-            </Link>
+            {/* <Link className="navbar-item" to="/search">
+              <i className="fa fa-search"></i>
+            </Link> */}
 
             {this.isAuth() ?
             <div className="navbar-item has-dropdown is-hoverable">

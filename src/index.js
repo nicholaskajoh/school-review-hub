@@ -9,7 +9,7 @@ import IndexLanding from './pages/IndexLanding/IndexLanding';
 import Home from './pages/Home/Home';
 import SRHIndex from './pages/SRHIndex/SRHIndex';
 // import Match from './pages/Match/Match';
-import Search from './pages/Search/Search';
+// import Search from './pages/Search/Search';
 import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
 import Logout from './pages/Logout/Logout';
@@ -31,7 +31,7 @@ class App extends Component {
           <PrivateRoute path="/home" component={Home}/>
           <DefaultLayout path="/srh-index" component={SRHIndex}/>
           {/* <PrivateRoute path="/match" component={Match}/> */}
-          <DefaultLayout path="/search" component={Search}/>
+          {/* <DefaultLayout path="/search" component={Search}/> */}
           <DefaultLayout path="/register" component={Register}/>
           <DefaultLayout path="/login" component={Login}/>
           <PrivateRoute path="/profile" component={Profile}/>
