@@ -11,8 +11,7 @@ class RatingForm extends Component {
       criteria: [],
       school1: {},
       school2: {},
-      formData: {},
-      hasRated: false
+      formData: {}
     }
   }
 
@@ -61,7 +60,7 @@ class RatingForm extends Component {
     });
     const data = {schools, choices};
     this.submitRating(data);
-    this.setState({hasRated: true});
+    window.location.replace("/profile");
     event.preventDefault();
   }
 
@@ -77,10 +76,6 @@ class RatingForm extends Component {
   }
 
   render() {
-    if(this.state.hasRated) {
-      return <Redirect to="/profile" push={true}/>
-    }
-
     return (
       <div className="section">
         <div className="container">
