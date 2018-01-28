@@ -164,7 +164,7 @@ class RatingView(APIView):
                 school1_id, school2_id = school2_id, school1_id
 
             for choice in choices:
-                comparison = Comparison.objects.update_or_create(
+                comparison, created = Comparison.objects.update_or_create(
                     criterion=Criterion.objects.get(id=choice['criterion_id']),
                     school1=School.objects.get(id=school1_id),
                     school2=School.objects.get(id=school2_id),
