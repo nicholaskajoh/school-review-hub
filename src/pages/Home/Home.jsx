@@ -27,7 +27,6 @@ class Home extends Component{
 		axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/top-schools`)
       .then(res => {
 				const topSchools = res.data;
-				console.log(res.data);
 				this.setState({ topSchools });
       });
 	}
@@ -40,7 +39,6 @@ class Home extends Component{
     })
     .then(res => {
       const suggestedMatches = res.data;
-      console.log(res.data);
       this.setState({ suggestedMatches });
     });
 	}
@@ -48,60 +46,57 @@ class Home extends Component{
 	getReviews() {
 		axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/top-reviews`)
       .then(res => {
-				const topReviews = res.data;
-				console.log(res.data);
-				this.setState({ topReviews });
+			const topReviews = res.data;
+			this.setState({ topReviews });
       });
 	}
 
 	render () {
 		return (
-			<div className='section'>
-				<Tabs>
-					<div className="tabs is-toggle is-fullwidth is-small">
-						<ul>
-							<TabList>
-								<Tab>
-									<li>
-										<a>
-											<span className="icon"><i class="fas fa-trophy"></i></span>
-											<span>Top Schools</span>
-										</a>
-									</li>
-								</Tab>
-								<Tab>
-									<li>
-										<a>
-											<span className="icon"><i class="fas fa-flag"></i></span>
-											<span>Suggested Matches</span>
-										</a>
-									</li>
-								</Tab>
-								<Tab>
-									<li>
-										<a>
-											<span className="icon"><i class="fas fa-comment-alt"></i></span>
-											<span>Top Reviews</span>
-										</a>
-									</li>
-								</Tab>
-							</TabList>
-						</ul>
-					</div>	
+      <Tabs>
+        <div className="section">
+          <div className="tabs is-toggle is-fullwidth is-small" style={{marginBottom: 0}}>
+            <ul>
+              <TabList>
+                <Tab>
+                  <li>
+                    <a>
+                      <span className="icon"><i className="fas fa-trophy"></i></span>
+                      <span>Top Schools</span>
+                    </a>
+                  </li>
+                </Tab>
+                <Tab>
+                  <li>
+                    <a>
+                      <span className="icon"><i className="fas fa-flag"></i></span>
+                      <span>Suggested Matches</span>
+                    </a>
+                  </li>
+                </Tab>
+                <Tab>
+                  <li>
+                    <a>
+                      <span className="icon"><i className="fas fa-comment-alt"></i></span>
+                      <span>Top Reviews</span>
+                    </a>
+                  </li>
+                </Tab>
+              </TabList>
+            </ul>
+          </div>
 
-					<div className="section">
-						<TabPanel>
-							<TopSchools schools={this.state.topSchools}/>
-						</TabPanel>
-						<TabPanel>
-							<SuggestedMatches matches={this.state.suggestedMatches}/>
-						</TabPanel>
-						<TabPanel>
-							<TopReviews reviews={this.state.topReviews}/>
-						</TabPanel>
-					</div>
-				</Tabs>
-			</div>			
+          <TabPanel>
+            <TopSchools schools={this.state.topSchools}/>
+          </TabPanel>
+          <TabPanel>
+            <SuggestedMatches matches={this.state.suggestedMatches}/>
+          </TabPanel>
+          <TabPanel>
+            <TopReviews reviews={this.state.topReviews}/>
+          </TabPanel>
+        </div>
+      </Tabs>			
 		);
 	}
 }
