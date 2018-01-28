@@ -96,6 +96,9 @@ DATABASES = {
     'USER': os.getenv('DATABASE_USER'),
     'PASSWORD': os.getenv('DATABASE_PASSWORD'),
     'NAME': os.getenv('DATABASE_NAME'),
+    'OPTIONS': {
+      'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+    },
   }
 }
 
