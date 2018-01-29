@@ -6,7 +6,7 @@ const TopReviews = ({ reviews }) => {
     <div>
       <section className="section">
 				<div className="container">
-					<h1 className="title">
+					<h1 className="title has-text-danger">
 						<i className="fa fa-comment-alt"></i> Top Reviews
 					</h1>
 

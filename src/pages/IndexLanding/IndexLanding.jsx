@@ -27,31 +27,31 @@ class IndexLanding extends Component{
         <section className="section">
           <div className="container">
             <nav className="columns">
-              <div className="column has-text-centered">
+              <div className="column has-text-centered ">
                 <div>
-                  <p><i className="fa fa-star fa-2x"></i></p>
-                  <p className="title">Ratings</p>
+                  <p className="has-text-danger"><i className="fa fa-star fa-2x"></i></p>
+                  <p className="title has-text-danger">Ratings</p>
                   <p>Rate univeristies using our comparison-based system. It allows you match two univeristies against each other and choose the best under different criteria.</p>
                 </div>
               </div>
-              <div className="column has-text-centered">
+              <div className="column has-text-centered ">
                 <div>
-                  <p><i className="fa fa-comments fa-2x"></i></p>
-                  <p className="title">Reviews</p>
+                  <p className="has-text-danger"><i className="fa fa-comments fa-2x"></i></p>
+                  <p className="title has-text-danger">Reviews</p>
                   <p>Write reviews of univeristies detailing more nuanced opinions that our rating system might not capture.</p>
                 </div>
               </div>
-              <div className="column has-text-centered">
+              <div className="column has-text-centered ">
                 <div>
-                  <p><i className="fa fa-microphone fa-2x"></i></p>
-                  <p className="title">Reports</p>
+                  <p className="has-text-danger"><i className="fa fa-microphone fa-2x"></i></p>
+                  <p className="title has-text-danger">Reports</p>
                   <p>Report events -- good, bad and ugly -- happening in any univeristy that might be of interest to the public.</p>
                 </div>
               </div>
-              <div className="column has-text-centered">
+              <div className="column has-text-centered ">
                 <div>
-                  <p><i className="fa fa-trophy fa-2x"></i></p>
-                  <p className="title">Rankings</p>
+                  <p className="has-text-danger"><i className="fa fa-trophy fa-2x"></i></p>
+                  <p className="title has-text-danger">Rankings</p>
                   <p>SchoolReviewHub maintains an index of all univeristies in Nigeria listed in ascending order of their rankings. Easily find out the best univeristies as rated by you!</p>
                 </div>
               </div>

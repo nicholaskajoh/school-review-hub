@@ -4,3 +4,13 @@
 .has-text-white{
   color: white;
 }
+/* 
+.has-text-danger{
+  color: 
+} */
+
+.card{
+  margin: 5px !important;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}

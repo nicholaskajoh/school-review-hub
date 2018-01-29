@@ -55,7 +55,7 @@ class Home extends Component{
 		return (
       <Tabs>
         <div className="section">
-          <div className="tabs is-toggle is-fullwidth is-small" style={{marginBottom: 0}}>
+          <div className="tabs is-toggle" style={{marginBottom: 0}}>
             <ul>
               <TabList>
                 <Tab>

@@ -5,7 +5,7 @@ const SuggestedMatches = ({ matches }) => {
   return (
     <section className="section">
       <div className="container">
-        <h1 className="title">
+        <h1 className="title has-text-danger">
           <i className="fa fa-flag"></i> Suggested matches
         </h1>
 
