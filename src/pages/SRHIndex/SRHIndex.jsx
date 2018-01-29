@@ -8,7 +8,8 @@ class SRHIndex extends Component {
     super(props);
 		this.state = {
 			schools: [],
-			page: 1
+      page: 1,
+      showLoadingSpinner: true
 		};
 	}
 	
@@ -21,12 +22,13 @@ class SRHIndex extends Component {
 	}
 
 	getSchools(page) {
+    this.setState({showLoadingSpinner: true});
     axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/srh-index/${page}`)
       .then(res => {
         const schools = res.data;
         this.hasPrevPage = (res.headers['x-has-previous'].toLowerCase() === "true");
         this.hasNextPage = (res.headers['x-has-next'].toLowerCase() === "true");
-        this.setState({ schools, page });
+        this.setState({schools, page, showLoadingSpinner: false});
       });
 	}
 
@@ -78,8 +80,14 @@ class SRHIndex extends Component {
 								<td>{school.reports_count}</td>
 							</tr>
 						)} 
-				</tbody>
+				  </tbody>
 				</table>
+
+        {this.state.showLoadingSpinner ?
+          <div className="has-text-centered">
+            <i className="fa fa-spinner fa-spin fa-2x"></i>
+          </div>
+        : ""}
 
 				<nav className="pagination">
 					<button className="button is-link" onClick={this.prevPage} disabled={!this.hasPrevPage}>Previous</button>
