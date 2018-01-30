@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 const TopReviews = ({ reviews }) => {
   return (
     <div>
-      <section className="section">
+      <section className="section" style={{ paddingTop: 0 }}>
 				<div className="container">
-					<h1 className="title has-text-danger">
+					<h1 className="title">
 						<i className="fa fa-comment-alt"></i> Top Reviews
 					</h1>
 

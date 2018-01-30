@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 const TopSchools = ({ schools }) => {
   return (
     <div>
-      <section className="section">
+      <section className="section" style={{ paddingTop: 0 }}>
         <div className="container">
-          <h1 className="title has-text-danger">
+          <h1 className="title">
             <i className="fa fa-trophy"></i> Top Schools
           </h1>
 

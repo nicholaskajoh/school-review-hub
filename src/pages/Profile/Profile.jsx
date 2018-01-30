@@ -63,28 +63,38 @@ class Profile extends Component {
 
   render() {
     return (
-      <div className="section">
-        <div className="container">
-          <div className="notification is-light">
-            Your profile is private. Only you can see it!
-          </div>
-
-          <h2 className="title">{this.state.user.first_name} <small>@{this.state.user.username}</small></h2>
-          <h4 className="subtitle">{this.state.user.email}</h4>
-
-          <hr/>
-
-          <h4 className="subtitle">Ratings</h4>
-
-          {this.state.ratings.map((rating, index) =>
-            <div className="box" key={index}>
-              {rating[2]} <strong> vs </strong> {rating[3]} &nbsp;
-              
-              <Link className="button is-info is-small" to={"/rate/" + rating[0] + "/" + rating[1]}>Update</Link> &nbsp;
-
-              <button className="button is-danger is-small" onClick={() => this.deleteRating(rating[0], rating[1])}>Delete</button>
+      <div>
+        <section className="hero is-small is-warning is-bold">
+          <div className="hero-body">
+            <div className="container">
+              <h1 className="title">Profile</h1>
             </div>
-          )}
+          </div>
+        </section>
+
+        <div className="section">
+          <div className="container">
+            <div className="notification is-light">
+              Your profile is private. Only you can see it!
+            </div>
+
+            <h2 className="title">{this.state.user.first_name} <small>@{this.state.user.username}</small></h2>
+            <h4 className="subtitle">{this.state.user.email}</h4>
+
+            <hr/>
+
+            <h4 className="subtitle">Ratings</h4>
+
+            {this.state.ratings.map((rating, index) =>
+              <div className="box" key={index}>
+                {rating[2]} <strong> vs </strong> {rating[3]} &nbsp;
+                
+                <Link className="button is-info is-small" to={"/rate/" + rating[0] + "/" + rating[1]}>Update</Link> &nbsp;
+
+                <button className="button is-danger is-small" onClick={() => this.deleteRating(rating[0], rating[1])}>Delete</button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
