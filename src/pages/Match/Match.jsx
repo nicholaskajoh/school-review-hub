@@ -8,8 +8,8 @@ class Match extends Component {
     super(props);
     this.state = {
       schools: [],
-      school1_id: 0,
-      school2_id: 0,
+      school1_id: "",
+      school2_id: "",
       hasSelectedSchools: false
     };
   }
@@ -33,7 +33,11 @@ class Match extends Component {
   };
 
   handleSubmit = event => {
-    this.setState({ hasSelectedSchools: true });
+    if (this.state.school1_id == this.state.school2_id) {
+      alert("You can't match a school against itself!");
+    } else {
+      this.setState({ hasSelectedSchools: true });
+    }
     event.preventDefault();
   };
 
@@ -58,72 +62,74 @@ class Match extends Component {
             </div>
           </div>
         </section>
-        <div className="section match-section">
-          <h1 className="title has-text-centered">
-            Match two schools and rate them...
-          </h1>
 
-          <form onSubmit={this.handleSubmit}>
-            <div className="columns is-centered">
-              <div className="column is-narrow">
-                <div clasNames="field">
-                  <div className="control">
-                    <div className="select is-rounded is-large">
-                      <select
-                        name="school1_id"
-                        value={this.state.school1_id}
-                        onChange={this.handleChange}
-                      >
-                        <option>Select School</option>
-                        <option value="svdsfs">Me</option>
-                        {schools.map((school, i) => {
-                          return (
-                            <option value={school.id} key={i}>
-                              {school.name}
-                            </option>
-                          );
-                        })}
-                      </select>
+        <div className="section match-section">
+          <div className="container">
+            <h1 className="title has-text-centered">
+              Match two schools and rate them...
+            </h1>
+
+            <form onSubmit={this.handleSubmit}>
+              <div className="columns is-centered">
+                <div className="column is-narrow">
+                  <div clasNames="field">
+                    <div className="control">
+                      <div className="select is-rounded is-large">
+                        <select
+                          name="school1_id"
+                          value={this.state.school1_id}
+                          onChange={this.handleChange}
+                        >
+                          <option value="">Select School</option>
+                          {schools.map((school, i) => {
+                            return (
+                              <option value={school.id} key={i}>
+                                {school.name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="column is-narrow">
+                  <button
+                    type="submit"
+                    class="button is-danger is-large"
+                    disabled={
+                      this.state.school1_id === "" ||
+                      this.state.school2_id === ""
+                    }
+                  >
+                    Rate
+                  </button>
+                </div>
+                <div className="column is-narrow">
+                  <div clasNames="field">
+                    <div className="control">
+                      <div className="select is-rounded is-large">
+                        <select
+                          name="school2_id"
+                          value={this.state.school2_id}
+                          onChange={this.handleChange}
+                        >
+                          <option value="">Select School</option>
+                          {schools.map((school, i) => {
+                            return (
+                              <option value={school.id} key={i}>
+                                {school.name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="column is-narrow">
-                <a
-                  type="submit"
-                  class="button is-danger is-large"
-                  disabled={
-                    this.state.school1_id === "" || this.state.school2_id === ""
-                  }
-                >
-                  Rate
-                </a>
-              </div>
-              <div className="column is-narrow">
-                <div clasNames="field">
-                  <div className="control">
-                    <div className="select is-rounded is-large">
-                      <select
-                        name="school2_id"
-                        value={this.state.school2_id}
-                        onChange={this.handleChange}
-                      >
-                        <option>Select School</option>
-                        <option value="svdsfs">Me</option>
-                        {schools.map((school, i) => {
-                          return (
-                            <option value={school.id} key={i}>
-                              {school.name}
-                            </option>
-                          );
-                        })}
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     );
