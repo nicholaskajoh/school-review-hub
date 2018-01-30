@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const TopReviews = ({ reviews }) => {
+const TopReviews = ({ reviews, isLoaded }) => {
   return (
     <div>
       <section className="section" style={{ paddingTop: 0 }}>
@@ -10,31 +10,37 @@ const TopReviews = ({ reviews }) => {
 						<i className="fa fa-comment-alt"></i> Top Reviews
 					</h1>
 
-          {reviews.map((review, index) =>
-            <div className="card" style={{marginBottom: 15}}>
-              <header className="card-header">
-                  <p className="card-header-title">
-                    {review.school.name}
-                  </p>
-              </header>
-              <div className="card-content">
-              <div className="content">
-                  {review.content.substring(0, 150).trim() + (review.content.length > 150 ? "..." : "")} - Last updated {review.updated_at}
+          {isLoaded ?
+            reviews.map((review, index) =>
+              <div className="card" style={{marginBottom: 15}}>
+                <header className="card-header">
+                    <p className="card-header-title">
+                      {review.school.name}
+                    </p>
+                </header>
+                <div className="card-content">
+                <div className="content">
+                    {review.content.substring(0, 150).trim() + (review.content.length > 150 ? "..." : "")} - Last updated {review.updated_at}
+                </div>
+                </div>
+                <footer className="card-footer">
+                    {/* <div className="card-footer-item">
+                        <Link to={"/review/" + review.id}>Full review</Link>
+                    </div> */}
+                    <div className="card-footer-item">
+                        Upvotes ({review.upvotes})
+                    </div>
+                    <div className="card-footer-item">
+                        Comments ({review.comments_count})
+                    </div>
+                </footer>
               </div>
-              </div>
-              <footer className="card-footer">
-                  {/* <div className="card-footer-item">
-                      <Link to={"/review/" + review.id}>Full review</Link>
-                  </div> */}
-                  <div className="card-footer-item">
-                      Upvotes ({review.upvotes})
-                  </div>
-                  <div className="card-footer-item">
-                      Comments ({review.comments_count})
-                  </div>
-              </footer>
+            )
+          :
+            <div className="has-text-centered">
+              <i className="fa fa-spinner fa-spin fa-2x"></i>
             </div>
-          )}
+          }
         </div>
       </section>
     </div>

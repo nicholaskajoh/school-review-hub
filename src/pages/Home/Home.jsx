@@ -13,7 +13,10 @@ class Home extends Component {
     this.state = {
       topSchools: [],
       suggestedMatches: [],
-      topReviews: []
+      topReviews: [],
+      schoolsHaveLoaded: false,
+      matchesHaveLoaded: false,
+      reviewsHaveLoaded: false,
     };
   }
 
@@ -24,15 +27,17 @@ class Home extends Component {
   }
 
   getSchools() {
+    this.setState({ schoolsHaveLoaded: false });
     axios
       .get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/top-schools`)
       .then(res => {
         const topSchools = res.data;
-        this.setState({ topSchools });
+        this.setState({ topSchools, schoolsHaveLoaded: true });
       });
   }
 
   getMatches() {
+    this.setState({ matchesHaveLoaded: false });
     axios
       .get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/suggested-matches`, {
         headers: {
@@ -41,16 +46,17 @@ class Home extends Component {
       })
       .then(res => {
         const suggestedMatches = res.data;
-        this.setState({ suggestedMatches });
+        this.setState({ suggestedMatches, matchesHaveLoaded: true });
       });
   }
 
   getReviews() {
+    this.setState({ reviewsHaveLoaded: false });
     axios
       .get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/top-reviews`)
       .then(res => {
         const topReviews = res.data;
-        this.setState({ topReviews });
+        this.setState({ topReviews, reviewsHaveLoaded: true });
       });
   }
 
@@ -95,13 +101,13 @@ class Home extends Component {
         </div>
 
         <TabPanel>
-          <TopSchools schools={this.state.topSchools} />
+          <TopSchools schools={this.state.topSchools} isLoaded={this.state.schoolsHaveLoaded} />
         </TabPanel>
         <TabPanel>
-          <SuggestedMatches matches={this.state.suggestedMatches} />
+          <SuggestedMatches matches={this.state.suggestedMatches} isLoaded={this.state.matchesHaveLoaded} />
         </TabPanel>
         <TabPanel>
-          <TopReviews reviews={this.state.topReviews} />
+          <TopReviews reviews={this.state.topReviews} isLoaded={this.state.reviewsHaveLoaded} />
         </TabPanel>
       </Tabs>
     );
