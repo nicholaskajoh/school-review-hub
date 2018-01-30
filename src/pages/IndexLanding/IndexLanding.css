@@ -1,7 +1,8 @@
-.has-bg-img { 
-  background: url('../../bg.jpeg')center center; background-size:cover;
- }
-.has-text-white{
+.has-bg-img {
+  background: url("../../assets/img/bg.jpeg")center center;
+  background-size: cover;
+}
+.has-text-white {
   color: white;
 }
 /* 
@@ -9,7 +10,7 @@
   color: 
 } */
 
-.card{
+.card {
   margin: 5px !important;
   padding-top: 40px;
   padding-bottom: 40px;

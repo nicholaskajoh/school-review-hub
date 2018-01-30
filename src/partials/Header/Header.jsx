@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import './Header.css';
-import logo from '../../logo.png';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import "./Header.css";
+import logo from "../../logo.png";
 
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = {isNavbarActive: false};
+    this.state = { isNavbarActive: false };
   }
 
   toggleNavbar = () => {
     this.setState(prevState => ({
-        isNavbarActive: !prevState.isNavbarActive
+      isNavbarActive: !prevState.isNavbarActive
     }));
-  }
+  };
 
   isAuth() {
     return localStorage.getItem("authToken") !== null;
@@ -24,52 +24,89 @@ class Header extends Component {
       <nav className="navbar is-link is-fixed-top">
         <div className="navbar-brand">
           <Link className="navbar-item" to="/">
-            <img src={logo} alt="SchoolReviewHub" width="40px" height="auto"/>
+            <img src={logo} alt="SchoolReviewHub" width="40px" height="auto" />
           </Link>
-          <div className={"navbar-burger burger" + (this.state.isNavbarActive ? " is-active" : "")} onClick={this.toggleNavbar}>
-            <span></span>
-            <span></span>
-            <span></span>
+          <div
+            className={
+              "navbar-burger burger" +
+              (this.state.isNavbarActive ? " is-active" : "")
+            }
+            onClick={this.toggleNavbar}
+          >
+            <span />
+            <span />
+            <span />
           </div>
         </div>
 
-        <div className={"navbar-menu" + (this.state.isNavbarActive ? " is-active" : "")} onClick={this.toggleNavbar}>
-          <div className="navbar-start">
-
-          </div>
+        <div
+          className={
+            "navbar-menu" + (this.state.isNavbarActive ? " is-active" : "")
+          }
+          onClick={this.toggleNavbar}
+        >
+          <div className="navbar-start" />
 
           <div className="navbar-end">
-            {this.isAuth() ?<Link className="navbar-item" to="/home">Home</Link>: ""}
-            <Link className="navbar-item" to="/srh-index">SRH Index</Link>
-            {this.isAuth() ? <Link className="navbar-item" to="/match">Match & Rate</Link>: ""}
+            {this.isAuth() ? (
+              <Link className="navbar-item" to="/home">
+                Home
+              </Link>
+            ) : (
+              ""
+            )}
+            <Link className="navbar-item" to="/srh-index">
+              SRH Index
+            </Link>
+            {this.isAuth() ? (
+              <Link className="navbar-item" to="/match">
+                Match & Rate
+              </Link>
+            ) : (
+              ""
+            )}
             {/* <Link className="navbar-item" to="/search">
               <i className="fa fa-search"></i>
             </Link> */}
 
-            {this.isAuth() ?
-            <div className="navbar-item has-dropdown is-hoverable">
-              <a className="navbar-link">Account</a>
-              
-              <div className="navbar-dropdown is-boxed">
-                <Link className="navbar-item" to="/profile">Profile</Link>
-                <Link className="navbar-item" to="/help">Help</Link>
-                <Link className="navbar-item" to="/logout">Log out</Link>
-              </div>
-            </div>
-            : ""}
+            {this.isAuth() ? (
+              <div className="navbar-item has-dropdown is-hoverable">
+                <a className="navbar-link">Account</a>
 
-            {!this.isAuth() ?
-            <div className="navbar-item">
-              <div className="field is-grouped">
-                <p className="control">
-                  <Link className="button is-success" to="/register">Sign Up</Link>
-                </p>
-                <p>
-                  <Link className="button is-info" to="/login">Login</Link>
-                </p>
+                <div className="navbar-dropdown is-boxed">
+                  <Link className="navbar-item" to="/profile">
+                    Profile
+                  </Link>
+                  <Link className="navbar-item" to="/help">
+                    Help
+                  </Link>
+                  <Link className="navbar-item" to="/logout">
+                    Log out
+                  </Link>
+                </div>
               </div>
-            </div>
-            : ""}
+            ) : (
+              ""
+            )}
+
+            {!this.isAuth() ? (
+              <div className="navbar-item">
+                <div className="field is-grouped">
+                  <p className="control">
+                    <Link className="button is-success" to="/register">
+                      Sign Up
+                    </Link>
+                  </p>
+                  <p>
+                    <Link className="button is-warning" to="/login">
+                      Login
+                    </Link>
+                  </p>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </nav>
