@@ -1,10 +1,18 @@
-import React from 'react';
-import './Help.css';
+import React from "react";
+import "./Help.css";
 
 const Help = () => (
-  <div className="section">
-    <div className="container">
-      <h1 className="title">Help page</h1>
+  <div>
+    <section className="hero is-small is-warning is-bold">
+      <div className="hero-body">
+        <div className="container">
+          <h1 className="title">Help</h1>
+        </div>
+      </div>
+    </section>
+
+    <div className="section">
+      <p className="has-text-centered">Help info coming soon!</p>
     </div>
   </div>
 );

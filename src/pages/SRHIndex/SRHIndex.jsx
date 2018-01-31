@@ -53,10 +53,12 @@ class SRHIndex extends Component {
           <div className="hero-body">
             <div className="container">
               <h1 className="title">SRH Index</h1>
-              <h1 className="sub-title">School Review Hub Rankings</h1>
             </div>
           </div>
         </section>
+
+        <br />
+
         <div className="container">
           <table className="table is-fullwidth">
             <thead>
