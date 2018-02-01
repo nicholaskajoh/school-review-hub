@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const TopSchools = ({ schools, isLoaded }) => {
   return (
@@ -7,52 +7,71 @@ const TopSchools = ({ schools, isLoaded }) => {
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="container">
           <h1 className="title">
-            <i className="fa fa-trophy"></i> Top Schools
+            <i className="fa fa-trophy has-text-danger" /> Top Schools
           </h1>
 
-          {isLoaded ?
-            schools.map((school, index) =>
-              <div className="box" key={index}>
-                <article className="media">
-                  <figure className="media-left">
-                    <p className="image is-48x48">
-                      <img src={school.logo_url} alt={school.name + " logo"}/>
-                    </p>
-                  </figure>
+          <hr />
+          <br />
+          <div className="columns is-multiline">
+            {isLoaded ? (
+              schools.map((school, index) => (
+                <div className="column is-3 has-text-centered" key={index}>
+                  <div className="box top-school-box">
+                    <img
+                      className="box-image image is-96x96"
+                      src={school.logo_url}
+                      alt={school.name + " logo"}
+                    />
 
-                  <div className="media-content">
-                    <div className="content">
-                      <h2 className="title">
+                    <div className="content has-text-centered">
+                      <h3 className="subtitle has-text-weight-semibold is-6 ">
                         <Link to={"/school/" + school.id}>{school.name}</Link>
-                      </h2>
+                      </h3>
+                    </div>
 
-                      <p className="school-stat-tags">
-                        <span className="tag is-warning is-rounded" title="Rank">
-                          <i className="fa fa-trophy"></i> &nbsp; {school.rank}
+                    <div className="school-stat-tags">
+                      <div className="bottom-pegged-display is-centered">
+                        <span className="tag" title="Rank">
+                          <a className="has-text-white">{school.rank}</a>
+                          &nbsp;
+                          <i className="fa fa-trophy has-text-warning" />
                         </span>
-                        <span className="tag is-info is-rounded" title="Rating">
-                          <i className="fa fa-star"></i> &nbsp; {school.rating}
+
+                        <span className="tag" title="Rank">
+                          <a className="has-text-white">{school.rating}</a>
+                          &nbsp;
+                          <i className="fa fa-star has-text-info" />
                         </span>
-                        <span className="tag is-success is-rounded" title="Reviews">
-                          <i className="fa fa-user"></i> &nbsp; {school.reviews_count}
+
+                        <span className="tag" title="Rank">
+                          <a className="has-text-white">
+                            {school.reviews_count}
+                          </a>
+                          &nbsp;
+                          <i className="fa fa-user has-text-success" />
                         </span>
-                        <span className="tag is-danger is-rounded" title="Reports">
-                          <i className="fa fa-comment-alt"></i> &nbsp; {school.reports_count}
+
+                        <span className="tag" title="Rank">
+                          <a className="has-text-white">
+                            {school.reports_count}
+                          </a>
+                          &nbsp;
+                          <i className="fa fa-comment-alt has-text-danger" />
                         </span>
-                      </p>
+                      </div>
                     </div>
                   </div>
-                </article>
+                </div>
+              ))
+            ) : (
+              <div className="has-text-centered">
+                <i className="fa fa-spinner fa-spin fa-2x" />
               </div>
-            )
-          :
-            <div className="has-text-centered">
-              <i className="fa fa-spinner fa-spin fa-2x"></i>
-            </div>
-          }
+            )}
+          </div>
         </div>
       </section>
-  	</div>
+    </div>
   );
 };
 

@@ -3,6 +3,8 @@ import { Redirect } from "react-router-dom";
 import axios from "axios";
 import qs from "qs";
 import "./RatingForm.css";
+import "../../assets/css/pretty-checkbox.min.css";
+import "mdi/css/materialdesignicons.min.css";
 
 class RatingForm extends Component {
   constructor(props) {
@@ -90,44 +92,62 @@ class RatingForm extends Component {
 
   render() {
     return (
-      <div className="section">
+      <div>
+        <section className="hero is-small is-warning is-bold">
+          <div className="hero-body">
+            <div className="container">
+              <h1 className="title">
+                Rate:{" "}
+                <a className="subtitle">Select the school that best fits</a>
+              </h1>
+            </div>
+          </div>
+        </section>
+
+        <br />
+        <br />
+
         <div className="container">
           {this.state.isLoaded ? (
             <form onSubmit={this.handleSubmit}>
               {this.state.criteria.map((criterion, index) => (
-                <div className="box" key={index}>
-                  <h4 className="subtitle">{criterion.description}</h4>
-
-                  <div className="field columns is-centered">
+                <article class="message is-info" key={index}>
+                  <div class="message-header">
+                    <p>{criterion.description}</p>
+                  </div>
+                  <div class="message-body">
                     <div className="control">
-                      <label className="radio">
+                      <div class="pretty p-default p-round">
                         <input
                           type="radio"
                           name={criterion.id}
                           value={this.state.school1.id}
                           onChange={this.handleChange}
-                        />{" "}
-                        &nbsp;
-                        {this.state.school1.name}
-                      </label>
+                        />
+                        <div class="state p-success-o">
+                          <label>{this.state.school1.name}</label>
+                        </div>
+                      </div>
 
-                      <strong>&nbsp; OR &nbsp;</strong>
-
-                      <label className="radio">
-                        {this.state.school2.name} &nbsp;
+                      <br />
+                      <br />
+                      <div class="pretty p-default p-round">
                         <input
                           type="radio"
                           name={criterion.id}
                           value={this.state.school2.id}
                           onChange={this.handleChange}
                         />
-                      </label>
+                        <div class="state p-success-o">
+                          <label>{this.state.school2.name}</label>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </article>
               ))}
 
-              <div className="has-text-right">
+              <div className="has-text-right buttons is-centered">
                 <button
                   className="button is-large is-success"
                   type="submit"
@@ -136,7 +156,8 @@ class RatingForm extends Component {
                     this.state.criteria.length
                   }
                 >
-                  Submit
+                  <i class="fa fa-star golden-star" aria-hidden="true" />&nbsp;
+                  Submit Ratings
                 </button>
               </div>
             </form>
@@ -146,6 +167,9 @@ class RatingForm extends Component {
             </div>
           )}
         </div>
+
+        <br />
+        <br />
       </div>
     );
   }

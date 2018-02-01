@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "axios": "^0.17.1",
+    "mdi": "^2.1.19",
+    "pretty-checkbox": "^3.0.3",
     "qs": "^6.5.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

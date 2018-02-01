@@ -16,7 +16,7 @@ class Home extends Component {
       topReviews: [],
       schoolsHaveLoaded: false,
       matchesHaveLoaded: false,
-      reviewsHaveLoaded: false,
+      reviewsHaveLoaded: false
     };
   }
 
@@ -63,51 +63,57 @@ class Home extends Component {
   render() {
     return (
       <Tabs>
-        <div className="tabs is-toggle columns is-centered" style={{ margin: 0 }}>
+        <div
+          className="tabs is-toggle columns is-centered"
+          style={{ margin: 0 }}
+        >
           <ul>
             <TabList>
               <Tab>
-                <li>
-                  <a>
-                    <span className="icon">
-                      <i className="fas fa-trophy" />
-                    </span>
-                    <span>Top Schools</span>
-                  </a>
-                </li>
+                <a>
+                  <span className="icon">
+                    <i className="fas fa-trophy" />
+                  </span>
+                  <span>Top Schools</span>
+                </a>
               </Tab>
               <Tab>
-                <li>
-                  <a>
-                    <span className="icon">
-                      <i className="fas fa-flag" />
-                    </span>
-                    <span>Suggested Matches</span>
-                  </a>
-                </li>
+                <a>
+                  <span className="icon">
+                    <i className="fas fa-flag" />
+                  </span>
+                  <span>Suggested Matches</span>
+                </a>
               </Tab>
               <Tab>
-                <li>
-                  <a>
-                    <span className="icon">
-                      <i className="fas fa-comment-alt" />
-                    </span>
-                    <span>Top Reviews</span>
-                  </a>
-                </li>
+                <a>
+                  <span className="icon">
+                    <i className="fas fa-comment-alt" />
+                  </span>
+                  <span>Top Reviews</span>
+                </a>
               </Tab>
             </TabList>
           </ul>
         </div>
 
         <TabPanel>
-          <TopSchools schools={this.state.topSchools} isLoaded={this.state.schoolsHaveLoaded} />
+          <TopSchools
+            schools={this.state.topSchools}
+            isLoaded={this.state.schoolsHaveLoaded}
+        />
         </TabPanel>
         <TabPanel>
-          <SuggestedMatches matches={this.state.suggestedMatches} isLoaded={this.state.matchesHaveLoaded} />
+          <SuggestedMatches
+            matches={this.state.suggestedMatches}
+            isLoaded={this.state.matchesHaveLoaded}
+          />
         </TabPanel>
         <TabPanel>
-          <TopReviews reviews={this.state.topReviews} isLoaded={this.state.reviewsHaveLoaded} />
+          <TopReviews
+            reviews={this.state.topReviews}
+            isLoaded={this.state.reviewsHaveLoaded}
+          />
         </TabPanel>
       </Tabs>
     );

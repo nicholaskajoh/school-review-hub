@@ -25,6 +25,9 @@ class Header extends Component {
         <div className="navbar-brand">
           <Link className="navbar-item" to="/">
             <img src={logo} alt="SchoolReviewHub" width="40px" height="auto" />
+            &nbsp;<h3 style={{ color: "#fff" }} className="title">
+              SRH
+            </h3>
           </Link>
           <div
             className={

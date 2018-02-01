@@ -55,14 +55,6 @@ class Match extends Component {
 
     return (
       <div>
-        <section className="hero is-small is-warning is-bold">
-          <div className="hero-body">
-            <div className="container">
-              <h1 className="title">Match and Rate</h1>
-            </div>
-          </div>
-        </section>
-
         <div className="section match-section">
           <div className="container">
             <h1 className="title has-text-centered">
@@ -74,11 +66,12 @@ class Match extends Component {
                 <div className="column is-narrow">
                   <div clasNames="field">
                     <div className="control">
-                      <div className="select is-rounded is-large">
+                      <div className="select is-rounded is-fullwidth is-medium">
                         <select
                           name="school1_id"
                           value={this.state.school1_id}
                           onChange={this.handleChange}
+                          className="fixed-width-select-box"
                         >
                           <option value="">Select School</option>
                           {schools.map((school, i) => {
@@ -93,10 +86,11 @@ class Match extends Component {
                     </div>
                   </div>
                 </div>
+
                 <div className="column is-narrow">
                   <button
                     type="submit"
-                    class="button is-danger is-large"
+                    class="button is-danger is-medium"
                     disabled={
                       this.state.school1_id === "" ||
                       this.state.school2_id === ""
@@ -105,14 +99,16 @@ class Match extends Component {
                     Rate
                   </button>
                 </div>
+
                 <div className="column is-narrow">
-                  <div clasNames="field">
+                  <div clasNames="field has-addons">
                     <div className="control">
-                      <div className="select is-rounded is-large">
+                      <div className="select is-rounded is-fullwidth is-medium">
                         <select
                           name="school2_id"
                           value={this.state.school2_id}
                           onChange={this.handleChange}
+                          className="fixed-width-select-box"
                         >
                           <option value="">Select School</option>
                           {schools.map((school, i) => {

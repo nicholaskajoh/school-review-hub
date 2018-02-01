@@ -6,10 +6,12 @@ const SuggestedMatches = ({ matches, isLoaded }) => {
     <section className="section" style={{ paddingTop: 0 }}>
       <div className="container">
         <h1 className="title">
-          <i className="fa fa-flag" /> Suggested matches
+          <i className="fa fa-flag has-text-danger" /> Suggested matches
         </h1>
+        <hr />
+        <br />
 
-        {isLoaded ?
+        {isLoaded ? (
           matches.map((match, index) => (
             <div className="box">
               <div className="columns has-text-centered">
@@ -41,11 +43,11 @@ const SuggestedMatches = ({ matches, isLoaded }) => {
               </div>
             </div>
           ))
-        :
+        ) : (
           <div className="has-text-centered">
-            <i className="fa fa-spinner fa-spin fa-2x"></i>
+            <i className="fa fa-spinner fa-spin fa-2x" />
           </div>
-        }
+        )}
       </div>
     </section>
   );

@@ -1,15 +1,18 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import './IndexLanding.css';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import "./IndexLanding.css";
+import ratingImg from "../../assets/img/rating.png";
+import reportImg from "../../assets/img/report.png";
+import reviewImg from "../../assets/img/review.png";
+import rankingImg from "../../assets/img/ranking.png";
 
-
-class IndexLanding extends Component{
+class IndexLanding extends Component {
   isAuth() {
     return localStorage.getItem("authToken") !== null;
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <div>
         <section className="hero is-medium has-bg-img">
           <div className="hero-body">
@@ -18,7 +21,8 @@ class IndexLanding extends Component{
                 This is School Review Hub
               </h1>
               <h2 className="subtitle has-text-white">
-                Crowd-sourced anonymous reviews of Nigerian univeristies at your finger tips!
+                Crowd-sourced anonymous reviews of Nigerian univeristies at your
+                finger tips!
               </h2>
             </div>
           </div>
@@ -29,55 +33,79 @@ class IndexLanding extends Component{
             <nav className="columns">
               <div className="column has-text-centered ">
                 <div>
-                  <p className="has-text-link"><i className="fa fa-star fa-2x"></i></p>
-                  <p className="title has-text-link">Ratings</p>
-                  <p>Rate univeristies using our comparison-based system. It allows you match two univeristies against each other and choose the best under different criteria.</p>
+                  <img src={ratingImg} class="shield-img" />
+                  <p className="title is-4">Ratings</p>
+                  <p>
+                    Rate univeristies using our comparison-based system. It
+                    allows you match two univeristies against each other and
+                    choose the best under different criteria.
+                  </p>
                 </div>
               </div>
               <div className="column has-text-centered ">
                 <div>
-                  <p className="has-text-link"><i className="fa fa-comments fa-2x"></i></p>
-                  <p className="title has-text-link">Reviews</p>
-                  <p>Write reviews of univeristies detailing more nuanced opinions that our rating system might not capture.</p>
+                  <img src={reviewImg} class="shield-img" />
+                  <p className="title is-4">Reviews</p>
+                  <p>
+                    Write reviews of univeristies detailing more nuanced
+                    opinions that our rating system might not capture.
+                  </p>
                 </div>
               </div>
               <div className="column has-text-centered ">
                 <div>
-                  <p className="has-text-link"><i className="fa fa-microphone fa-2x"></i></p>
-                  <p className="title has-text-link">Reports</p>
-                  <p>Report events -- good, bad and ugly -- happening in any univeristy that might be of interest to the public.</p>
+                  <img src={reportImg} class="shield-img" />
+                  <p className="title is-4">Reports</p>
+                  <p>
+                    Report events -- good, bad and ugly -- happening in any
+                    univeristy that might be of interest to the public.
+                  </p>
                 </div>
               </div>
               <div className="column has-text-centered ">
                 <div>
-                  <p className="has-text-link"><i className="fa fa-trophy fa-2x"></i></p>
-                  <p className="title has-text-link">Rankings</p>
-                  <p>SchoolReviewHub maintains an index of all univeristies in Nigeria listed in ascending order of their rankings. Easily find out the best univeristies as rated by you!</p>
+                  <img src={rankingImg} class="shield-img" />
+                  <p className="title is-4">Rankings</p>
+                  <p>
+                    SchoolReviewHub maintains an index of all univeristies in
+                    Nigeria listed in ascending order of their rankings. Easily
+                    find out the best univeristies as rated by you!
+                  </p>
                 </div>
               </div>
             </nav>
           </div>
         </section>
 
-        <section className="hero is-warning">
-          <div className="hero-body has-text-centered">
+        <section className="hero is-pattern-bg">
+          <div className="hero-body content has-text-centered">
             <div className="container">
-              <h1 className="title">
+              <h1 className="title has-text-danger has-text-weight-bold">
                 You're anonymous!
               </h1>
               <h2 className="subtitle">
-                Rate, review and report anonymously. Tell the truth and nothing but the truth.
+                Rate, review and report anonymously. Tell the truth and nothing
+                but the truth.
               </h2>
-              {!this.isAuth() ?
+              {!this.isAuth() ? (
                 <div>
-                  <p>What are you waiting for? Sign up for or Login to SchoolReviewHub...</p>
-
-                  <Link className="button is-success is-medium" to="/register">Sign Up</Link> &nbsp;
-                  <Link className="button is-info is-medium" to="/login">Login</Link>
+                  <p>
+                    What are you waiting for? Sign up for or Login to
+                    SchoolReviewHub...
+                  </p>
+                  <Link className="button is-success is-medium" to="/register">
+                    Sign Up
+                  </Link>{" "}
+                  &nbsp;
+                  <Link className="button is-info is-medium" to="/login">
+                    Login
+                  </Link>
                 </div>
-                :
-                <Link className="button is-info is-danger" to="/home">Home</Link>                    
-              }
+              ) : (
+                <Link className="button is-info is-success" to="/home">
+                  Get Started
+                </Link>
+              )}
             </div>
           </div>
         </section>

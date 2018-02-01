@@ -60,80 +60,86 @@ class SRHIndex extends Component {
         <br />
 
         <div className="container">
-          <table className="table is-fullwidth">
-            <thead>
-              <tr>
-                <th>
-                  <i className="fa fa-trophy" /> Rank
+          <div className="container responsive-table">
+            <table className="table is-fullwidth is-hoverable">
+              <thead>
+                <tr>
+                  <th>
+                    <i className="fa fa-trophy is-custom-yellow" /> Rank
                 </th>
-                <th>
-                  <i className="fa fa-shield-alt" /> Crest
+                  <th>
+                    <i className="fa fa-shield-alt is-custom-yellow" /> Crest
                 </th>
-                <th>
-                  <i className="fa fa-graduation-cap" /> Name
+                  <th>
+                    <i className="fa fa-graduation-cap is-custom-yellow" /> Name
                 </th>
-                <th>
-                  <i className="fa fa-star" /> Rating
+                  <th>
+                    <i className="fa fa-star is-custom-yellow" /> Rating
                 </th>
-                <th>
-                  <i className="fa fa-users" /> Reviews
+                  <th>
+                    <i className="fa fa-users is-custom-yellow" /> Reviews
                 </th>
-                <th>
-                  <i className="fa fa-comment-alt" /> Reports
+                  <th>
+                    <i className="fa fa-comment-alt is-custom-yellow" /> Reports
                 </th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {this.state.schools.map((school, index) => (
-                <tr key={index}>
-                  <td>{school.rank}</td>
-                  <td>
-                    <img
-                      className="image is-48x48"
-                      src={school.logo_url}
-                      alt={school.name + " logo"}
-                    />
-                  </td>
-                  <td>
-                    <Link to={"/school/" + school.id}>{school.name}</Link>
-                  </td>
-                  <td>{school.rating}</td>
-                  <td>{school.reviews_count}</td>
-                  <td>{school.reports_count}</td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {this.state.schools.map((school, index) => (
+                  <tr key={index}>
+                    <td>{school.rank}</td>
+                    <td>
+                      <img
+                        className="image is-48x48 rounded-img"
+                        src={school.logo_url}
+                        alt={school.name + " logo"}
+                      />
+                    </td>
+                    <td>
+                      <Link to={"/school/" + school.id}>{school.name}</Link>
+                    </td>
+                    <td>{school.rating}</td>
+                    <td>{school.reviews_count}</td>
+                    <td>{school.reports_count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+          </div>
 
           {this.state.showLoadingSpinner ? (
             <div className="has-text-centered">
               <i className="fa fa-spinner fa-spin fa-2x" />
             </div>
           ) : (
-            ""
-          )}
+              ""
+            )}
+
+
+          <br /><br />
 
           <nav className="pagination">
             <button
-              className="button is-link"
+              className="button is-small is-transparent"
               onClick={this.prevPage}
               disabled={!this.hasPrevPage}
             >
-              Previous
+              <i className="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp; Previous
             </button>
             <button
-              className="button is-link"
+              className="button is-small is-transparent"
               onClick={this.nextPage}
               disabled={!this.hasNextPage}
             >
-              Next
+              Next &nbsp;&nbsp;&nbsp;<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
             </button>
           </nav>
 
           <br />
         </div>
-      </div>
+      </div >
     );
   }
 }

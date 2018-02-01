@@ -1,10 +1,68 @@
 .school-stat-tags span {
-    margin-right: 5px;
+  margin-right: 0px;
+  padding: 8px;
+  background-color: transparent !important;
 }
 
+.school-stat-tags {
+  bottom: 0px !important;
+  position: absolute;
+  background-color: #022038;
+  padding: 5px;
+  width: 100%;
+}
+
+.box-image {
+  margin: auto;
+  /* left: 0;
+  right: 0; */
+}
 .react-tabs__tab--selected {
   background: #fff;
   border-color: transparent !important;
   color: black;
-  /* border-radius: 5px05px 0 0; */
+}
+
+.top-school-box {
+  height: 270px;
+  padding-bottom: 10px !important;
+  padding-left: 0px;
+  padding-right: 0px !important;
+  position: relative;
+  margin: 10px;
+}
+
+.top-school-box .content {
+  margin-top: 10px;
+}
+
+.subtitle a {
+  color: #363636;
+}
+
+.line_diagonal {
+  width: 100%;
+  top: 35px;
+  left: 35px;
+  transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.blank {
+  position: absolute;
+  padding: 0px;
+}
+
+.blank span {
+  display: inline-block;
+}
+
+.school-1-side {
+  background-color: #022038;
+}
+
+.school-1-side h3 {
+  color: white;
 }

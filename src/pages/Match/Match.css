@@ -9,3 +9,7 @@
     padding-bottom: 50px;
   }
 }
+
+.fixed-width-select-box {
+  max-width: 500px !important;
+}
