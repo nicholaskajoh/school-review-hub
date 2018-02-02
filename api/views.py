@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework import status, generics
+from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from api.models import *
 from api.serializers import *
@@ -12,6 +13,7 @@ from django.utils import timezone
 from django.db.models import Q
 from random import shuffle
 from django.db.models import Count
+from .forms import RegisterForm
 
 # Pagination function.
 def paginate(input_list, page, results_per_page=10):
@@ -205,11 +207,16 @@ class DeleteRatingView(APIView):
 
 class RegisterView(APIView):
     def post(self, request):
-        data = request.data
-        user = User(username=data['username'], email=data['email'])
-        user.set_password(data['password'])
-        user.save()
-        return Response(status=status.HTTP_201_CREATED)
+        form = RegisterForm(request.data or None)
+        if form.is_valid():
+            username = form.cleaned_data['username'].lower()
+            email = form.cleaned_data['email'].lower()
+            user = User(username=username, email=email)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            token  = Token.objects.create(user=user)
+            return Response(data={'token':token.key}, status=status.HTTP_201_CREATED)
+        return Response(data={'errors': form.errors}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
 class LogoutView(APIView):
