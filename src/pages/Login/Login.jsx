@@ -12,6 +12,11 @@ class Login extends React.Component {
       password: "",
       isAuth: false
     };
+    this.errors = {
+      username: [],
+      password: [],
+      non_field_errors: []
+    }
   }
 
   handleChange = (event) => {
@@ -33,7 +38,40 @@ class Login extends React.Component {
       localStorage.setItem("authToken", res.data.token);
       this.setState({ isAuth: true });
     } catch(e) {
-      alert("Invalid username or password!");
+      if (e.response)
+      {
+        this.errors = {
+          username: [],
+          password: [],
+          non_field_errors: []
+        };
+        const errors = e.response.data;
+        console.log(e.response);
+        if (errors.username)
+        {
+          this.errors.username = errors.username
+        }
+        if (errors.password)
+        {
+          this.errors.password = errors.password
+        }
+        if (errors.non_field_errors)
+        {
+          this.errors.non_field_errors = errors.non_field_errors
+        }
+        this.forceUpdate();
+        console.log(this.errors);
+      }
+      else
+      {
+        this.errors = {
+          username: [],
+          password: [],
+          non_field_errors: ["OMG! Server is down. We'll notify the development team right away."]
+        };
+        this.forceUpdate();
+        console.table(e);
+      }
     }
   }
 
@@ -50,20 +88,29 @@ class Login extends React.Component {
               <h2 className="title has-text-grey">Login</h2>
 
               <h4 className="subtitle">Please, login to proceed</h4>
-              
+
               <div className="box">
                 <form onSubmit={this.handleSubmit} autoComplete="off">
                   <div className="field">
                     <div className="control">
                       <input className="input is-medium" type="text" name="username" placeholder="Username" autoFocus value={this.state.username} onChange={this.handleChange}/>
                     </div>
+                    <p className="help is-danger">
+                      {this.errors.username}
+                    </p>
                   </div>
-  
+
                   <div className="field">
                     <div className="control">
                       <input className="input is-medium" type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
                     </div>
+                    <p className="help is-danger">
+                      {this.errors.password}
+                    </p>
                   </div>
+                  <p className="help is-danger">
+                    {this.errors.non_field_errors}
+                  </p>
 
                   <button type="submit" className="button is-fullwidth is-info is-large" disabled={this.state.username === "" || this.state.password === ""}>Login</button>
                 </form>
@@ -75,7 +122,7 @@ class Login extends React.Component {
             </div>
           </div>
         </div>
-      </section>  
+      </section>
     );
   }
 }
