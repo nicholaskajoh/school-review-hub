@@ -41,6 +41,7 @@ INSTALLED_APPS = [
   'rest_framework', # api
   'rest_framework.authtoken', # api auth
   'corsheaders',
+  'django_extensions',
 
   # django
   'django.contrib.admin',
@@ -160,3 +161,5 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = os.getenv('CORS_ORIGIN_WHITELIST').split(',') if os.getenv('CORS_ORIGIN_WHITELIST') else []
 
 CORS_EXPOSE_HEADERS = ['X-Has-Previous', 'X-Has-Next']
+
+SHELL_PLUS = "ipython"
