@@ -13,6 +13,12 @@ class Register extends React.Component {
       password: "",
       isAuth: false
     };
+    this.errors = {
+      username: [],
+      email: [],
+      password: [],
+      __all__: []
+    }
   }
 
   handleChange = (event) => {
@@ -28,18 +34,65 @@ class Register extends React.Component {
 
   async register(username, email, password) {
     try {
-      // register
-      await axios.post(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/register`, {
+      const res1 = await axios.post(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/register`, {
         username, email, password
       });
-      // login
-      const res2 = await axios.post(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/token-auth`, {
-        username, password
-      });
-      localStorage.setItem("authToken", res2.data.token);
-      this.setState({ isAuth: true });
+      if (res1.data.token)
+      {
+        localStorage.setItem("authToken", res1.data.token);
+        this.setState({ isAuth: true });
+      }
+      else
+      {
+        console.log('Good request but somthing is wrong, token was not given');
+        this.errors = {
+          username: [],
+          email: [],
+          password: [],
+          __all__: ["registeration was successful but your authorization was not, please try to login"]
+        };
+        console.log(res1.data);
+      }
     } catch(e) {
-      console.log(e);
+      if (e.response)
+      {
+        this.errors = {
+          username: [],
+          email: [],
+          password: [],
+          __all__: []
+        };
+        const errors = e.response.data.errors;
+        if (errors.username)
+        {
+          this.errors.username = errors.username
+        }
+        if (errors.email)
+        {
+          this.errors.email = errors.email
+        }
+        if (errors.password)
+        {
+          this.errors.password = errors.password
+        }
+        if (errors.__all__)
+        {
+          this.errors.__all__ = errors.__all__
+        }
+        this.forceUpdate();
+        console.log(this.errors);
+      }
+      else
+      {
+        this.errors = {
+          username: [],
+          email: [],
+          password: [],
+          __all__: ["OMG! Server is down. We'll notify the development team right away."]
+        };
+        this.forceUpdate();
+        console.table(e);
+      }
     }
   }
 
@@ -61,20 +114,32 @@ class Register extends React.Component {
                     <div class="control">
                       <input class="input is-medium" type="text" name="username" placeholder="Username" autoFocus value={this.state.name} onChange={this.handleChange}/>
                     </div>
+
+                    <p className="help is-danger">
+                      {this.errors.username}
+                    </p>
                   </div>
 
                   <div class="field">
                     <div class="control">
                       <input class="input is-medium" type="email" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange}/>
                     </div>
+                    <p className="help is-danger">
+                    {this.errors.email}
+                    </p>
                   </div>
-    
+
                   <div class="field">
                     <div class="control">
                       <input class="input is-medium" type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
                     </div>
+                    <p className="help is-danger">
+                    {this.errors.password}
+                    </p>
                   </div>
-
+                  <p className="help is-danger">
+                  {this.errors.__all__}
+                  </p>
                   <button type="submit" class="button is-fullwidth is-info is-large" disabled={this.state.username === "" || this.state.email === "" || this.state.password === ""}>Create account</button>
                 </form>
               </div>
@@ -85,7 +150,7 @@ class Register extends React.Component {
             </div>
           </div>
         </div>
-      </section>  
+      </section>
     );
   }
 }
