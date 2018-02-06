@@ -13,6 +13,7 @@ class Register extends React.Component {
       password: "",
       isAuth: false
     };
+    this.clicked = "";
     this.errors = {
       username: [],
       email: [],
@@ -28,6 +29,8 @@ class Register extends React.Component {
   }
 
   handleSubmit = (event) => {
+    this.clicked = "is-loading";
+    this.forceUpdate();
     this.register(this.state.username, this.state.email, this.state.password);
     event.preventDefault();
   }
@@ -37,6 +40,7 @@ class Register extends React.Component {
       const res1 = await axios.post(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/register`, {
         username, email, password
       });
+      this.clicked = "";
       if (res1.data.token)
       {
         localStorage.setItem("authToken", res1.data.token);
@@ -44,16 +48,18 @@ class Register extends React.Component {
       }
       else
       {
-        console.log('Good request but somthing is wrong, token was not given');
+        // console.log('Good request but something is wrong, token was not given');
         this.errors = {
           username: [],
           email: [],
           password: [],
           __all__: ["registeration was successful but your authorization was not, please try to login"]
         };
-        console.log(res1.data);
+        // console.log(res1.data);
+        this.forceUpdate();
       }
     } catch(e) {
+      this.clicked = "";
       if (e.response)
       {
         this.errors = {
@@ -80,7 +86,7 @@ class Register extends React.Component {
           this.errors.__all__ = errors.__all__
         }
         this.forceUpdate();
-        console.log(this.errors);
+        // console.log(this.errors);
       }
       else
       {
@@ -91,7 +97,7 @@ class Register extends React.Component {
           __all__: ["OMG! Server is down. We'll notify the development team right away."]
         };
         this.forceUpdate();
-        console.table(e);
+        // console.table(e);
       }
     }
   }
@@ -102,17 +108,17 @@ class Register extends React.Component {
     }
 
     return (
-      <section class="hero is-light">
-        <div class="hero-body">
-          <div class="container has-text-centered">
-            <div class="column is-4 is-offset-4">
-              <h3 class="title has-text-grey">Register</h3>
+      <section className="hero is-light">
+        <div className="hero-body">
+          <div className="container has-text-centered">
+            <div className="column is-4 is-offset-4">
+              <h3 className="title has-text-grey">Register</h3>
 
-              <div class="box">
+              <div className="box">
                 <form onSubmit={this.handleSubmit} autoComplete="off">
-                  <div class="field">
-                    <div class="control">
-                      <input class="input is-medium" type="text" name="username" placeholder="Username" autoFocus value={this.state.name} onChange={this.handleChange}/>
+                  <div className="field">
+                    <div className="control">
+                      <input className="input is-medium" type="text" name="username" placeholder="Username" autoFocus value={this.state.name} onChange={this.handleChange}/>
                     </div>
 
                     <p className="help is-danger">
@@ -120,18 +126,18 @@ class Register extends React.Component {
                     </p>
                   </div>
 
-                  <div class="field">
-                    <div class="control">
-                      <input class="input is-medium" type="email" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange}/>
+                  <div className="field">
+                    <div className="control">
+                      <input className="input is-medium" type="email" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange}/>
                     </div>
                     <p className="help is-danger">
                     {this.errors.email}
                     </p>
                   </div>
 
-                  <div class="field">
-                    <div class="control">
-                      <input class="input is-medium" type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
+                  <div className="field">
+                    <div className="control">
+                      <input className="input is-medium" type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
                     </div>
                     <p className="help is-danger">
                     {this.errors.password}
@@ -140,11 +146,12 @@ class Register extends React.Component {
                   <p className="help is-danger">
                   {this.errors.__all__}
                   </p>
-                  <button type="submit" class="button is-fullwidth is-info is-large" disabled={this.state.username === "" || this.state.email === "" || this.state.password === ""}>Create account</button>
+                  <button type="submit" className={"button is-fullwidth is-info is-large " + this.clicked}
+                  disabled={this.state.username === "" || this.state.email === "" || this.state.password === ""}>Create account</button>
                 </form>
               </div>
 
-              <p class="has-text-grey">
+              <p className="has-text-grey">
                 <Link to="/login">Login</Link>
               </p>
             </div>
