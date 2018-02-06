@@ -51,7 +51,7 @@ class Login extends React.Component {
           non_field_errors: []
         };
         const errors = e.response.data;
-        console.log(e.response);
+        // console.log(e.response);
         if (errors.username)
         {
           this.errors.username = errors.username
@@ -65,7 +65,7 @@ class Login extends React.Component {
           this.errors.non_field_errors = errors.non_field_errors
         }
         this.forceUpdate();
-        console.log(this.errors);
+        // console.log(this.errors);
       }
       else
       {
@@ -75,7 +75,7 @@ class Login extends React.Component {
           non_field_errors: ["OMG! Server is down. We'll notify the development team right away."]
         };
         this.forceUpdate();
-        console.table(e);
+        // console.table(e);
       }
     }
   }
