@@ -12,6 +12,7 @@ class Login extends React.Component {
       password: "",
       isAuth: false
     };
+    this.clicked = "";
     this.errors = {
       username: [],
       password: [],
@@ -26,6 +27,8 @@ class Login extends React.Component {
   }
 
   handleSubmit = (event) => {
+    this.clicked = "is-loading";
+    this.forceUpdate();
     this.login(this.state.username, this.state.password);
     event.preventDefault();
   }
@@ -35,9 +38,11 @@ class Login extends React.Component {
       const res = await axios.post(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/token-auth`, {
         username, password
       });
+      this.clicked = "";
       localStorage.setItem("authToken", res.data.token);
       this.setState({ isAuth: true });
     } catch(e) {
+      this.clicked = "";
       if (e.response)
       {
         this.errors = {
@@ -111,8 +116,9 @@ class Login extends React.Component {
                   <p className="help is-danger">
                     {this.errors.non_field_errors}
                   </p>
-
-                  <button type="submit" className="button is-fullwidth is-info is-large" disabled={this.state.username === "" || this.state.password === ""}>Login</button>
+                  <button type="submit" className={"button is-fullwidth is-info is-large " + this.clicked}
+                   disabled={this.state.username === "" || this.state.password === ""}>Login
+                   </button>
                 </form>
               </div>
 
