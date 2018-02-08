@@ -1,6 +1,7 @@
 import factory
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from random import randint
 
 class UserFactory(factory.django.DjangoModelFactory):
     first_name = factory.Sequence(lambda n: 'First_user-{0}'.format(n))
@@ -14,6 +15,8 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = User
 
 class SchoolFactory(factory.django.DjangoModelFactory):
+    rating = float(randint(10, 200))
+    rank = randint(1, 30)
 
     class Meta:
         model = 'api.School'
