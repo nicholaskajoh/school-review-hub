@@ -7,7 +7,11 @@ services:
   - mysql
 
 env:
-  - SECRET_KEY=secret DB=mysql
+  - SECRET_KEY=secret
+  - DATABASE_HOST=127.0.0.1
+  - DATABASE_PORT=3306
+  - DATABASE_NAME=test
+  - DATABASE_USER=root
 
 install:
   - pip install -r requirements.txt
