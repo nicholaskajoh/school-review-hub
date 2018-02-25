@@ -18,21 +18,21 @@ class Login extends React.Component {
     this.errors = {
       username: [],
       non_field_errors: []
-    }
+    };
   }
 
-  handleChange = (event) => {
+  handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value.trim()
     });
-  }
+  };
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     this.clicked = "is-loading";
     this.forceUpdate();
     this.login(this.state.username, this.state.password);
     event.preventDefault();
-  }
+  };
 
   async login(username, password) {
     try {
@@ -40,33 +40,30 @@ class Login extends React.Component {
       this.clicked = "";
       localStorage.setItem("authToken", res.data.token);
       this.setState({ isAuth: true });
-    } catch(e) {
+    } catch (e) {
       this.clicked = "";
       toast.error("Error occured!");
-      if (e.response)
-      {
+      if (e.response) {
         this.errors = {
           username: [],
           non_field_errors: []
         };
         const errors = e.response.data;
         // console.log(e.response);
-        if (errors.username)
-        {
-          this.errors.username = errors.username
+        if (errors.username) {
+          this.errors.username = errors.username;
         }
-        if (errors.non_field_errors)
-        {
-          this.errors.non_field_errors = errors.non_field_errors
+        if (errors.non_field_errors) {
+          this.errors.non_field_errors = errors.non_field_errors;
         }
         this.forceUpdate();
         // console.log(this.errors);
-      }
-      else
-      {
+      } else {
         this.errors = {
           username: [],
-          non_field_errors: ["OMG! Server is down. We'll notify the development team right away."]
+          non_field_errors: [
+            "OMG! Server is down. We'll notify the development team right away."
+          ]
         };
         this.forceUpdate();
         // console.table(e);
@@ -75,8 +72,8 @@ class Login extends React.Component {
   }
 
   render() {
-    if(this.state.isAuth || localStorage.getItem("authToken")) {
-      return <Redirect to="/home" push={true}/>
+    if (this.state.isAuth || localStorage.getItem("authToken")) {
+      return <Redirect to="/home" push={true} />;
     }
 
     return (
@@ -92,7 +89,15 @@ class Login extends React.Component {
                 <form onSubmit={this.handleSubmit} autoComplete="off">
                   <div className="field">
                     <div className="control">
-                      <input className="input is-medium" type="text" name="username" placeholder="Username" autoFocus value={this.state.username} onChange={this.handleChange}/>
+                      <input
+                        className="input is-medium"
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        autoFocus
+                        value={this.state.username}
+                        onChange={this.handleChange}
+                      />
                     </div>
                     <p className="help is-danger is-size-5">
                       {this.errors.username}
@@ -101,15 +106,30 @@ class Login extends React.Component {
 
                   <div className="field">
                     <div className="control">
-                      <input className="input is-medium" type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
+                      <input
+                        className="input is-medium"
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                      />
                     </div>
                   </div>
                   <p className="help is-danger is-size-5">
                     {this.errors.non_field_errors}
                   </p>
-                  <button type="submit" className={"button is-fullwidth is-info is-large " + this.clicked}
-                   disabled={this.state.username === "" || this.state.password === ""}>Login
-                   </button>
+                  <button
+                    type="submit"
+                    className={
+                      "button is-fullwidth is-info is-large " + this.clicked
+                    }
+                    disabled={
+                      this.state.username === "" || this.state.password === ""
+                    }
+                  >
+                    Login
+                  </button>
                 </form>
               </div>
 

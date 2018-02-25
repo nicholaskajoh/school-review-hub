@@ -134,7 +134,7 @@ class SRHIndex extends Component {
               onClick={this.nextPage}
               disabled={!this.hasNextPage}
             >
-              Next &nbsp;&nbsp;&nbsp;<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+              Next &nbsp;&nbsp;&nbsp;<i className="fa fa-arrow-circle-right" aria-hidden="true"></i>
             </button>
           </nav>
 

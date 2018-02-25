@@ -30,13 +30,13 @@ const Highlights = (props) => (
                             <h4 className="title">Rated higher than</h4>
                             <div className="content">
                                 {props.lowerRatedSchools.map(school =>
-                                    <article class="media">
+                                    <article className="media">
                                         <div className="media-left">
                                             <figure className="image is-32x32">
                                                 <img src={school.logo_url} alt={school + " logo"}/>
                                             </figure>
                                         </div>
-                                        <div class="media-content">
+                                        <div className="media-content">
                                             <Link to={"/school/" + school.id}>{school.name}</Link>
                                         </div>
                                     </article> 

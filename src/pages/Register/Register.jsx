@@ -21,21 +21,21 @@ class Register extends React.Component {
       email: [],
       password: [],
       __all__: []
-    }
+    };
   }
 
-  handleChange = (event) => {
+  handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
-  }
+  };
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     this.clicked = "is-loading";
     this.forceUpdate();
     this.register(this.state.username, this.state.email, this.state.password);
     event.preventDefault();
-  }
+  };
 
   async register(username, email, password) {
     try {
@@ -45,25 +45,24 @@ class Register extends React.Component {
       {
         localStorage.setItem("authToken", res.data.token);
         this.setState({ isAuth: true });
-      }
-      else
-      {
+      } else {
         // console.log('Good request but something is wrong, token was not given');
         toast.error("Error occured!");
         this.errors = {
           username: [],
           email: [],
           password: [],
-          __all__: ["registeration was successful but your authorization was not, please try to login"]
+          __all__: [
+            "registeration was successful but your authorization was not, please try to login"
+          ]
         };
         // console.log(res.data);
         this.forceUpdate();
       }
-    } catch(e) {
+    } catch (e) {
       toast.error("Error occured!");
       this.clicked = "";
-      if (e.response)
-      {
+      if (e.response) {
         this.errors = {
           username: [],
           email: [],
@@ -71,32 +70,28 @@ class Register extends React.Component {
           __all__: []
         };
         const errors = e.response.data.errors;
-        if (errors.username)
-        {
-          this.errors.username = errors.username
+        if (errors.username) {
+          this.errors.username = errors.username;
         }
-        if (errors.email)
-        {
-          this.errors.email = errors.email
+        if (errors.email) {
+          this.errors.email = errors.email;
         }
-        if (errors.password)
-        {
-          this.errors.password = errors.password
+        if (errors.password) {
+          this.errors.password = errors.password;
         }
-        if (errors.__all__)
-        {
-          this.errors.__all__ = errors.__all__
+        if (errors.__all__) {
+          this.errors.__all__ = errors.__all__;
         }
         this.forceUpdate();
         // console.log(this.errors);
-      }
-      else
-      {
+      } else {
         this.errors = {
           username: [],
           email: [],
           password: [],
-          __all__: ["OMG! Server is down. We'll notify the development team right away."]
+          __all__: [
+            "OMG! Server is down. We'll notify the development team right away."
+          ]
         };
         this.forceUpdate();
         // console.table(e);
@@ -105,8 +100,8 @@ class Register extends React.Component {
   }
 
   render() {
-    if(this.state.isAuth || localStorage.getItem("authToken")) {
-      return <Redirect to="/home" push={true}/>
+    if (this.state.isAuth || localStorage.getItem("authToken")) {
+      return <Redirect to="/home" push={true} />;
     }
 
     return (
@@ -120,7 +115,15 @@ class Register extends React.Component {
                 <form onSubmit={this.handleSubmit} autoComplete="off">
                   <div className="field">
                     <div className="control">
-                      <input className="input is-medium" type="text" name="username" placeholder="Username" autoFocus value={this.state.name} onChange={this.handleChange}/>
+                      <input
+                        className="input is-medium"
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        autoFocus
+                        value={this.state.name}
+                        onChange={this.handleChange}
+                      />
                     </div>
 
                     <p className="help is-danger is-size-5">
@@ -130,26 +133,51 @@ class Register extends React.Component {
 
                   <div className="field">
                     <div className="control">
-                      <input className="input is-medium" type="email" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange}/>
+                      <input
+                        className="input is-medium"
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={this.state.email}
+                        onChange={this.handleChange}
+                      />
                     </div>
                     <p className="help is-danger is-size-5">
-                    {this.errors.email}
+                      {this.errors.email}
                     </p>
                   </div>
 
                   <div className="field">
                     <div className="control">
-                      <input className="input is-medium" type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
+                      <input
+                        className="input is-medium"
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                      />
                     </div>
                     <p className="help is-danger is-size-5">
-                    {this.errors.password}
+                      {this.errors.password}
                     </p>
                   </div>
                   <p className="help is-danger is-size-5">
-                  {this.errors.__all__}
+                    {this.errors.__all__}
                   </p>
-                  <button type="submit" className={"button is-fullwidth is-info is-large " + this.clicked}
-                  disabled={this.state.username === "" || this.state.email === "" || this.state.password === ""}>Create account</button>
+                  <button
+                    type="submit"
+                    className={
+                      "button is-fullwidth is-info is-large " + this.clicked
+                    }
+                    disabled={
+                      this.state.username === "" ||
+                      this.state.email === "" ||
+                      this.state.password === ""
+                    }
+                  >
+                    Create account
+                  </button>
                 </form>
               </div>
 

@@ -3,3 +3,19 @@
   background-color: #011627;
   color: rgb(209, 207, 207);
 }
+
+.twitter-share-button{
+	background-color: #0C7ABF;
+	border-radius: 6px;
+	color: #ffffff;
+	padding: 15px;
+	margin: 20px 20px 30px 20px;
+	transition: .3s ease all;
+	-webkit-transition: .3s ease all;
+}
+
+.twitter-share-button:hover{
+	background-color: #ffffff;
+	border-radius: 6px;
+	color: #0C7ABF;
+}

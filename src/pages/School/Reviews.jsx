@@ -25,8 +25,9 @@ class Reviews extends Component {
     this.api.get(`school/${id}/reviews/${page}`)
       .then(res => {
         const reviews = res.data;
-        this.hasPrevPage = (res.headers['x-has-previous'].toLowerCase() === "true");
-        this.hasNextPage = (res.headers['x-has-next'].toLowerCase() === "true");
+        this.hasPrevPage =
+          res.headers["x-has-previous"].toLowerCase() === "true";
+        this.hasNextPage = res.headers["x-has-next"].toLowerCase() === "true";
         this.setState({ reviews, page });
       });
   }
@@ -35,13 +36,13 @@ class Reviews extends Component {
     if (this.hasPrevPage) {
       this.getReviews(this.props.schoolId, this.state.page - 1);
     }
-  }
+  };
 
   nextPage = () => {
     if (this.hasNextPage) {
       this.getReviews(this.props.schoolId, this.state.page + 1);
     }
-  }
+  };
 
   render() {
     return (
@@ -50,47 +51,57 @@ class Reviews extends Component {
           <div className="hero-body">
             <div className="container">
               <h1 className="title">
-                <i className="fa fa-users"></i> Reviews
-                            </h1>
+                <i className="fa fa-users" /> Reviews
+              </h1>
             </div>
           </div>
         </section>
 
         <section className="section">
-          {this.state.reviews.map(review =>
+          {this.state.reviews.map(review => (
             <div className="card review">
               <header className="card-header">
                 <p className="card-header-title">
-                  Last updated {review.updated_at}
+                  Last updated {new Date(review.updated_at).toDateString()}
                 </p>
               </header>
               <div className="card-content">
-                <div className="content">
-                  {review.content}
-                </div>
+                <div className="content">{review.content}</div>
               </div>
               <footer className="card-footer">
-                {/* <div className="card-footer-item">
-                                    <Link to={"/review/" + review.id}>Full review</Link>
-                                </div> */}
+                <div className="card-footer-item">
+                  <Link to={"/review/" + review.id}>Full review</Link>
+                </div>
                 <div className="card-footer-item">
                   Upvotes ({review.upvotes})
-                                </div>
+                </div>
                 <div className="card-footer-item">
                   Comments ({review.comments_count})
-                                </div>
+                </div>
               </footer>
             </div>
-          )}
+          ))}
 
-          {this.state.reviews.length === 0 ?
+          {this.state.reviews.length === 0 ? (
             <p className="has-text-centered">No reviews yet!</p>
-            :
+          ) : (
             <nav className="pagination">
-              <button className="button is-link" onClick={this.prevPage} disabled={!this.hasPrevPage}>Previous</button>
-              <button className="button is-link" onClick={this.nextPage} disabled={!this.hasNextPage}>Next</button>
+              <button
+                className="button is-link"
+                onClick={this.prevPage}
+                disabled={!this.hasPrevPage}
+              >
+                Previous
+              </button>
+              <button
+                className="button is-link"
+                onClick={this.nextPage}
+                disabled={!this.hasNextPage}
+              >
+                Next
+              </button>
             </nav>
-          }
+          )}
         </section>
       </div>
     );

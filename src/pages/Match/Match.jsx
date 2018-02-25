@@ -34,7 +34,7 @@ class Match extends Component {
   };
 
   handleSubmit = event => {
-    if (this.state.school1_id == this.state.school2_id) {
+    if (this.state.school1_id === this.state.school2_id) {
       toast.error("You can't match a school against itself!");
     } else {
       this.setState({ hasSelectedSchools: true });
@@ -91,7 +91,7 @@ class Match extends Component {
                 <div className="column is-narrow">
                   <button
                     type="submit"
-                    class="button is-danger is-medium"
+                    className="button is-danger is-medium"
                     disabled={
                       this.state.school1_id === "" ||
                       this.state.school2_id === ""
