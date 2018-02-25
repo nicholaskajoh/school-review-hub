@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import './Profile.css';
 
@@ -19,10 +20,15 @@ class Profile extends Component {
   }
 
   componentDidMount() {
+    this.welcomeUser();
     this.getUserInfo();
     this.getUserRatings(1);
   }
 
+  welcomeUser(){
+    toast.info("Welcome,You are anonymous !!!")
+  }
+  
   getUserInfo() {
     axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/profile`, {
       headers: {
@@ -96,6 +102,7 @@ class Profile extends Component {
             )}
           </div>
         </div>
+        <ToastContainer />
       </div>
     );
   }

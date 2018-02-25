@@ -20,7 +20,7 @@ const TopReviews = ({ reviews, isLoaded }) => {
                 </header>
                 <div className="card-content">
                 <div className="content">
-                    {review.content.substring(0, 150).trim() + (review.content.length > 150 ? "..." : "")} - Last updated {review.updated_at}
+                    {review.content.substring(0, 150).trim() + (review.content.length > 150 ? "..." : "")} - Last updated {new Date(review.updated_at).toDateString()}
                 </div>
                 </div>
                 <footer className="card-footer">
