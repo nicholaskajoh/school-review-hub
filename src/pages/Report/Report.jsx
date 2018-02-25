@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import axios from "axios";
 import "./Report.css";
 import CommentCard from "./../../partials/CommentCard/CommentCard";
+import APIHelper from "../../api-helpers.js";
 
 class Report extends Component {
   constructor(props) {
     super(props);
+    this.api = new APIHelper();
     this.state = {
       report: [],
       school_name: "",
@@ -28,8 +30,7 @@ class Report extends Component {
   }
 
   getReport(id) {
-    axios
-      .get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/report/${id}`)
+    this.api.get(`report/${id}`)
       .then(res => {
         const report = res.data;
         const school_name = res.data.school.name;
@@ -41,10 +42,7 @@ class Report extends Component {
   }
 
   getComments(id) {
-    axios
-      .get(
-        `${process.env.REACT_APP_API_DOMAIN_NAME}/api/report/${id}/comments/1`
-      )
+    this.api.get(`report/${id}/comments/1`)
       .then(res => {
         const comments = res.data;
         this.setState({ comments });

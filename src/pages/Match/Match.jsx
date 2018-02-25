@@ -65,7 +65,7 @@ class Match extends Component {
             <form onSubmit={this.handleSubmit}>
               <div className="columns is-centered">
                 <div className="column is-narrow">
-                  <div clasNames="field">
+                  <div className="field">
                     <div className="control">
                       <div className="select is-rounded is-fullwidth is-medium">
                         <select
@@ -102,7 +102,7 @@ class Match extends Component {
                 </div>
 
                 <div className="column is-narrow">
-                  <div clasNames="field has-addons">
+                  <div className="field has-addons">
                     <div className="control">
                       <div className="select is-rounded is-fullwidth is-medium">
                         <select

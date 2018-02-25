@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import './Profile.css';
 import APIHelper from "../../api-helpers.js";
+import { Redirect } from 'react-router-dom';
+
 
 class Profile extends Component {
   constructor(props) {
@@ -13,6 +15,7 @@ class Profile extends Component {
       ratings: [],
       ratingsPage: 1
     };
+    this.invalidToken = false;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -35,6 +38,12 @@ class Profile extends Component {
       .then(res => {
         const user = res.data;
         this.setState({ user });
+      })
+      .catch(e => {
+        if (e.response.status === 401)
+        {
+          this.invalidToken = true;
+        }
       });
   }
 
@@ -44,6 +53,12 @@ class Profile extends Component {
       const ratings = res.data;
       // console.log(ratings);
       this.setState({ ratings });
+    })
+    .catch(e => {
+      if (e.response.status === 401)
+      {
+        this.invalidToken = true;
+      }
     });
   }
 
@@ -53,14 +68,25 @@ class Profile extends Component {
       .then(res => {
         // this.getUserRatings(1);
         const ratings = res.data;
-        console.log(ratings);
+        // console.log(ratings);
         this.setState({ ratings });
+      })
+      .catch(e => {
+        if (e.response.status === 401)
+        {
+          this.invalidToken = true;
+        }
       });
     }
   };
 
   
   render() {
+    if (this.invalidToken) {
+      localStorage.removeItem("authToken");
+      return <Redirect to="/login" push={true} />;
+    }
+
     return (
       <div>
         <section className="hero is-small is-warning is-bold">

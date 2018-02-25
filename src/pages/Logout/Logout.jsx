@@ -17,7 +17,7 @@ class Logout extends React.Component {
   }
 
   render() {
-    return <Redirect to="/" push={true}/>
+    return <Redirect to="/login" push={true}/>
   }
 }
 

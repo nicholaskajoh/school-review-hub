@@ -6,6 +6,7 @@ import TopReviews from "./TopReviews";
 import "react-tabs/style/react-tabs.css";
 import "./Home.css";
 import APIHelper from "../../api-helpers.js";
+import { Redirect } from 'react-router-dom';
 
 class Home extends Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class Home extends Component {
       matchesHaveLoaded: false,
       reviewsHaveLoaded: false
     };
+    this.invalidToken = false;
   }
 
   componentDidMount() {
@@ -44,6 +46,11 @@ class Home extends Component {
       .then(res => {
         const suggestedMatches = res.data;
         this.setState({ suggestedMatches, matchesHaveLoaded: true });
+      }).catch(e => {
+        if (e.response.status === 401)
+        {
+          this.invalidToken = true;
+        }
       });
   }
 
@@ -58,6 +65,11 @@ class Home extends Component {
   }
 
   render() {
+    if (this.invalidToken) {
+      localStorage.removeItem("authToken");
+      return <Redirect to="/login" push={true} />;
+    }
+
     return (
       <Tabs>
         <div
