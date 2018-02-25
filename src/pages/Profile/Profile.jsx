@@ -25,8 +25,13 @@ class Profile extends Component {
     this.getUserRatings(1);
   }
 
+<<<<<<< HEAD
   welcomeUser() {
     toast.info("Welcome,You are anonymous");
+=======
+  welcomeUser(){
+    toast.info("Welcome, You are anonymous!")
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
   }
 
   getUserInfo() {

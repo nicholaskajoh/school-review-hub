@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import "./Register.css";
+=======
+import React from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import './Register.css';
+
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
 
 class Register extends React.Component {
   constructor(props) {
@@ -50,6 +59,7 @@ class Register extends React.Component {
         this.setState({ isAuth: true });
       } else {
         // console.log('Good request but something is wrong, token was not given');
+        toast.error("Error occured!");
         this.errors = {
           username: [],
           email: [],
@@ -61,7 +71,12 @@ class Register extends React.Component {
         // console.log(res1.data);
         this.forceUpdate();
       }
+<<<<<<< HEAD
     } catch (e) {
+=======
+    } catch(e) {
+      toast.error("Error occured!");
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
       this.clicked = "";
       if (e.response) {
         this.errors = {
@@ -101,8 +116,13 @@ class Register extends React.Component {
   }
 
   render() {
+<<<<<<< HEAD
     if (this.state.isAuth) {
       return <Redirect to="/home" push={true} />;
+=======
+    if(this.state.isAuth || localStorage.getItem("authToken")) {
+      return <Redirect to="/home" push={true}/>
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
     }
 
     return (
@@ -127,7 +147,13 @@ class Register extends React.Component {
                       />
                     </div>
 
+<<<<<<< HEAD
                     <p className="help is-danger">{this.errors.username}</p>
+=======
+                    <p className="help is-danger is-size-5">
+                      {this.errors.username}
+                    </p>
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
                   </div>
 
                   <div className="field">
@@ -141,7 +167,13 @@ class Register extends React.Component {
                         onChange={this.handleChange}
                       />
                     </div>
+<<<<<<< HEAD
                     <p className="help is-danger">{this.errors.email}</p>
+=======
+                    <p className="help is-danger is-size-5">
+                    {this.errors.email}
+                    </p>
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
                   </div>
 
                   <div className="field">
@@ -155,6 +187,7 @@ class Register extends React.Component {
                         onChange={this.handleChange}
                       />
                     </div>
+<<<<<<< HEAD
                     <p className="help is-danger">{this.errors.password}</p>
                   </div>
                   <p className="help is-danger">{this.errors.__all__}</p>
@@ -171,6 +204,17 @@ class Register extends React.Component {
                   >
                     Create account
                   </button>
+=======
+                    <p className="help is-danger is-size-5">
+                    {this.errors.password}
+                    </p>
+                  </div>
+                  <p className="help is-danger is-size-5">
+                  {this.errors.__all__}
+                  </p>
+                  <button type="submit" className={"button is-fullwidth is-info is-large " + this.clicked}
+                  disabled={this.state.username === "" || this.state.email === "" || this.state.password === ""}>Create account</button>
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
                 </form>
               </div>
 
@@ -180,6 +224,7 @@ class Register extends React.Component {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </section>
     );
   }

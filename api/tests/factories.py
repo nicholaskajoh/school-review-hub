@@ -4,11 +4,10 @@ from django.contrib.auth.models import User
 from random import randint
 
 class UserFactory(factory.django.DjangoModelFactory):
-    first_name = factory.Sequence(lambda n: 'First_user-{0}'.format(n))
-    last_name = factory.Sequence(lambda n: 'Last_user-{0}'.format(n))
-    # Emails must be unique - so use a sequence here:
-    email = factory.Sequence(lambda n: 'user.{}@test.com'.format(n))
-    username = factory.Sequence(lambda n: 'user.{}'.format(n))
+    first_name = factory.Faker('first_name')
+    last_name = factory.Faker('last_name')
+    email = factory.Faker('email')
+    username = factory.Faker('user_name')
     password = make_password('password')
 
     class Meta:

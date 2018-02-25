@@ -33,7 +33,11 @@ class IndexLanding extends Component {
             <nav className="columns">
               <div className="column has-text-centered ">
                 <div>
+<<<<<<< HEAD
                   <img src={ratingImg} class="shield-img" alt="rating" />
+=======
+                  <img src={ratingImg} className="shield-img" />
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
                   <p className="title is-4">Ratings</p>
                   <p>
                     Rate univeristies using our comparison-based system. It
@@ -44,7 +48,11 @@ class IndexLanding extends Component {
               </div>
               <div className="column has-text-centered ">
                 <div>
+<<<<<<< HEAD
                   <img src={reviewImg} class="shield-img" alt="review" />
+=======
+                  <img src={reviewImg} className="shield-img" />
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
                   <p className="title is-4">Reviews</p>
                   <p>
                     Write reviews of univeristies detailing more nuanced
@@ -54,7 +62,11 @@ class IndexLanding extends Component {
               </div>
               <div className="column has-text-centered ">
                 <div>
+<<<<<<< HEAD
                   <img src={reportImg} class="shield-img" alt="repott" />
+=======
+                  <img src={reportImg} className="shield-img" />
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
                   <p className="title is-4">Reports</p>
                   <p>
                     Report events -- good, bad and ugly -- happening in any
@@ -64,7 +76,11 @@ class IndexLanding extends Component {
               </div>
               <div className="column has-text-centered ">
                 <div>
+<<<<<<< HEAD
                   <img src={rankingImg} class="shield-img" alt="ranking" />
+=======
+                  <img src={rankingImg} className="shield-img" />
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
                   <p className="title is-4">Rankings</p>
                   <p>
                     SchoolReviewHub maintains an index of all univeristies in

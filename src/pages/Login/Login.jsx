@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import "./Login.css";
+=======
+import React from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import './Login.css';
+
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
 
 class Login extends React.Component {
   constructor(props) {
@@ -14,7 +23,6 @@ class Login extends React.Component {
     this.clicked = "";
     this.errors = {
       username: [],
-      password: [],
       non_field_errors: []
     };
   }
@@ -46,10 +54,15 @@ class Login extends React.Component {
       this.setState({ isAuth: true });
     } catch (e) {
       this.clicked = "";
+<<<<<<< HEAD
       if (e.response) {
+=======
+      toast.error("Error occured!");
+      if (e.response)
+      {
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
         this.errors = {
           username: [],
-          password: [],
           non_field_errors: []
         };
         const errors = e.response.data;
@@ -57,21 +70,31 @@ class Login extends React.Component {
         if (errors.username) {
           this.errors.username = errors.username;
         }
+<<<<<<< HEAD
         if (errors.password) {
           this.errors.password = errors.password;
         }
         if (errors.non_field_errors) {
           this.errors.non_field_errors = errors.non_field_errors;
+=======
+        if (errors.non_field_errors)
+        {
+          this.errors.non_field_errors = errors.non_field_errors
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
         }
         this.forceUpdate();
         // console.log(this.errors);
       } else {
         this.errors = {
           username: [],
+<<<<<<< HEAD
           password: [],
           non_field_errors: [
             "OMG! Server is down. We'll notify the development team right away."
           ]
+=======
+          non_field_errors: ["OMG! Server is down. We'll notify the development team right away."]
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
         };
         this.forceUpdate();
         // console.table(e);
@@ -80,8 +103,13 @@ class Login extends React.Component {
   }
 
   render() {
+<<<<<<< HEAD
     if (this.state.isAuth) {
       return <Redirect to="/home" push={true} />;
+=======
+    if(this.state.isAuth || localStorage.getItem("authToken")) {
+      return <Redirect to="/home" push={true}/>
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
     }
 
     return (
@@ -107,7 +135,13 @@ class Login extends React.Component {
                         onChange={this.handleChange}
                       />
                     </div>
+<<<<<<< HEAD
                     <p className="help is-danger">{this.errors.username}</p>
+=======
+                    <p className="help is-danger is-size-5">
+                      {this.errors.username}
+                    </p>
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
                   </div>
 
                   <div className="field">
@@ -121,9 +155,12 @@ class Login extends React.Component {
                         onChange={this.handleChange}
                       />
                     </div>
+<<<<<<< HEAD
                     <p className="help is-danger">{this.errors.password}</p>
+=======
+>>>>>>> 1734816b213340e8244f30e3e710f3401c3e1a95
                   </div>
-                  <p className="help is-danger">
+                  <p className="help is-danger is-size-5">
                     {this.errors.non_field_errors}
                   </p>
                   <button
@@ -146,6 +183,7 @@ class Login extends React.Component {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </section>
     );
   }
