@@ -101,8 +101,3 @@ admin.site.register(Comparison, ComparisonAdmin)
 admin.site.register(Criterion, CriterionAdmin)
 admin.site.register(Report, ReportAdmin)
 admin.site.register(Upvote, UpvoteAdmin)
-
-# TODO:
-# customize the list diplay links
-# add admin inline where necessary
-# ad admin actions where necessary

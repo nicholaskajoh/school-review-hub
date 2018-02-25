@@ -42,6 +42,14 @@ class Comparison(models.Model):
             self.criterion,
             self.comparer))
 
+    # Override models save method
+    def save(self, *args, **kwargs):
+        # school1 and school2 must not be the same
+        if self.school1 == self.school2:
+            raise ValueError('Cannot compare the same school!')
+        else:
+            super(Comparison, self).save(*args, **kwargs)
+
 
 class Criterion(models.Model):
     description = models.CharField(max_length=200)
