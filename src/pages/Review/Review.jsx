@@ -48,19 +48,6 @@ class Review extends Component{
     // this.getComments(reviewId);
   }
 
-  getReview(id) {
-    this.api.get(`review/${id}`)
-      .then(res => {
-        const review = res.data;
-        const school_name = res.data.school.name;
-        const school_id = res.data.school.id;
-        console.log(school_id);
-        this.setState({ review });
-        this.setState({ school_name });
-        this.setState({ school_id });
-      });
-  }
-
   getComments(id) {
     this.api.get(`review/${id}/comments/1`)
       .then(res => {
@@ -68,11 +55,6 @@ class Review extends Component{
         this.setState({ comments });
       });
   }
-
-  handleClick = event => {
-    const isLoading = "is-loading";
-    this.setState({ isLoading });
-  };
 
   render() {
     return (
