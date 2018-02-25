@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 import './Login.css';
 
 
@@ -15,7 +16,6 @@ class Login extends React.Component {
     this.clicked = "";
     this.errors = {
       username: [],
-      password: [],
       non_field_errors: []
     }
   }
@@ -43,11 +43,11 @@ class Login extends React.Component {
       this.setState({ isAuth: true });
     } catch(e) {
       this.clicked = "";
+      toast.error("Error occured!");
       if (e.response)
       {
         this.errors = {
           username: [],
-          password: [],
           non_field_errors: []
         };
         const errors = e.response.data;
@@ -55,10 +55,6 @@ class Login extends React.Component {
         if (errors.username)
         {
           this.errors.username = errors.username
-        }
-        if (errors.password)
-        {
-          this.errors.password = errors.password
         }
         if (errors.non_field_errors)
         {
@@ -71,7 +67,6 @@ class Login extends React.Component {
       {
         this.errors = {
           username: [],
-          password: [],
           non_field_errors: ["OMG! Server is down. We'll notify the development team right away."]
         };
         this.forceUpdate();
@@ -81,7 +76,7 @@ class Login extends React.Component {
   }
 
   render() {
-    if(this.state.isAuth) {
+    if(this.state.isAuth || localStorage.getItem("authToken")) {
       return <Redirect to="/home" push={true}/>
     }
 
@@ -100,7 +95,7 @@ class Login extends React.Component {
                     <div className="control">
                       <input className="input is-medium" type="text" name="username" placeholder="Username" autoFocus value={this.state.username} onChange={this.handleChange}/>
                     </div>
-                    <p className="help is-danger">
+                    <p className="help is-danger is-size-5">
                       {this.errors.username}
                     </p>
                   </div>
@@ -109,11 +104,8 @@ class Login extends React.Component {
                     <div className="control">
                       <input className="input is-medium" type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
                     </div>
-                    <p className="help is-danger">
-                      {this.errors.password}
-                    </p>
                   </div>
-                  <p className="help is-danger">
+                  <p className="help is-danger is-size-5">
                     {this.errors.non_field_errors}
                   </p>
                   <button type="submit" className={"button is-fullwidth is-info is-large " + this.clicked}
@@ -128,6 +120,7 @@ class Login extends React.Component {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </section>
     );
   }

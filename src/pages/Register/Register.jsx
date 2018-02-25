@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 import './Register.css';
 
 
@@ -49,6 +50,7 @@ class Register extends React.Component {
       else
       {
         // console.log('Good request but something is wrong, token was not given');
+        toast.error("Error occured!");
         this.errors = {
           username: [],
           email: [],
@@ -59,6 +61,7 @@ class Register extends React.Component {
         this.forceUpdate();
       }
     } catch(e) {
+      toast.error("Error occured!");
       this.clicked = "";
       if (e.response)
       {
@@ -103,7 +106,7 @@ class Register extends React.Component {
   }
 
   render() {
-    if(this.state.isAuth) {
+    if(this.state.isAuth || localStorage.getItem("authToken")) {
       return <Redirect to="/home" push={true}/>
     }
 
@@ -121,7 +124,7 @@ class Register extends React.Component {
                       <input className="input is-medium" type="text" name="username" placeholder="Username" autoFocus value={this.state.name} onChange={this.handleChange}/>
                     </div>
 
-                    <p className="help is-danger">
+                    <p className="help is-danger is-size-5">
                       {this.errors.username}
                     </p>
                   </div>
@@ -130,7 +133,7 @@ class Register extends React.Component {
                     <div className="control">
                       <input className="input is-medium" type="email" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange}/>
                     </div>
-                    <p className="help is-danger">
+                    <p className="help is-danger is-size-5">
                     {this.errors.email}
                     </p>
                   </div>
@@ -139,11 +142,11 @@ class Register extends React.Component {
                     <div className="control">
                       <input className="input is-medium" type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
                     </div>
-                    <p className="help is-danger">
+                    <p className="help is-danger is-size-5">
                     {this.errors.password}
                     </p>
                   </div>
-                  <p className="help is-danger">
+                  <p className="help is-danger is-size-5">
                   {this.errors.__all__}
                   </p>
                   <button type="submit" className={"button is-fullwidth is-info is-large " + this.clicked}
@@ -157,6 +160,7 @@ class Register extends React.Component {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </section>
     );
   }

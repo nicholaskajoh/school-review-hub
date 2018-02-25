@@ -1,7 +1,7 @@
 import React from 'react';
 import './CommentCard.css';
 
-const CommentCard = () => (
+const CommentCard = ({comment}) => (
   <div className="box">
     <article className="media">
 
