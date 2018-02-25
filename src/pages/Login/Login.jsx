@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 import './Login.css';
 
 
@@ -43,6 +44,7 @@ class Login extends React.Component {
       this.setState({ isAuth: true });
     } catch(e) {
       this.clicked = "";
+      toast.error("Error occured!");
       if (e.response)
       {
         this.errors = {
@@ -81,7 +83,7 @@ class Login extends React.Component {
   }
 
   render() {
-    if(this.state.isAuth) {
+    if(this.state.isAuth || localStorage.getItem("authToken")) {
       return <Redirect to="/home" push={true}/>
     }
 
@@ -128,6 +130,7 @@ class Login extends React.Component {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </section>
     );
   }

@@ -47,8 +47,7 @@ class Comparison(models.Model):
         # school1 and school2 must not be the same
         if self.school1 == self.school2:
             raise ValueError('Cannot compare the same school!')
-        else:
-            super(Comparison, self).save(*args, **kwargs)
+        super(Comparison, self).save(*args, **kwargs)
 
 
 class Criterion(models.Model):

@@ -103,7 +103,7 @@ class Register extends React.Component {
   }
 
   render() {
-    if(this.state.isAuth) {
+    if(this.state.isAuth || localStorage.getItem("authToken")) {
       return <Redirect to="/home" push={true}/>
     }
 
