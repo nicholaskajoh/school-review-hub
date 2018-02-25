@@ -1,8 +1,7 @@
-import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import axios from 'axios';
-import './Login.css';
-
+import React from "react";
+import { Link, Redirect } from "react-router-dom";
+import axios from "axios";
+import "./Login.css";
 
 class Login extends React.Component {
   constructor(props) {
@@ -17,34 +16,37 @@ class Login extends React.Component {
       username: [],
       password: [],
       non_field_errors: []
-    }
+    };
   }
 
-  handleChange = (event) => {
+  handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value.trim()
     });
-  }
+  };
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     this.clicked = "is-loading";
     this.forceUpdate();
     this.login(this.state.username, this.state.password);
     event.preventDefault();
-  }
+  };
 
   async login(username, password) {
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/token-auth`, {
-        username, password
-      });
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_DOMAIN_NAME}/api/token-auth`,
+        {
+          username,
+          password
+        }
+      );
       this.clicked = "";
       localStorage.setItem("authToken", res.data.token);
       this.setState({ isAuth: true });
-    } catch(e) {
+    } catch (e) {
       this.clicked = "";
-      if (e.response)
-      {
+      if (e.response) {
         this.errors = {
           username: [],
           password: [],
@@ -52,27 +54,24 @@ class Login extends React.Component {
         };
         const errors = e.response.data;
         // console.log(e.response);
-        if (errors.username)
-        {
-          this.errors.username = errors.username
+        if (errors.username) {
+          this.errors.username = errors.username;
         }
-        if (errors.password)
-        {
-          this.errors.password = errors.password
+        if (errors.password) {
+          this.errors.password = errors.password;
         }
-        if (errors.non_field_errors)
-        {
-          this.errors.non_field_errors = errors.non_field_errors
+        if (errors.non_field_errors) {
+          this.errors.non_field_errors = errors.non_field_errors;
         }
         this.forceUpdate();
         // console.log(this.errors);
-      }
-      else
-      {
+      } else {
         this.errors = {
           username: [],
           password: [],
-          non_field_errors: ["OMG! Server is down. We'll notify the development team right away."]
+          non_field_errors: [
+            "OMG! Server is down. We'll notify the development team right away."
+          ]
         };
         this.forceUpdate();
         // console.table(e);
@@ -81,8 +80,8 @@ class Login extends React.Component {
   }
 
   render() {
-    if(this.state.isAuth) {
-      return <Redirect to="/home" push={true}/>
+    if (this.state.isAuth) {
+      return <Redirect to="/home" push={true} />;
     }
 
     return (
@@ -98,27 +97,46 @@ class Login extends React.Component {
                 <form onSubmit={this.handleSubmit} autoComplete="off">
                   <div className="field">
                     <div className="control">
-                      <input className="input is-medium" type="text" name="username" placeholder="Username" autoFocus value={this.state.username} onChange={this.handleChange}/>
+                      <input
+                        className="input is-medium"
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        autoFocus
+                        value={this.state.username}
+                        onChange={this.handleChange}
+                      />
                     </div>
-                    <p className="help is-danger">
-                      {this.errors.username}
-                    </p>
+                    <p className="help is-danger">{this.errors.username}</p>
                   </div>
 
                   <div className="field">
                     <div className="control">
-                      <input className="input is-medium" type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
+                      <input
+                        className="input is-medium"
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                      />
                     </div>
-                    <p className="help is-danger">
-                      {this.errors.password}
-                    </p>
+                    <p className="help is-danger">{this.errors.password}</p>
                   </div>
                   <p className="help is-danger">
                     {this.errors.non_field_errors}
                   </p>
-                  <button type="submit" className={"button is-fullwidth is-info is-large " + this.clicked}
-                   disabled={this.state.username === "" || this.state.password === ""}>Login
-                   </button>
+                  <button
+                    type="submit"
+                    className={
+                      "button is-fullwidth is-info is-large " + this.clicked
+                    }
+                    disabled={
+                      this.state.username === "" || this.state.password === ""
+                    }
+                  >
+                    Login
+                  </button>
                 </form>
               </div>
 

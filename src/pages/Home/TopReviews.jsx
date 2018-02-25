@@ -1,46 +1,46 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const TopReviews = ({ reviews, isLoaded }) => {
   return (
     <div>
       <section className="section" style={{ paddingTop: 0 }}>
-				<div className="container">
-					<h1 className="title">
-						<i className="fa fa-comment-alt"></i> Top Reviews
-					</h1>
+        <div className="container">
+          <h1 className="title">
+            <i className="fa fa-comment-alt" /> Top Reviews
+          </h1>
 
-          {isLoaded ?
-            reviews.map((review, index) =>
-              <div className="card" style={{marginBottom: 15}}>
+          {isLoaded ? (
+            reviews.map((review, index) => (
+              <div className="card" style={{ marginBottom: 15 }}>
                 <header className="card-header">
-                    <p className="card-header-title">
-                      {review.school.name}
-                    </p>
+                  <p className="card-header-title">{review.school.name}</p>
                 </header>
                 <div className="card-content">
-                <div className="content">
-                    {review.content.substring(0, 150).trim() + (review.content.length > 150 ? "..." : "")} - Last updated {new Date(review.updated_at).toDateString()}
-                </div>
+                  <div className="content">
+                    {review.content.substring(0, 150).trim() +
+                      (review.content.length > 150 ? "..." : "")}{" "}
+                    - Last updated {new Date(review.updated_at).toDateString()}
+                  </div>
                 </div>
                 <footer className="card-footer">
-                    {/* <div className="card-footer-item">
-                        <Link to={"/review/" + review.id}>Full review</Link>
-                    </div> */}
-                    <div className="card-footer-item">
-                        Upvotes ({review.upvotes})
-                    </div>
-                    <div className="card-footer-item">
-                        Comments ({review.comments_count})
-                    </div>
+                  <div className="card-footer-item">
+                    <Link to={"/review/" + review.id}>Full review</Link>
+                  </div>
+                  <div className="card-footer-item">
+                    Upvotes ({review.upvotes})
+                  </div>
+                  <div className="card-footer-item">
+                    Comments ({review.comments_count})
+                  </div>
                 </footer>
               </div>
-            )
-          :
+            ))
+          ) : (
             <div className="has-text-centered">
-              <i className="fa fa-spinner fa-spin fa-2x"></i>
+              <i className="fa fa-spinner fa-spin fa-2x" />
             </div>
-          }
+          )}
         </div>
       </section>
     </div>

@@ -33,7 +33,7 @@ class IndexLanding extends Component {
             <nav className="columns">
               <div className="column has-text-centered ">
                 <div>
-                  <img src={ratingImg} class="shield-img" />
+                  <img src={ratingImg} class="shield-img" alt="rating" />
                   <p className="title is-4">Ratings</p>
                   <p>
                     Rate univeristies using our comparison-based system. It
@@ -44,7 +44,7 @@ class IndexLanding extends Component {
               </div>
               <div className="column has-text-centered ">
                 <div>
-                  <img src={reviewImg} class="shield-img" />
+                  <img src={reviewImg} class="shield-img" alt="review" />
                   <p className="title is-4">Reviews</p>
                   <p>
                     Write reviews of univeristies detailing more nuanced
@@ -54,7 +54,7 @@ class IndexLanding extends Component {
               </div>
               <div className="column has-text-centered ">
                 <div>
-                  <img src={reportImg} class="shield-img" />
+                  <img src={reportImg} class="shield-img" alt="repott" />
                   <p className="title is-4">Reports</p>
                   <p>
                     Report events -- good, bad and ugly -- happening in any
@@ -64,7 +64,7 @@ class IndexLanding extends Component {
               </div>
               <div className="column has-text-centered ">
                 <div>
-                  <img src={rankingImg} class="shield-img" />
+                  <img src={rankingImg} class="shield-img" alt="ranking" />
                   <p className="title is-4">Rankings</p>
                   <p>
                     SchoolReviewHub maintains an index of all univeristies in

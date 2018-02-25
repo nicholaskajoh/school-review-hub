@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import "./Match.css";
 
@@ -34,7 +34,7 @@ class Match extends Component {
   };
 
   handleSubmit = event => {
-    if (this.state.school1_id == this.state.school2_id) {
+    if (this.state.school1_id === this.state.school2_id) {
       toast.error("You can't match a school against itself!");
     } else {
       this.setState({ hasSelectedSchools: true });

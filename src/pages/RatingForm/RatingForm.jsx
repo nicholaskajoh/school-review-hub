@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { css } from "glamor";
 import axios from "axios";
 import qs from "qs";
 import "./RatingForm.css";
@@ -14,7 +15,8 @@ class RatingForm extends Component {
       school1: {},
       school2: {},
       formData: {},
-      isLoaded: false
+      isLoaded: false,
+      toastId: null
     };
   }
 
@@ -74,12 +76,15 @@ class RatingForm extends Component {
       });
     });
     const data = { schools, choices };
+
     this.submitRating(data);
     window.location.replace("/profile");
     event.preventDefault();
   };
 
   async submitRating(data) {
+    this.setState({ toastId: toast("Processing......", { autoClose: false }) });
+
     await axios({
       method: "POST",
       url: `${process.env.REACT_APP_API_DOMAIN_NAME}/api/rating`,
@@ -87,6 +92,18 @@ class RatingForm extends Component {
       headers: {
         Authorization: `Token ${localStorage.getItem("authToken")}`
       }
+    });
+    await this.setState({
+      toastId: toast.update(this.toastId, {
+        render: "Done",
+        type: toast.TYPE.INFO,
+        autoClose: 2000,
+        //Here the magic
+        className: css({
+          transform: "rotateY(360deg)",
+          transition: "transform 0.6s"
+        })
+      })
     });
   }
 
@@ -170,6 +187,7 @@ class RatingForm extends Component {
 
         <br />
         <br />
+        <ToastContainer />
       </div>
     );
   }
