@@ -26,7 +26,7 @@ class Profile extends Component {
   }
 
   welcomeUser(){
-    toast.info("Welcome,You are anonymous !!!")
+    toast.info("Welcome, You are anonymous!")
   }
   
   getUserInfo() {
