@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import './Register.css';
+import APIHelper from "../../api-helpers.js";
 
 
 class Register extends React.Component {
   constructor(props) {
     super(props);
+    this.api = new APIHelper();
     this.state = {
       username: "",
       email: "",
@@ -38,13 +39,11 @@ class Register extends React.Component {
 
   async register(username, email, password) {
     try {
-      const res1 = await axios.post(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/register`, {
-        username, email, password
-      });
+      const res = await this.api.post( 'register', {username, email, password} );
       this.clicked = "";
-      if (res1.data.token)
+      if (res.data.token)
       {
-        localStorage.setItem("authToken", res1.data.token);
+        localStorage.setItem("authToken", res.data.token);
         this.setState({ isAuth: true });
       }
       else
@@ -57,7 +56,7 @@ class Register extends React.Component {
           password: [],
           __all__: ["registeration was successful but your authorization was not, please try to login"]
         };
-        // console.log(res1.data);
+        // console.log(res.data);
         this.forceUpdate();
       }
     } catch(e) {

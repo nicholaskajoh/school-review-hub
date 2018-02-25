@@ -1,15 +1,16 @@
 import React, { Component } from "react";
-import axios from "axios";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import TopSchools from "./TopSchools";
 import SuggestedMatches from "./SuggestedMatches";
 import TopReviews from "./TopReviews";
 import "react-tabs/style/react-tabs.css";
 import "./Home.css";
+import APIHelper from "../../api-helpers.js";
 
 class Home extends Component {
   constructor(props) {
     super(props);
+    this.api = new APIHelper();
     this.state = {
       topSchools: [],
       suggestedMatches: [],
@@ -28,8 +29,8 @@ class Home extends Component {
 
   getSchools() {
     this.setState({ schoolsHaveLoaded: false });
-    axios
-      .get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/top-schools`)
+    
+    this.api.get('top-schools')
       .then(res => {
         const topSchools = res.data;
         this.setState({ topSchools, schoolsHaveLoaded: true });
@@ -38,12 +39,8 @@ class Home extends Component {
 
   getMatches() {
     this.setState({ matchesHaveLoaded: false });
-    axios
-      .get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/suggested-matches`, {
-        headers: {
-          Authorization: `Token ${localStorage.getItem("authToken")}`
-        }
-      })
+    
+    this.api.get('suggested-matches', true)
       .then(res => {
         const suggestedMatches = res.data;
         this.setState({ suggestedMatches, matchesHaveLoaded: true });
@@ -52,8 +49,8 @@ class Home extends Component {
 
   getReviews() {
     this.setState({ reviewsHaveLoaded: false });
-    axios
-      .get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/top-reviews`)
+
+    this.api.get('top-reviews')
       .then(res => {
         const topReviews = res.data;
         this.setState({ topReviews, reviewsHaveLoaded: true });

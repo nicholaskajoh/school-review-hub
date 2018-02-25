@@ -1,14 +1,17 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import axios from "axios";
 import qs from "qs";
 import "./RatingForm.css";
 import "../../assets/css/pretty-checkbox.min.css";
 import "mdi/css/materialdesignicons.min.css";
+import APIHelper from "../../api-helpers.js";
+import axios from 'axios';
+
 
 class RatingForm extends Component {
   constructor(props) {
     super(props);
+    this.api = new APIHelper();
     this.state = {
       criteria: [],
       school1: {},
@@ -28,8 +31,8 @@ class RatingForm extends Component {
 
   getCriteria() {
     this.setState({ isLoaded: false });
-    axios
-      .get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/criteria`)
+
+    this.api.get('criteria')
       .then(res => {
         const criteria = res.data;
         this.setState({ criteria, isLoaded: true });
@@ -39,12 +42,8 @@ class RatingForm extends Component {
   getSchools(school1Id, school2Id) {
     axios
       .all([
-        axios.get(
-          `${process.env.REACT_APP_API_DOMAIN_NAME}/api/school/${school1Id}`
-        ),
-        axios.get(
-          `${process.env.REACT_APP_API_DOMAIN_NAME}/api/school/${school2Id}`
-        )
+        this.api.get(`school/${school1Id}`),
+        this.api.get(`school/${school2Id}`)
       ])
       .then(
         axios.spread((res1, res2) => {
@@ -80,14 +79,7 @@ class RatingForm extends Component {
   };
 
   async submitRating(data) {
-    await axios({
-      method: "POST",
-      url: `${process.env.REACT_APP_API_DOMAIN_NAME}/api/rating`,
-      data: qs.stringify({ data: JSON.stringify(data) }),
-      headers: {
-        Authorization: `Token ${localStorage.getItem("authToken")}`
-      }
-    });
+    await this.api.post('rating', qs.stringify({ data: JSON.stringify(data) }), true);
   }
 
   render() {
@@ -111,34 +103,34 @@ class RatingForm extends Component {
           {this.state.isLoaded ? (
             <form onSubmit={this.handleSubmit}>
               {this.state.criteria.map((criterion, index) => (
-                <article class="message is-info" key={index}>
-                  <div class="message-header">
+                <article className="message is-info" key={index}>
+                  <div className="message-header">
                     <p>{criterion.description}</p>
                   </div>
-                  <div class="message-body">
+                  <div className="message-body">
                     <div className="control">
-                      <div class="pretty p-default p-round">
+                      <div className="pretty p-default p-round">
                         <input
                           type="radio"
                           name={criterion.id}
                           value={this.state.school1.id}
                           onChange={this.handleChange}
                         />
-                        <div class="state p-success-o">
+                        <div className="state p-success-o">
                           <label>{this.state.school1.name}</label>
                         </div>
                       </div>
 
                       <br />
                       <br />
-                      <div class="pretty p-default p-round">
+                      <div className="pretty p-default p-round">
                         <input
                           type="radio"
                           name={criterion.id}
                           value={this.state.school2.id}
                           onChange={this.handleChange}
                         />
-                        <div class="state p-success-o">
+                        <div className="state p-success-o">
                           <label>{this.state.school2.name}</label>
                         </div>
                       </div>
@@ -156,7 +148,7 @@ class RatingForm extends Component {
                     this.state.criteria.length
                   }
                 >
-                  <i class="fa fa-star golden-star" aria-hidden="true" />&nbsp;
+                  <i className="fa fa-star golden-star" aria-hidden="true" />&nbsp;
                   Submit Ratings
                 </button>
               </div>

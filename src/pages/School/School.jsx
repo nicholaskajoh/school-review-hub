@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import Heading from './Heading';
 import Highlights from './Highlights';
 import Reviews from './Reviews';
 import Reports from './Reports';
 import './School.css';
+import APIHelper from "../../api-helpers.js";
+
 
 class School extends Component {
 	constructor(props) {
-    super(props);
+		super(props);
+		this.api = new APIHelper();
 		this.state = {
 			school: {},
       lowerRatedSchools: [],
@@ -29,7 +31,7 @@ class School extends Component {
 	}
 
 	getSchool(id){
-		axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/school/${id}`)
+		this.api.get(`school/${id}`)
 		.then(res => {
 			const school = res.data;
 			this.setState({ school });
@@ -37,7 +39,7 @@ class School extends Component {
 	}
 
 	getLowerRatedSchools(id) {
-		axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/rated-higher-than/${id}`)
+		this.api.get(`rated-higher-than/${id}`)
       .then(res => {
         var lowerRatedSchools = res.data;
         const numLowerRatedSchools = lowerRatedSchools.length;

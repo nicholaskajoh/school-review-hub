@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
-import axios from "axios";
 import "./Match.css";
+import APIHelper from "../../api-helpers.js";
 
 class Match extends Component {
   constructor(props) {
     super(props);
+    this.api = new APIHelper();
     this.state = {
       schools: [],
       school1_id: "",
@@ -19,8 +20,7 @@ class Match extends Component {
   }
 
   getSchools() {
-    axios
-      .get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/schools-list`)
+    this.api.get('schools-list')
       .then(res => {
         const schools = res.data;
         this.setState({ schools });

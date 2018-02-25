@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import axios from 'axios';
 import './Profile.css';
+import APIHelper from "../../api-helpers.js";
 
 class Profile extends Component {
   constructor(props) {
     super(props);
+    this.api = new APIHelper();
     this.state = {
       user: {},
       ratings: [],
@@ -30,37 +31,25 @@ class Profile extends Component {
   }
   
   getUserInfo() {
-    axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/profile`, {
-      headers: {
-        "Authorization": `Token ${localStorage.getItem("authToken")}`
-      }
-    })
-    .then(res => {
-      const user = res.data;
-      this.setState({ user });
-    });
+    this.api.get('profile', true)
+      .then(res => {
+        const user = res.data;
+        this.setState({ user });
+      });
   }
 
   getUserRatings(page) {
-    axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/profile/ratings/${page}`, {
-      headers: {
-        "Authorization": `Token ${localStorage.getItem("authToken")}`
-      }
-    })
+    this.api.get(`profile/ratings/${page}`, true)
     .then(res => {
       const ratings = res.data;
-      console.log(ratings);
+      // console.log(ratings);
       this.setState({ ratings });
     });
   }
 
   deleteRating = (school1Id, school2Id) => {
     if(window.confirm("Are you sure you want to delete this?")) {
-      axios.delete(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/rating/${school1Id}/${school2Id}`, {
-        headers: {
-          "Authorization": `Token ${localStorage.getItem("authToken")}`
-        }
-      })
+      this.api.delete(`rating/${school1Id}/${school2Id}`, true)
       .then(res => {
         this.getUserRatings(1);
       });

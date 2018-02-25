@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import './Login.css';
+import APIHelper from "../../api-helpers.js";
 
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
+    this.api = new APIHelper();
     this.state = {
       username: "",
       password: "",
@@ -35,9 +36,7 @@ class Login extends React.Component {
 
   async login(username, password) {
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/token-auth`, {
-        username, password
-      });
+      const res = await this.api.post('token-auth', {username, password});
       this.clicked = "";
       localStorage.setItem("authToken", res.data.token);
       this.setState({ isAuth: true });

@@ -2,7 +2,6 @@ from django.contrib import admin
 from .models import *
 from django.utils.html import format_html
 
-# register the models so the admin can manipulate them
 class SchoolAdmin(admin.ModelAdmin):
     list_display = ('name', 'rank', 'rating', 'location',
         'logo', 'site', 'created_at'
@@ -10,7 +9,6 @@ class SchoolAdmin(admin.ModelAdmin):
     list_filter = ('rank', 'location')
     search_fields = ['name', 'description', 'website', 'logo_url', 'location']
     ordering = ('-created_at', )
-    # date_hierarchy = 'created_at'
     readonly_fields = ('logo', 'site', 'created_at', 'updated_at')
 
     def logo(self, obj):
@@ -30,10 +28,10 @@ class ReviewAdmin(admin.ModelAdmin):
         'content'
     )
     readonly_fields = ('created_at', 'updated_at')
-    ordering = ('-created_at', )
+    ordering = ('-created_at',)
 
     def content_(self, obj):
-        if len(obj.content ) > 60:
+        if len(obj.content) > 60:
             return obj.content[:60] + '...'
         return obj.content
 
@@ -44,21 +42,26 @@ class CommentAdmin(admin.ModelAdmin):
         'commenter__last_name', 'commenter__email', 'comment', 'entity'
     )
     readonly_fields = ('created_at', 'updated_at')
-    ordering = ('-created_at', )
+    ordering = ('-created_at',)
     
     def comment_(self, obj):
-        if len(obj.comment ) > 60:
+        if len(obj.comment) > 60:
             return obj.comment[:60] + '...'
         return obj.comment
 
 class ComparisonAdmin(admin.ModelAdmin):
-    list_display = ('choice', 'comparer', 'criterion', 'school1', 'school2')
+    list_display = ('choice', 'comparer', 'criterion_', 'school1', 'school2')
     list_filter = ('criterion', 'choice')
     search_fields = ('comparer__username', 'comparer__first_name',
         'comparer__last_name', 'comparer__email', 'criterion__description',
         'school1__name', 'school2__name', 'choice__name'
     )
     ordering = ('choice', )
+    
+    def criterion_(self, obj):
+        if len(obj.criterion.description) > 60:
+            return obj.criterion.description[:60] + '...'
+        return obj.criterion.description
 
 class CriterionAdmin(admin.ModelAdmin):
     list_display = ('description_', 'created_at')

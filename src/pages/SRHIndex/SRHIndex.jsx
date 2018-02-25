@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import "./SRHIndex.css";
+import APIHelper from "../../api-helpers.js";
 
 class SRHIndex extends Component {
   constructor(props) {
     super(props);
+    this.api = new APIHelper();
     this.state = {
       schools: [],
       page: 1,
@@ -23,12 +24,12 @@ class SRHIndex extends Component {
 
   getSchools(page) {
     this.setState({ showLoadingSpinner: true });
-    axios
-      .get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/srh-index/${page}`)
+    
+    this.api.get(`srh-index/${page}`)
       .then(res => {
         const schools = res.data;
         this.hasPrevPage =
-          res.headers["x-has-previous"].toLowerCase() === "true";
+        res.headers["x-has-previous"].toLowerCase() === "true";
         this.hasNextPage = res.headers["x-has-next"].toLowerCase() === "true";
         this.setState({ schools, page, showLoadingSpinner: false });
       });

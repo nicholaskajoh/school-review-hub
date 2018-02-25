@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import './Review.css';
 import Comment from './../../partials/Comment/Comment';
 import CommentCard from './../../partials/CommentCard/CommentCard';
-
+import APIHelper from "../../api-helpers.js";
 
 
 class Review extends Component{
   constructor(props) {
     super(props);
+    this.api = new APIHelper();
     this.state = {
       review: [],
       school_name: "",
@@ -29,12 +29,12 @@ class Review extends Component{
 	}
 
 	getReview(id){
-		axios.get(`${process.env.REACT_APP_API_DOMAIN_NAME}/api/review/${id}`)
+    this.api.get(`review/${id}`)
 		.then(res => {
       const review = res.data;
       const school_name = res.data.school.name;
       const school_id = res.data.school.id;
-      console.log(school_id);
+      // console.log(school_id);
       this.setState({ review });
       this.setState({ school_name });
       this.setState({ school_id });
