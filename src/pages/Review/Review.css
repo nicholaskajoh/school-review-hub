@@ -38,3 +38,8 @@ padding: 5px 7% 5% 7%;
   padding-left: 100px;
   display:inline-block;
 }
+
+.review-content {
+  font-weight: bold !important;
+  font-size: 1.5em;
+}

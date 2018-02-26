@@ -3,6 +3,7 @@ import './Review.css';
 import { ToastContainer, toast } from 'react-toastify';
 import CommentCard from './../../partials/CommentCard/CommentCard';
 import APIHelper, { errors_to_array } from "../../api-helpers.js";
+import TimeAgo from 'react-time-ago';
 
 
 class Review extends Component{
@@ -69,7 +70,7 @@ class Review extends Component{
     // this.setState({ toastId: toast("Publishing...", { autoClose: true }) });
     try
     {
-      const res = await this.api.post("add-comment", data, true);
+      await this.api.post("add-comment", data, true);
       await this.setState({ toastId: toast("Comment Added", { autoClose: true }) });
       // await this.setState({
       //   toastId: toast.update(this.toastId, {
@@ -118,6 +119,7 @@ class Review extends Component{
     {
       await this.api.get(`upvote/${data.review['id']}/review`, true);
       await toast.info("Upvoted sucessfully");
+      window.location.reload();
     }
     catch (e)
     {
@@ -144,16 +146,13 @@ class Review extends Component{
 
               <div className="column is-half">
                 <div className="content ">
-                  <p>
-                    <strong className="title">
+                  <p className="title">
                       <a
                         className="has-text-black"
                         href={"/school/" + this.state.school_id}
                       >
                         {this.state.school_name} Review
                       </a>
-                    </strong>
-                    <br />
                   </p>
                 </div>
               </div>
@@ -162,16 +161,25 @@ class Review extends Component{
             </div>
 
             <div className="review-body">
-              <div className="review-section">
-                <p>{this.state.review.content}</p>
-                <br />
-                <p>
-                  Last Updated at {new Date(this.state.review.created_at).toDateString()}
-                </p>
-                <br />
-                <br />
-                <button className="button is-danger" onClick={this.handleUpvote} >Upvote Review</button>
+
+              <div className="box">
+                <div className="media-content">
+                  <div className="content has-text-centered">
+                    {/*<TimeAgo>{new Date(this.state.review.created_at) }</TimeAgo>*/}
+                    <p className="review-content">"{this.state.review.content}"</p>
+                  </div>
+                  <div className="card-footer">
+                  <div className="card-footer-item">Comments ({this.state.review.comments_count})</div>
+                  <div className="card-footer-item">Upvotes ({this.state.review.upvotes})</div>
+                  </div>
+                  <div className="card-footer">
+                  <div className="card-footer-item">
+                    <button className="button is-danger is-small" onClick={this.handleUpvote}>Upvote Review</button>
+                  </div>
+                  </div>
+                </div>
               </div>
+
               <div className="review-section">
                 <h3 className="title">Your view?</h3>
                 <p>

@@ -41,3 +41,8 @@
     padding-left: 100px;
     display: inline-block;
 }
+
+.report-content {
+    font-weight: bold !important;
+    font-size: 1.5em;
+}

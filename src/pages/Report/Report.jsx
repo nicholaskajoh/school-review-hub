@@ -3,6 +3,7 @@ import "./Report.css";
 import CommentCard from "./../../partials/CommentCard/CommentCard";
 import { ToastContainer, toast } from 'react-toastify';
 import APIHelper, { errors_to_array } from "../../api-helpers.js";
+import TimeAgo from 'react-time-ago';
 
 
 class Report extends Component {
@@ -17,6 +18,7 @@ class Report extends Component {
       comment: "",
       isloading: ""
     };
+    this.errors = [];
   }
 
   componentWillReceiveProps(nextProps) {
@@ -40,6 +42,7 @@ class Report extends Component {
         this.setState({ report });
         this.setState({ school_name });
         this.setState({ school_id });
+        console.log(this.state.report.comments_count);
     });
   }
 
@@ -69,7 +72,7 @@ class Report extends Component {
     // this.setState({ toastId: toast("Publishing...", { autoClose: true }) });
     try
     {
-      const res = await this.api.post("add-comment", data, true);
+      await this.api.post("add-comment", data, true);
       await this.setState({ toastId: toast("Comment Added", { autoClose: true }) });
       // await this.setState({
       //   toastId: toast.update(this.toastId, {
@@ -142,15 +145,13 @@ class Report extends Component {
 
               <div className="column is-half">
                 <div className="content ">
-                  <p>
-                    <strong className="title">
+                  <p className="title">
                       <a
                         className="has-text-black"
                         href={"/school/" + this.state.school_id}
                       >
                         {this.state.school_name} Report
                       </a>
-                    </strong>
                     <br />
                   </p>
                 </div>
@@ -160,20 +161,28 @@ class Report extends Component {
             </div>
 
             <div className="report-body">
-              <div className="report-section">
-                <p>{this.state.report.content}</p>
-                <br />
-                <p>
-                  Last Updated at {new Date(this.state.report.created_at).toDateString()}
-                </p>
+
+              <div className="box">
+                <div className="media-content">
+                  <div className="content has-text-centered">
+                    {/*<TimeAgo>{new Date(this.state.report.created_at) }</TimeAgo>*/}
+                    <p className="report-content">"{this.state.report.content}"</p>
+                  </div>
+                  <div className="card-footer">
+                  <div className="card-footer-item">Comments ({this.state.report.comments_count})</div>
+                  <div className="card-footer-item">Upvotes ({this.state.report.upvotes})</div>
+                  </div>
+                  <div className="card-footer">
+                  <div className="card-footer-item">
+                    <button className="button is-danger is-small" onClick={this.handleUpvote}>Upvote Report</button>
+                  </div>
+                  </div>
+                </div>
               </div>
               <div className="report-section">
-                <button className="button is-danger" onClick={this.handleUpvote}>Upvote Report</button>
-                <br />
-                <br />
                 <h3 className="title">Your view?</h3>
                 <p>
-                  What's your opinion? Do feel this report is rightly spoken?
+                  What's your opinion? Do you feel this report is rightly spoken?
                   Why not let others see the other side of the coin through your
                   perspective.
                 </p>

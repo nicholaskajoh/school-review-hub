@@ -1,14 +1,19 @@
 import React from "react";
 import "./CommentCard.css";
+import TimeAgo from 'react-time-ago';
+import 'react-time-ago/Tooltip.css';
+
 
 const CommentCard = ({ comment }) => (
   <div className="box">
     <div className="media-content">
-      <div className="content">
-        <p>On {new Date(comment.created_at).toDateString()}</p>
+      <div className="content has-text-centered">        
         <p>{comment.comment}</p>
       </div>
-      <div className="card-footer-item">Upvotes ({comment.upvotes})</div>
+      <div className="card-footer">
+	      <div className="card-footer-item">Upvotes ({comment.upvotes})</div>
+	      <div className="card-footer-item"><TimeAgo>{new Date(comment.created_at) }</TimeAgo></div>
+	  </div>
     </div>
   </div>
 );

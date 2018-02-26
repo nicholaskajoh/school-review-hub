@@ -23,6 +23,11 @@ import School from "./pages/School/School";
 import Report from "./pages/Report/Report";
 import NotFound from "./pages/NotFound/NotFound";
 import registerServiceWorker from "./registerServiceWorker";
+import TimeAgo from 'javascript-time-ago';
+// Load locale-specific relative date/time formatting rules.
+import en from 'javascript-time-ago/locale/en';
+// Add locale-specific relative date/time formatting rules.
+TimeAgo.locale(en);
 
 class App extends Component {
   render() {
