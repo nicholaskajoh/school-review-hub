@@ -44,7 +44,7 @@ export function getAuth(){
 }
 
 
-export function error_to_string(e){
+export function errors_to_array(e){
     if (e.response)
     {
         if (e.response.status == 500){

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Review.css';
 import CommentCard from './../../partials/CommentCard/CommentCard';
-import APIHelper, { error_to_string } from "../../api-helpers.js";
+import APIHelper, { errors_to_array } from "../../api-helpers.js";
 
 
 class Review extends Component{

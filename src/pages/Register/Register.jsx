@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import './Register.css';
-import APIHelper, { error_to_string } from "../../api-helpers.js";
+import APIHelper, { errors_to_array } from "../../api-helpers.js";
 
 
 class Register extends React.Component {
@@ -51,7 +51,7 @@ class Register extends React.Component {
     }
     catch (e)
     {
-      this.errors = error_to_string(e);
+      this.errors = errors_to_array(e);
       toast.error("Error occured!");
       this.clicked = "";
       this.forceUpdate();

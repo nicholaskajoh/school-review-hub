@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { css } from "glamor";
 import "./ReviewForm.css";
-import APIHelper, { error_to_string } from "../../api-helpers.js";
+import APIHelper, { errors_to_array } from "../../api-helpers.js";
 
 
 class ReviewForm extends Component {
@@ -65,7 +65,7 @@ class ReviewForm extends Component {
     }
     catch (e)
     {
-      this.errors = error_to_string(e);
+      this.errors = errors_to_array(e);
       await this.setState({ toastId: toast(`Error: ${this.errors}`, { autoClose: true }) });
       // await this.setState({
       //   toastId: toast.update(this.toastId, {
