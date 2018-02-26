@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Review.css';
+import { ToastContainer, toast } from 'react-toastify';
 import CommentCard from './../../partials/CommentCard/CommentCard';
 import APIHelper, { errors_to_array } from "../../api-helpers.js";
 
@@ -35,7 +36,6 @@ class Review extends Component{
       const review = res.data;
       const school_name = res.data.school.name;
       const school_id = res.data.school.id;
-      // console.log(school_id);
       this.setState({ review });
       this.setState({ school_name });
       this.setState({ school_id });
@@ -47,6 +47,23 @@ class Review extends Component{
     this.setState({isLoading});
     // this.getReview(reviewId);
     // this.getComments(reviewId);
+  }
+
+  handleUpvote = event => {
+    this.upVote(this.state);
+  };
+
+  async upVote(data){
+    try
+    {
+      await this.api.get(`upvote/${data.review['id']}/review`, true);
+      await toast.info("Upvoted sucessfully");
+    }
+    catch (e)
+    {
+      this.errors = errors_to_array(e);
+      toast.error("Error occured while upvoting");
+    }
   }
 
   getComments(id) {
@@ -66,13 +83,14 @@ class Review extends Component{
               <h1 className="title">Review</h1>
             </div>
           </div>
+        <ToastContainer />
         </section>
         <div className="section">
           <div className="container">
             <div className="columns">
               <div className="column" />
 
-              <div className="column">
+              <div className="column is-half">
                 <div className="content ">
                   <p>
                     <strong className="title">
@@ -80,7 +98,7 @@ class Review extends Component{
                         className="has-text-black"
                         href={"/school/" + this.state.school_id}
                       >
-                        {this.state.school_name}
+                        {this.state.school_name} Review
                       </a>
                     </strong>
                     <br />
@@ -98,14 +116,14 @@ class Review extends Component{
                 <p>
                   Last Updated at {new Date(this.state.review.created_at).toDateString()}
                 </p>
+                <br />
+                <br />
+                <button className="button is-danger" onClick={this.handleUpvote} >Upvote Review</button>
               </div>
-              <div className="review-section comment-section">
-                <button className="button is-danger" onClick={this.handleClick} >Upvote Review</button>
-                <br />
-                <br />
+              <div className="review-section">
                 <h3 className="title">Your view?</h3>
                 <p>
-                  Whats your opinion? Do feel this is review is rightly spoken?
+                  What's your opinion? Do you feel this review is rightly spoken?
                   Why not let others see the other side of the coin through your
                   perspective.
                 </p>
@@ -116,12 +134,17 @@ class Review extends Component{
                       <textarea
                         className="textarea"
                         type="text"
-                        placeholder="Write a comment?"
+                        placeholder="Write a comment"
                       />
                     </div>
-                    <button type="submit" className="button is-danger">
-                      Post Comment
-                    </button>
+                    <br />
+                    <div className="field is-grouped is-grouped-centered">
+                      <p className="control">
+                        <button type="submit" className="button is-danger">
+                          Post Comment
+                        </button>
+                      </p>
+                    </div>
                   </div>
                 </form>
                 <br />

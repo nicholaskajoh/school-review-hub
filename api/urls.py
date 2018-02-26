@@ -25,7 +25,7 @@ urlpatterns = [
 	path('profile/ratings/<int:page>', ProfileRatingsView.as_view(), name='profile_ratings'),
 	path('rating/<int:school1_id>/<int:school2_id>', DeleteRatingView.as_view(), name='delete_rating'),
 	path('register', RegisterView.as_view(), name='register'),
-	path('upvote/<int:entity_id>/<entity>', UpvoteView.as_view(), name='upvote'),
+	path('upvote/<int:entity_id>/<entity_type>', UpvoteView.as_view(), name='upvote'),
 	path('add-review', AddReviewView.as_view(), name='add_review'),
 	path('add-report', AddReportView.as_view(), name='add_report'),
 ]

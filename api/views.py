@@ -222,9 +222,9 @@ class RegisterView(APIView):
 class UpvoteView(APIView):
     permission_classes = (IsAuthenticated, )
 
-    def get(self, request, entity_id, entity):
-        upvote = Upvote.objects.create(
-            entity = Upvote.ENTITY_CHOICES[entity],
+    def get(self, request, entity_id, entity_type):
+        upvote = Upvote.objects.update_or_create(
+            entity = entity_type,
             entity_id = entity_id,
             upvoter = request.user
         )

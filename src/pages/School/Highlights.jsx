@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+
 const Highlights = (props) => (
     <div className="section">
         <div className="container">

@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const Heading = (props) => (
   <section className="hero is-light">
     <div className="hero-body">

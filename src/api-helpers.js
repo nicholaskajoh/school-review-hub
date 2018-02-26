@@ -47,11 +47,11 @@ export function getAuth(){
 export function errors_to_array(e){
     if (e.response)
     {
-        if (e.response.status == 500){
+        if (e.response.status === 500){
             console.log('ERROR 500: Server ran into a problem');
             return ["We ran into an error, we'll notify the development team right away"];
         }
-        else if (e.response.status == 404)
+        else if (e.response.status === 404)
         {
             console.log('ERROR 404: Page not found');
             return ["Something is wrong, please refresh the page"];
@@ -64,7 +64,7 @@ export function errors_to_array(e){
 
             Object.keys(e.response.data).forEach(function(key) {
                 for (var i = 0; i < e.response.data[key].length; i++) {
-                    msg.push(e.response.data[key][i]);
+                    msg.push(`${key}: ${e.response.data[key][i]}`);
                 }
             });
             return msg;

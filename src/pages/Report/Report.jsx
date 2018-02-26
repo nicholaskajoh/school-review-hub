@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import "./Report.css";
 import CommentCard from "./../../partials/CommentCard/CommentCard";
-import APIHelper from "../../api-helpers.js";
+import { ToastContainer, toast } from 'react-toastify';
+import APIHelper, { errors_to_array } from "../../api-helpers.js";
+
 
 class Report extends Component {
   constructor(props) {
@@ -10,7 +12,7 @@ class Report extends Component {
     this.state = {
       report: [],
       school_name: "",
-      schoool_id: "",
+      school_id: "",
       comments: [],
       isloading: ""
     };
@@ -53,6 +55,23 @@ class Report extends Component {
     this.setState({ isLoading });
   };
 
+  handleUpvote = event => {
+    this.upVote(this.state);
+  };
+
+  async upVote(data){
+    try
+    {
+      await this.api.get(`upvote/${data.report['id']}/report`, true);
+      await toast.info("Upvoted sucessfully");
+    }
+    catch (e)
+    {
+      this.errors = errors_to_array(e);
+      toast.error("Error occured while upvoting");
+    }
+  }
+
   render() {
     return (
       <div>
@@ -62,21 +81,22 @@ class Report extends Component {
               <h1 className="title">Report</h1>
             </div>
           </div>
+          <ToastContainer />
         </section>
         <div className="section">
           <div className="container">
             <div className="columns">
               <div className="column" />
 
-              <div className="column">
+              <div className="column is-half">
                 <div className="content ">
                   <p>
                     <strong className="title">
                       <a
                         className="has-text-black"
-                        href={"/school/" + this.state.schoool_id}
+                        href={"/school/" + this.state.school_id}
                       >
-                        {this.state.school_name}
+                        {this.state.school_name} Report
                       </a>
                     </strong>
                     <br />
@@ -95,13 +115,13 @@ class Report extends Component {
                   Last Updated at {new Date(this.state.report.created_at).toDateString()}
                 </p>
               </div>
-              <div className="report-section comment-section">
-                <button className="button is-danger">Upvote Report</button>
+              <div className="report-section">
+                <button className="button is-danger" onClick={this.handleUpvote}>Upvote Report</button>
                 <br />
                 <br />
                 <h3 className="title">Your view?</h3>
                 <p>
-                  Whats your opinion? Do feel this is Report is rightly spoken?
+                  What's your opinion? Do feel this report is rightly spoken?
                   Why not let others see the other side of the coin through your
                   perspective.
                 </p>
@@ -112,12 +132,17 @@ class Report extends Component {
                       <textarea
                         className="textarea"
                         type="text"
-                        placeholder="Write a comment?"
+                        placeholder="Write a comment"
                       />
                     </div>
-                    <button type="submit" className="button is-danger">
-                      Post Comment
-                    </button>
+                    <br />
+                    <div className="field is-grouped is-grouped-centered">
+                      <p className="control">
+                        <button type="submit" className="button is-danger">
+                          Post Comment
+                        </button>
+                      </p>
+                    </div>
                   </div>
                 </form>
                 <br />

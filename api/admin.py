@@ -89,7 +89,7 @@ class ReportAdmin(admin.ModelAdmin):
         return obj.content
 
 class UpvoteAdmin(admin.ModelAdmin):
-    list_display = ('upvoter', 'entity', 'entity_id')
+    list_display = ('upvoter', 'entity', 'entity_id', 'created_at')
     list_filter = ('entity',)
     search_fields = ('upvoter__username', 'upvoter__first_name',
         'upvoter__last_name', 'upvoter__email', 'entity'

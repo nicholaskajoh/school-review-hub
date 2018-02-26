@@ -6,6 +6,7 @@ import Reports from "./Reports";
 import "./School.css";
 import APIHelper from "../../api-helpers.js";
 
+
 class School extends Component {
   constructor(props) {
     super(props);

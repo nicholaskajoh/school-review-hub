@@ -7,6 +7,7 @@ import reviewImg from "../../assets/img/review.png";
 import rankingImg from "../../assets/img/ranking.png";
 import { getAuth } from "../../api-helpers.js";
 
+
 class IndexLanding extends Component {
   isAuth() {
     return getAuth();

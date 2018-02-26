@@ -71,11 +71,11 @@ class Report(models.Model):
 
 
 class Comment(models.Model):
-    REVIEW = 0
-    REPORT = 1
+    REVIEW = 'review'
+    REPORT = 'report'
     ENTITY_CHOICES = (
-        ('review', 'Review'),
-        ('report', 'Report'),
+        (REVIEW, 'Review'),
+        (REPORT, 'Report'),
     )
     entity = models.CharField(max_length=15, choices=ENTITY_CHOICES)
     entity_id = models.IntegerField()
@@ -89,13 +89,13 @@ class Comment(models.Model):
 
 
 class Upvote(models.Model):
-    REVIEW = 0
-    REPORT = 1
-    COMMENT = 2
+    REVIEW = 'review'
+    REPORT = 'report'
+    COMMENT = 'comment'
     ENTITY_CHOICES = (
-        ('review', 'Review'),
-        ('report', 'Report'),
-        ('comment', 'Comment'),
+        (REVIEW, 'Review'),
+        (REPORT, 'Report'),
+        (COMMENT, 'Comment'),
     )
     entity = models.CharField(max_length=15, choices=ENTITY_CHOICES)
     entity_id = models.IntegerField()

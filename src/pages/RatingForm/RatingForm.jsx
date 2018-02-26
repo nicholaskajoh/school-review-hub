@@ -8,6 +8,7 @@ import "../../assets/css/pretty-checkbox.min.css";
 import "mdi/css/materialdesignicons.min.css";
 import APIHelper from "../../api-helpers.js";
 
+
 class RatingForm extends Component {
   constructor(props) {
     super(props);

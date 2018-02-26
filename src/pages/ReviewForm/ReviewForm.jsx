@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { css } from "glamor";
+// import { css } from "glamor";
 import "./ReviewForm.css";
 import APIHelper, { errors_to_array } from "../../api-helpers.js";
 
@@ -112,9 +112,13 @@ class ReviewForm extends Component {
                 {this.errors}
               </p>
               <br/ >
-              <button type="submit" className="button is-danger">
-                Publish
-              </button>
+              <div className="field is-grouped is-grouped-centered">
+                <p className="control">
+                  <button type="submit" className="button is-danger">
+                    Publish
+                  </button>
+                </p>
+              </div>
             </form>
           </div>
         </div>
