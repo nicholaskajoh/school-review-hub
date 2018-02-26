@@ -42,7 +42,6 @@ class Report extends Component {
         this.setState({ report });
         this.setState({ school_name });
         this.setState({ school_id });
-        console.log(this.state.report.comments_count);
     });
   }
 
@@ -119,6 +118,7 @@ class Report extends Component {
     {
       await this.api.get(`upvote/${data.report['id']}/report`, true);
       await toast.info("Upvoted sucessfully");
+      window.location.reload();
     }
     catch (e)
     {

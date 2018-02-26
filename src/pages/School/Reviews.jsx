@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import APIHelper from "../../api-helpers.js";
+import TimeAgo from 'react-time-ago';
 
 
 class Reviews extends Component {
@@ -71,7 +72,7 @@ class Reviews extends Component {
               <div className="card review">
                 <header className="card-header">
                   <p className="card-header-title">
-                    Last updated {new Date(review.updated_at).toDateString()}
+                    <strong><TimeAgo>{new Date(review.created_at)}</TimeAgo></strong>
                   </p>
                 </header>
                 <div className="card-content">
@@ -90,7 +91,7 @@ class Reviews extends Component {
                 </footer>
               </div>
             ))}
-
+            <br />
             {this.state.reviews.length === 0 ? (
               <p className="has-text-centered">No reviews yet!</p>
             ) : (

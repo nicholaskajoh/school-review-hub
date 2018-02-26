@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import TimeAgo from 'react-time-ago';
+
 
 const TopReviews = ({ reviews, isLoaded }) => {
   return (
@@ -20,7 +22,8 @@ const TopReviews = ({ reviews, isLoaded }) => {
                   <div className="content">
                     {review.content.substring(0, 150).trim() +
                       (review.content.length > 150 ? "..." : "")}{" "}
-                    - Last updated {new Date(review.updated_at).toDateString()}
+                      <br />
+                      <strong><TimeAgo>{new Date(review.created_at)}</TimeAgo></strong>
                   </div>
                 </div>
                 <footer className="card-footer">
