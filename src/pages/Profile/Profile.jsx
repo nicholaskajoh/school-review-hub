@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import './Profile.css';
 import APIHelper from "../../api-helpers.js";
-import { Redirect } from 'react-router-dom';
 
 
 class Profile extends Component {
@@ -15,7 +14,6 @@ class Profile extends Component {
       ratings: [],
       ratingsPage: 1
     };
-    this.invalidToken = false;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -41,7 +39,8 @@ class Profile extends Component {
       })
       .catch(e => {
         if (e.response.status === 401) {
-          this.invalidToken = true;
+          localStorage.removeItem("authToken");
+          window.location.replace("/login");
         }
       });
   }
@@ -55,7 +54,8 @@ class Profile extends Component {
       })
       .catch(e => {
         if (e.response.status === 401) {
-          this.invalidToken = true;
+          localStorage.removeItem("authToken");
+          window.location.replace("/login");
         }
       });
   }
@@ -71,7 +71,8 @@ class Profile extends Component {
         })
         .catch(e => {
           if (e.response.status === 401) {
-            this.invalidToken = true;
+            localStorage.removeItem("authToken");
+            window.location.replace("/login");
           }
         });
     }
@@ -79,10 +80,6 @@ class Profile extends Component {
 
 
   render() {
-    if (this.invalidToken) {
-      localStorage.removeItem("authToken");
-      return <Redirect to="/login" push={true} />;
-    }
 
     return (
       <div>

@@ -80,26 +80,40 @@ class RatingForm extends Component {
   };
 
   async submitRating(data) {
-    this.setState({ toastId: toast("Processing......", { autoClose: false }) });
-
-    await this.api.post(
-      "rating",
-      qs.stringify({ data: JSON.stringify(data) }),
-      true
-    );
-    await this.setState({
-      toastId: toast.update(this.toastId, {
-        render: "Done",
-        type: toast.TYPE.INFO,
-        autoClose: 2000,
-        //Here the magic
-        className: css({
-          transform: "rotateY(360deg)",
-          transition: "transform 0.6s"
+    this.setState({ toastId: toast("Processing...", { autoClose: true }) });
+    try {
+      await this.api.post(
+        "rating",
+        qs.stringify({ data: JSON.stringify(data) }),
+        true
+      );
+      await this.setState({
+        toastId: toast.update(this.toastId, {
+          render: "Done",
+          type: toast.TYPE.SUCCESS,
+          autoClose: 2000,
+          //Here the magic
+          className: css({
+            transform: "rotateY(360deg)",
+            transition: "transform 0.6s"
+          })
         })
-      })
-    });
-  }
+      });
+    } catch (e) {
+      await this.setState({
+        toastId: toast.update(this.toastId, {
+          render: `Failed ${e.response}`,
+          type: toast.TYPE.ERROR,
+          autoClose: 2000,
+          className: css({
+            transform: "rotateY(360deg)",
+            transition: "transform 0.6s"
+          })
+        })
+      });
+    }
+
+}
 
   render() {
     return (

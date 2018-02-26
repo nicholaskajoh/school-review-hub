@@ -271,7 +271,8 @@ class AddReportView(APIView):
                 reporter=reporter,school=school,
                 content=content
             )
-            return Response(status=status.HTTP_200_OK)
+
+            return Response(data=ReportSerializer(report).data, status=status.HTTP_200_OK)
         return Response(data={'errors': form.errors}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 

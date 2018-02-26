@@ -39,39 +39,68 @@ class ReportForm extends Component {
   handleSubmit = event => {
     const data = { content: this.state.content, school: this.state.school.id };
     this.submitReport(data);
-    window.location.replace("/profile");
     event.preventDefault();
   };
 
-  async submitReport(data) {
-    this.setState({ toastId: toast("Publishing...", { autoClose: true }) });
-    try {
-      await this.api.post("add-report", data, true);
-      await this.setState({
-        toastId: toast.update(this.toastId, {
-          render: "Done",
-          type: toast.TYPE.SUCCESS,
-          autoClose: 2000,
-          className: css({
-            transform: "rotateY(360deg)",
-            transition: "transform 0.6s"
-          })
-        })
-      });
-    } catch (e) {
-      await this.setState({
-        toastId: toast.update(this.toastId, {
-          render: `Failed ${e.response.data.errors}`,
-          type: toast.TYPE.ERROR,
-          autoClose: 2000,
-          className: css({
-            transform: "rotateY(360deg)",
-            transition: "transform 0.6s"
-          })
-        })
+  submitReport(data) {
+    // this.setState({ toastId: toast("Publishing...", { autoClose: true }) });
+    this.api.post("add-report", data, true)
+      .then(res => {
+        this.setState({ toastId: toast("Published", { autoClose: false }) });
+        // this.setState({
+        // toastId: toast.update(this.toastId, {
+        //   render: "Done",
+        //   type: toast.TYPE.SUCCESS,
+        //   autoClose: 2000,
+        //   className: css({
+        //     transform: "rotateY(360deg)",
+        //     transition: "transform 0.6s"
+        //     })
+        //   })
+        // });
+        window.location.replace(`../report/${res.data['id']}`);
+      }).catch (e => {
+        // this.setState({
+        //   toastId: toast.update(this.toastId, {
+        //     render: `Failed ${e.response.data.errors}`,
+        //     type: toast.TYPE.ERROR,
+        //     autoClose: 2000,
+        //     className: css({
+        //       transform: "rotateY(360deg)",
+        //       transition: "transform 0.6s"
+        //     })
+        //   })
+        // });
+        this.setState({ toastId: toast(`Error: ${e.response.data.errors['content']}`, { autoClose: false }) });
       });
     }
-  }
+
+    // try {
+    //   await this.api.post("add-report", data, true);
+    //   await this.setState({
+    //     toastId: toast.update(this.toastId, {
+    //       render: "Done",
+    //       type: toast.TYPE.SUCCESS,
+    //       autoClose: 2000,
+    //       className: css({
+    //         transform: "rotateY(360deg)",
+    //         transition: "transform 0.6s"
+    //       })
+    //     })
+    //   });
+    // } catch (e) {
+    //   await this.setState({
+    //     toastId: toast.update(this.toastId, {
+    //       render: `Failed ${e.response.data.errors}`,
+    //       type: toast.TYPE.ERROR,
+    //       autoClose: 2000,
+    //       className: css({
+    //         transform: "rotateY(360deg)",
+    //         transition: "transform 0.6s"
+    //       })
+    //     })
+    //   });
+    // }
 
   render() {
     return (
