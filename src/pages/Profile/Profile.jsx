@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import './Profile.css';
 import APIHelper from "../../api-helpers.js";
@@ -40,8 +40,7 @@ class Profile extends Component {
         this.setState({ user });
       })
       .catch(e => {
-        if (e.response.status === 401)
-        {
+        if (e.response.status === 401) {
           this.invalidToken = true;
         }
       });
@@ -49,38 +48,36 @@ class Profile extends Component {
 
   getUserRatings(page) {
     this.api.get(`profile/ratings/${page}`, true)
-    .then(res => {
-      const ratings = res.data;
-      // console.log(ratings);
-      this.setState({ ratings });
-    })
-    .catch(e => {
-      if (e.response.status === 401)
-      {
-        this.invalidToken = true;
-      }
-    });
-  }
-
-  deleteRating = (school1Id, school2Id) => {
-    if(window.confirm("Are you sure you want to delete this?")) {
-      this.api.delete(`rating/${school1Id}/${school2Id}`, true)
       .then(res => {
-        // this.getUserRatings(1);
         const ratings = res.data;
         // console.log(ratings);
         this.setState({ ratings });
       })
       .catch(e => {
-        if (e.response.status === 401)
-        {
+        if (e.response.status === 401) {
           this.invalidToken = true;
         }
       });
+  }
+
+  deleteRating = (school1Id, school2Id) => {
+    if (window.confirm("Are you sure you want to delete this?")) {
+      this.api.delete(`rating/${school1Id}/${school2Id}`, true)
+        .then(res => {
+          // this.getUserRatings(1);
+          const ratings = res.data;
+          // console.log(ratings);
+          this.setState({ ratings });
+        })
+        .catch(e => {
+          if (e.response.status === 401) {
+            this.invalidToken = true;
+          }
+        });
     }
   };
 
-  
+
   render() {
     if (this.invalidToken) {
       localStorage.removeItem("authToken");

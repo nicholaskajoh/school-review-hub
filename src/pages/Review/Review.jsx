@@ -11,7 +11,7 @@ class Review extends Component{
     this.state = {
       review: [],
       school_name: "",
-      schoool_id: "",
+      school_id: "",
       comments: [],
       isloading: ""
     };
@@ -77,7 +77,7 @@ class Review extends Component{
                     <strong className="title">
                       <a
                         className="has-text-black"
-                        href={"/school/" + this.state.schoool_id}
+                        href={"/school/" + this.state.school_id}
                       >
                         {this.state.school_name}
                       </a>
@@ -95,15 +95,14 @@ class Review extends Component{
                 <p>{this.state.review.content}</p>
                 <br />
                 <p>
-                  Last Updated at
-                  {new Date(this.state.review.created_at).toDateString()}
+                  Last Updated at {new Date(this.state.review.created_at).toDateString()}
                 </p>
               </div>
               <div className="review-section comment-section">
-                <button className="button is-danger">Upvote Review</button>
+                <button className="button is-danger" onClick={this.handleClick} >Upvote Review</button>
                 <br />
                 <br />
-                <h3 className="title">Your view ?</h3>
+                <h3 className="title">Your view?</h3>
                 <p>
                   Whats your opinion? Do feel this is review is rightly spoken?
                   Why not let others see the other side of the coin through your

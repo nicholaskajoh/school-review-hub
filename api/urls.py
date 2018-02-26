@@ -13,6 +13,7 @@ urlpatterns = [
 	path('top-schools', TopSchoolsView.as_view(), name='top_schools'),
 	path('srh-index/<int:page>', SRHIndexView.as_view(), name='srh_index'),
 	path('review/<int:id>', ReviewView.as_view(), name='review'),
+	path('report/<int:id>', ReportView.as_view(), name='report'),
 	path('<entity>/<int:id>/comments/<int:page>', CommentsView.as_view(), name='comments'),
 	path('criteria', CriteriaListView.as_view(), name='criteria_list'),
 	path('top-reviews', TopReviewsView.as_view(), name='top_reviews'),
@@ -23,5 +24,8 @@ urlpatterns = [
 	path('profile', ProfileView.as_view(), name='profile'),
 	path('profile/ratings/<int:page>', ProfileRatingsView.as_view(), name='profile_ratings'),
 	path('rating/<int:school1_id>/<int:school2_id>', DeleteRatingView.as_view(), name='delete_rating'),
-	path('register', RegisterView.as_view(), name='register'),	
+	path('register', RegisterView.as_view(), name='register'),
+	path('upvote/<int:entity_id>/<entity>', UpvoteView.as_view(), name='upvote'),
+	path('add-review', AddReviewView.as_view(), name='add_review'),
+	path('add-report', AddReportView.as_view(), name='add_report'),
 ]

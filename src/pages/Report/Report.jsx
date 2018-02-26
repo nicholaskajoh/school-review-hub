@@ -29,21 +29,23 @@ class Report extends Component {
   }
 
   getReport(id) {
-    this.api.get(`report/${id}`).then(res => {
-      const report = res.data;
-      const school_name = res.data.school.name;
-      const school_id = res.data.school.id;
-      this.setState({ report });
-      this.setState({ school_name });
-      this.setState({ school_id });
+    this.api.get(`report/${id}`)
+      .then(res => {
+        const report = res.data;
+        const school_name = res.data.school.name;
+        const school_id = res.data.school.id;
+        this.setState({ report });
+        this.setState({ school_name });
+        this.setState({ school_id });
     });
   }
 
   getComments(id) {
-    this.api.get(`report/${id}/comments/1`).then(res => {
-      const comments = res.data;
-      this.setState({ comments });
-    });
+    this.api.get(`report/${id}/comments/1`)
+      .then(res => {
+        const comments = res.data;
+        this.setState({ comments });
+      });
   }
 
   handleClick = event => {
@@ -90,15 +92,14 @@ class Report extends Component {
                 <p>{this.state.report.content}</p>
                 <br />
                 <p>
-                  Last Updated at
-                  {new Date(this.state.report.created_at).toDateString()}
+                  Last Updated at {new Date(this.state.report.created_at).toDateString()}
                 </p>
               </div>
               <div className="report-section comment-section">
                 <button className="button is-danger">Upvote Report</button>
                 <br />
                 <br />
-                <h3 className="title">Your view ?</h3>
+                <h3 className="title">Your view?</h3>
                 <p>
                   Whats your opinion? Do feel this is Report is rightly spoken?
                   Why not let others see the other side of the coin through your

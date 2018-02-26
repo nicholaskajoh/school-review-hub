@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.db.models import Q
 from random import shuffle
 from django.db.models import Count
-from .forms import RegisterForm
+from .forms import *
 
 # Pagination function.
 def paginate(input_list, page, results_per_page=10):
@@ -216,6 +216,62 @@ class RegisterView(APIView):
             user.save()
             token  = Token.objects.create(user=user)
             return Response(data={'token':token.key}, status=status.HTTP_201_CREATED)
+        return Response(data={'errors': form.errors}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+
+class UpvoteView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request, entity_id, entity):
+        upvote = Upvote.objects.create(
+            entity = Upvote.ENTITY_CHOICES[entity],
+            entity_id = entity_id,
+            upvoter = request.user
+        )
+        return Response(status=status.HTTP_200_OK)
+
+
+class AddReviewView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request):
+        data = {
+            'content': request.data['content'],
+            'school': request.data['school'],
+            'reviewer': request.user.id
+        }
+        form = ReviewForm(data or None)
+        if form.is_valid():
+            content = form.cleaned_data['content']
+            school = form.cleaned_data['school']
+            reviewer = form.cleaned_data['reviewer']
+            review = Review.objects.create(
+                reviewer=reviewer,school=school,
+                content=content
+            )
+            return Response(status=status.HTTP_200_OK)
+        return Response(data={'errors': form.errors}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)    
+
+
+class AddReportView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request):
+        data = {
+            'content': request.data['content'],
+            'school': request.data['school'],
+            'reporter': request.user.id
+        }
+        form = ReportForm(data or None)
+        if form.is_valid():
+            content = form.cleaned_data['content']
+            school = form.cleaned_data['school']
+            reporter = form.cleaned_data['reporter']
+            report = Report.objects.create(
+                reporter=reporter,school=school,
+                content=content
+            )
+            return Response(status=status.HTTP_200_OK)
         return Response(data={'errors': form.errors}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 

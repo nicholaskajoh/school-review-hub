@@ -71,6 +71,8 @@ class Report(models.Model):
 
 
 class Comment(models.Model):
+    REVIEW = 0
+    REPORT = 1
     ENTITY_CHOICES = (
         ('review', 'Review'),
         ('report', 'Report'),
@@ -87,6 +89,9 @@ class Comment(models.Model):
 
 
 class Upvote(models.Model):
+    REVIEW = 0
+    REPORT = 1
+    COMMENT = 2
     ENTITY_CHOICES = (
         ('review', 'Review'),
         ('report', 'Report'),

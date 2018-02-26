@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { css } from "glamor";
 import "./ReportForm.css";
 import APIHelper from "../../api-helpers.js";
@@ -33,25 +33,24 @@ class ReportForm extends Component {
   }
 
   handleChange = event => {
-    this.setState({ content: event.target.content });
+    this.setState({ content: event.target.value });
   };
 
   handleSubmit = event => {
-    const data = { content: this.state.content, school_id: this.props.id };
-
+    const data = { content: this.state.content, school: this.state.school.id };
     this.submitReport(data);
     window.location.replace("/profile");
     event.preventDefault();
   };
 
   async submitReport(data) {
-    this.setState({ toastId: toast("Publishing......", { autoClose: false }) });
+    this.setState({ toastId: toast("Publishing...", { autoClose: true }) });
     try {
-      await this.api.post("report", data, true);
+      await this.api.post("add-report", data, true);
       await this.setState({
         toastId: toast.update(this.toastId, {
           render: "Done",
-          type: toast.TYPE.INFO,
+          type: toast.TYPE.SUCCESS,
           autoClose: 2000,
           className: css({
             transform: "rotateY(360deg)",
@@ -62,8 +61,8 @@ class ReportForm extends Component {
     } catch (e) {
       await this.setState({
         toastId: toast.update(this.toastId, {
-          render: "Failed",
-          type: toast.TYPE.INFO,
+          render: `Failed ${e.response.data.errors}`,
+          type: toast.TYPE.ERROR,
           autoClose: 2000,
           className: css({
             transform: "rotateY(360deg)",
@@ -83,6 +82,7 @@ class ReportForm extends Component {
               <h1 className="title">Publish Report</h1>
             </div>
           </div>
+          <ToastContainer />
         </section>
         <div className="section columns is-centered">
           <div className="column is-6">

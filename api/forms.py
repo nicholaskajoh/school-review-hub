@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
+from .models import Review, Report
 
 class RegisterForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -38,3 +39,13 @@ class RegisterForm(ModelForm):
         if User.objects.filter(email=email).exists() and email != "":
             raise ValidationError("A user with that email address already exists.")
         return cleaned_data
+
+class ReviewForm(ModelForm):
+    class Meta:
+        model = Review
+        fields = ['content', 'school', 'reviewer']
+
+class ReportForm(ModelForm):
+    class Meta:
+        model = Report
+        fields = ['content', 'school', 'reporter']
