@@ -216,7 +216,7 @@ class RegisterView(APIView):
             user.save()
             token  = Token.objects.create(user=user)
             return Response(data={'token':token.key}, status=status.HTTP_201_CREATED)
-        return Response(data={'errors': form.errors}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
 class UpvoteView(APIView):
@@ -249,8 +249,8 @@ class AddReviewView(APIView):
                 reviewer=reviewer,school=school,
                 content=content
             )
-            return Response(status=status.HTTP_200_OK)
-        return Response(data={'errors': form.errors}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)    
+            return Response(data=ReviewSerializer(review).data,status=status.HTTP_200_OK)
+        return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)    
 
 
 class AddReportView(APIView):
@@ -271,9 +271,8 @@ class AddReportView(APIView):
                 reporter=reporter,school=school,
                 content=content
             )
-
             return Response(data=ReportSerializer(report).data, status=status.HTTP_200_OK)
-        return Response(data={'errors': form.errors}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
 class LogoutView(APIView):

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import './Login.css';
-import APIHelper from "../../api-helpers.js";
+import APIHelper, { error_to_string } from "../../api-helpers.js";
 
 
 class Login extends React.Component {
@@ -15,10 +15,7 @@ class Login extends React.Component {
       isAuth: false
     };
     this.clicked = "";
-    this.errors = {
-      username: [],
-      non_field_errors: []
-    };
+    this.errors = [];
   }
 
   handleChange = event => {
@@ -35,39 +32,19 @@ class Login extends React.Component {
   };
 
   async login(username, password) {
-    try {
+    try
+    {
       const res = await this.api.post('token-auth', {username, password});
       this.clicked = "";
       localStorage.setItem("authToken", res.data.token);
       this.setState({ isAuth: true });
-    } catch (e) {
-      this.clicked = "";
+    }
+    catch (e)
+    {
+      this.errors = error_to_string(e);
       toast.error("Error occured!");
-      if (e.response) {
-        this.errors = {
-          username: [],
-          non_field_errors: []
-        };
-        const errors = e.response.data;
-        // console.log(e.response);
-        if (errors.username) {
-          this.errors.username = errors.username;
-        }
-        if (errors.non_field_errors) {
-          this.errors.non_field_errors = errors.non_field_errors;
-        }
-        this.forceUpdate();
-        // console.log(this.errors);
-      } else {
-        this.errors = {
-          username: [],
-          non_field_errors: [
-            "OMG! Server is down. We'll notify the development team right away."
-          ]
-        };
-        this.forceUpdate();
-        // console.table(e);
-      }
+      this.clicked = "";
+      this.forceUpdate();
     }
   }
 
@@ -99,9 +76,6 @@ class Login extends React.Component {
                         onChange={this.handleChange}
                       />
                     </div>
-                    <p className="help is-danger is-size-5">
-                      {this.errors.username}
-                    </p>
                   </div>
 
                   <div className="field">
@@ -117,7 +91,7 @@ class Login extends React.Component {
                     </div>
                   </div>
                   <p className="help is-danger is-size-5">
-                    {this.errors.non_field_errors}
+                    {this.errors}
                   </p>
                   <button
                     type="submit"

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import './Register.css';
-import APIHelper from "../../api-helpers.js";
+import APIHelper, { error_to_string } from "../../api-helpers.js";
 
 
 class Register extends React.Component {
@@ -16,12 +16,7 @@ class Register extends React.Component {
       isAuth: false
     };
     this.clicked = "";
-    this.errors = {
-      username: [],
-      email: [],
-      password: [],
-      __all__: []
-    };
+    this.errors = [];
   }
 
   handleChange = event => {
@@ -38,64 +33,28 @@ class Register extends React.Component {
   };
 
   async register(username, email, password) {
-    try {
+    try
+    {
       const res = await this.api.post( 'register', {username, email, password} );
       this.clicked = "";
       if (res.data.token)
       {
         localStorage.setItem("authToken", res.data.token);
         this.setState({ isAuth: true });
-      } else {
-        // console.log('Good request but something is wrong, token was not given');
+      }
+      else
+      {
         toast.error("Error occured!");
-        this.errors = {
-          username: [],
-          email: [],
-          password: [],
-          __all__: [
-            "registeration was successful but your authorization was not, please try to login"
-          ]
-        };
-        // console.log(res.data);
+        this.errors = ["registeration was successful but your authorization was not, please try to login"]
         this.forceUpdate();
       }
-    } catch (e) {
+    }
+    catch (e)
+    {
+      this.errors = error_to_string(e);
       toast.error("Error occured!");
       this.clicked = "";
-      if (e.response) {
-        this.errors = {
-          username: [],
-          email: [],
-          password: [],
-          __all__: []
-        };
-        const errors = e.response.data.errors;
-        if (errors.username) {
-          this.errors.username = errors.username;
-        }
-        if (errors.email) {
-          this.errors.email = errors.email;
-        }
-        if (errors.password) {
-          this.errors.password = errors.password;
-        }
-        if (errors.__all__) {
-          this.errors.__all__ = errors.__all__;
-        }
-        this.forceUpdate();
-        // console.log(this.errors);
-      } else {
-        this.errors = {
-          username: [],
-          email: [],
-          password: [],
-          __all__: [
-            "OMG! Server is down. We'll notify the development team right away."
-          ]
-        };
-        this.forceUpdate();
-        // console.table(e);
-      }
+      this.forceUpdate();
     }
   }
 
@@ -125,10 +84,6 @@ class Register extends React.Component {
                         onChange={this.handleChange}
                       />
                     </div>
-
-                    <p className="help is-danger is-size-5">
-                      {this.errors.username}
-                    </p>
                   </div>
 
                   <div className="field">
@@ -142,9 +97,6 @@ class Register extends React.Component {
                         onChange={this.handleChange}
                       />
                     </div>
-                    <p className="help is-danger is-size-5">
-                      {this.errors.email}
-                    </p>
                   </div>
 
                   <div className="field">
@@ -158,12 +110,9 @@ class Register extends React.Component {
                         onChange={this.handleChange}
                       />
                     </div>
-                    <p className="help is-danger is-size-5">
-                      {this.errors.password}
-                    </p>
                   </div>
                   <p className="help is-danger is-size-5">
-                    {this.errors.__all__}
+                    {this.errors}
                   </p>
                   <button
                     type="submit"

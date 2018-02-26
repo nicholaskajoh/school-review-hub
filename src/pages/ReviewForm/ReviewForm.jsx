@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { css } from "glamor";
 import "./ReviewForm.css";
-import APIHelper from "../../api-helpers.js";
+import APIHelper, { error_to_string } from "../../api-helpers.js";
+
 
 class ReviewForm extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class ReviewForm extends Component {
       content: "",
       toastId: null
     };
+    this.errors = [];
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,37 +41,43 @@ class ReviewForm extends Component {
   handleSubmit = event => {
     const data = { content: this.state.content, school: this.state.school.id };
     this.submitReview(data);
-    window.location.replace("/profile");
     event.preventDefault();
   };
 
   async submitReview(data) {
-    this.setState({ toastId: toast("Publishing...", { autoClose: true }) });
-    try {
-      await this.api.post("add-review", data, true);
-      await this.setState({
-        toastId: toast.update(this.toastId, {
-          render: "Done",
-          type: toast.TYPE.SUCCESS,
-          autoClose: 2000,
-          className: css({
-            transform: "rotateY(360deg)",
-            transition: "transform 0.6s"
-          })
-        })
-      });
-    } catch (e) {
-      await this.setState({
-        toastId: toast.update(this.toastId, {
-          render: `Failed ${e.response.data.errors}`,
-          type: toast.TYPE.ERROR,
-          autoClose: 2000,
-          className: css({
-            transform: "rotateY(360deg)",
-            transition: "transform 0.6s"
-          })
-        })
-      });
+    // this.setState({ toastId: toast("Publishing...", { autoClose: true }) });
+    try
+    {
+      const res = await this.api.post("add-review", data, true);
+      await this.setState({ toastId: toast("Published", { autoClose: false }) });
+      // await this.setState({
+      //   toastId: toast.update(this.toastId, {
+      //     render: "Done",
+      //     type: toast.TYPE.SUCCESS,
+      //     autoClose: 2000,
+      //     className: css({
+      //       transform: "rotateY(360deg)",
+      //       transition: "transform 0.6s"
+      //     })
+      //   })
+      // });
+      window.location.replace(`../review/${res.data['id']}`);
+    }
+    catch (e)
+    {
+      this.errors = error_to_string(e);
+      await this.setState({ toastId: toast(`Error: ${this.errors}`, { autoClose: true }) });
+      // await this.setState({
+      //   toastId: toast.update(this.toastId, {
+      //     render: `Failed ${this.errors}`,
+      //     type: toast.TYPE.ERROR,
+      //     autoClose: 2000,
+      //     className: css({
+      //       transform: "rotateY(360deg)",
+      //       transition: "transform 0.6s"
+      //     })
+      //   })
+      // });
     }
   }
 
@@ -91,7 +99,6 @@ class ReviewForm extends Component {
               <b> {this.state.school.name}</b>
             </p>
             <br />
-            <br />
             <form onSubmit={this.handleSubmit}>
               <textarea
                 className="textarea"
@@ -101,6 +108,10 @@ class ReviewForm extends Component {
                 onChange={this.handleChange}
                 required
               />
+              <p className="help is-danger is-size-5">
+                {this.errors}
+              </p>
+              <br/ >
               <button type="submit" className="button is-danger">
                 Publish
               </button>

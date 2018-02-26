@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Review.css';
 import CommentCard from './../../partials/CommentCard/CommentCard';
-import APIHelper from "../../api-helpers.js";
+import APIHelper, { error_to_string } from "../../api-helpers.js";
 
 
 class Review extends Component{
@@ -15,6 +15,7 @@ class Review extends Component{
       comments: [],
       isloading: ""
     };
+    this.errors = [];
   }
 
   componentWillReceiveProps(nextProps) {

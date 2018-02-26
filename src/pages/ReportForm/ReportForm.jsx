@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { css } from "glamor";
 import "./ReportForm.css";
-import APIHelper from "../../api-helpers.js";
+import APIHelper, { error_to_string } from "../../api-helpers.js";
+
 
 class ReportForm extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class ReportForm extends Component {
       content: "",
       toastId: null
     };
+    this.errors = [];
   }
 
   componentWillReceiveProps(nextProps) {
@@ -42,65 +44,42 @@ class ReportForm extends Component {
     event.preventDefault();
   };
 
-  submitReport(data) {
+  async submitReport(data) {
     // this.setState({ toastId: toast("Publishing...", { autoClose: true }) });
-    this.api.post("add-report", data, true)
-      .then(res => {
-        this.setState({ toastId: toast("Published", { autoClose: false }) });
-        // this.setState({
-        // toastId: toast.update(this.toastId, {
-        //   render: "Done",
-        //   type: toast.TYPE.SUCCESS,
-        //   autoClose: 2000,
-        //   className: css({
-        //     transform: "rotateY(360deg)",
-        //     transition: "transform 0.6s"
-        //     })
-        //   })
-        // });
-        window.location.replace(`../report/${res.data['id']}`);
-      }).catch (e => {
-        // this.setState({
-        //   toastId: toast.update(this.toastId, {
-        //     render: `Failed ${e.response.data.errors}`,
-        //     type: toast.TYPE.ERROR,
-        //     autoClose: 2000,
-        //     className: css({
-        //       transform: "rotateY(360deg)",
-        //       transition: "transform 0.6s"
-        //     })
-        //   })
-        // });
-        this.setState({ toastId: toast(`Error: ${e.response.data.errors['content']}`, { autoClose: false }) });
-      });
+    try
+    {
+      const res = await this.api.post("add-report", data, true);
+      await this.setState({ toastId: toast("Published", { autoClose: false }) });
+      // await this.setState({
+      //   toastId: toast.update(this.toastId, {
+      //     render: "Done",
+      //     type: toast.TYPE.SUCCESS,
+      //     autoClose: 2000,
+      //     className: css({
+      //       transform: "rotateY(360deg)",
+      //       transition: "transform 0.6s"
+      //     })
+      //   })
+      // });
+      window.location.replace(`../report/${res.data['id']}`);
     }
-
-    // try {
-    //   await this.api.post("add-report", data, true);
-    //   await this.setState({
-    //     toastId: toast.update(this.toastId, {
-    //       render: "Done",
-    //       type: toast.TYPE.SUCCESS,
-    //       autoClose: 2000,
-    //       className: css({
-    //         transform: "rotateY(360deg)",
-    //         transition: "transform 0.6s"
-    //       })
-    //     })
-    //   });
-    // } catch (e) {
-    //   await this.setState({
-    //     toastId: toast.update(this.toastId, {
-    //       render: `Failed ${e.response.data.errors}`,
-    //       type: toast.TYPE.ERROR,
-    //       autoClose: 2000,
-    //       className: css({
-    //         transform: "rotateY(360deg)",
-    //         transition: "transform 0.6s"
-    //       })
-    //     })
-    //   });
-    // }
+    catch (e)
+    {
+      this.errors = error_to_string(e);
+      await this.setState({ toastId: toast(`Error: ${this.errors}`, { autoClose: true }) });
+      // await this.setState({
+      //   toastId: toast.update(this.toastId, {
+      //     render: `Failed ${this.errors}`,
+      //     type: toast.TYPE.ERROR,
+      //     autoClose: 2000,
+      //     className: css({
+      //       transform: "rotateY(360deg)",
+      //       transition: "transform 0.6s"
+      //     })
+      //   })
+      // });
+    }
+  }
 
   render() {
     return (
@@ -120,7 +99,6 @@ class ReportForm extends Component {
               <b> {this.state.school.name}</b>
             </p>
             <br />
-            <br />
             <form onSubmit={this.handleSubmit}>
               <textarea
                 className="textarea"
@@ -128,8 +106,12 @@ class ReportForm extends Component {
                 rows="10"
                 value={this.state.content}
                 onChange={this.handleChange}
-                required
+                required    
               />
+              <p className="help is-danger is-size-5">
+                {this.errors}
+              </p>
+              <br/ >
               <button type="submit" className="button is-danger">
                 Publish
               </button>
