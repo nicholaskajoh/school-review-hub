@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import { Redirect } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { css } from "glamor";
 import axios from "axios";
@@ -8,7 +7,6 @@ import "./RatingForm.css";
 import "../../assets/css/pretty-checkbox.min.css";
 import "mdi/css/materialdesignicons.min.css";
 import APIHelper from "../../api-helpers.js";
-
 
 class RatingForm extends Component {
   constructor(props) {
@@ -35,11 +33,10 @@ class RatingForm extends Component {
   getCriteria() {
     this.setState({ isLoaded: false });
 
-    this.api.get('criteria')
-      .then(res => {
-        const criteria = res.data;
-        this.setState({ criteria, isLoaded: true });
-      });
+    this.api.get("criteria").then(res => {
+      const criteria = res.data;
+      this.setState({ criteria, isLoaded: true });
+    });
   }
 
   getSchools(school1Id, school2Id) {
@@ -85,7 +82,11 @@ class RatingForm extends Component {
   async submitRating(data) {
     this.setState({ toastId: toast("Processing......", { autoClose: false }) });
 
-    await this.api.post('rating', qs.stringify({ data: JSON.stringify(data) }), true);
+    await this.api.post(
+      "rating",
+      qs.stringify({ data: JSON.stringify(data) }),
+      true
+    );
     await this.setState({
       toastId: toast.update(this.toastId, {
         render: "Done",
@@ -107,7 +108,7 @@ class RatingForm extends Component {
           <div className="hero-body">
             <div className="container">
               <h1 className="title">
-                Rate:{" "}
+                Rate:
                 <a className="subtitle">Select the school that best fits</a>
               </h1>
             </div>

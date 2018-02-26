@@ -16,6 +16,8 @@ import Logout from "./pages/Logout/Logout";
 import Profile from "./pages/Profile/Profile";
 import Help from "./pages/Help/Help";
 import RatingForm from "./pages/RatingForm/RatingForm";
+import ReviewForm from "./pages/ReviewForm/ReviewForm";
+import ReportForm from "./pages/ReportForm/ReportForm";
 import Review from "./pages/Review/Review";
 import School from "./pages/School/School";
 import Report from "./pages/Report/Report";
@@ -40,6 +42,8 @@ class App extends Component {
             path="/rate/:school1Id/:school2Id"
             component={RatingForm}
           />
+          <PrivateRoute path="/add-review/:id" component={ReviewForm} />
+          <PrivateRoute path="/add-report/:id" component={ReportForm} />
           <DefaultLayout path="/review/:id" component={Review} />
           <DefaultLayout path="/school/:id" component={School} />
           <DefaultLayout path="/report/:id" component={Report} />

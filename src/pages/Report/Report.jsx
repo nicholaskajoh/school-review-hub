@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import "./Report.css";
 import CommentCard from "./../../partials/CommentCard/CommentCard";
 import APIHelper from "../../api-helpers.js";
@@ -30,23 +29,21 @@ class Report extends Component {
   }
 
   getReport(id) {
-    this.api.get(`report/${id}`)
-      .then(res => {
-        const report = res.data;
-        const school_name = res.data.school.name;
-        const school_id = res.data.school.id;
-        this.setState({ report });
-        this.setState({ school_name });
-        this.setState({ school_id });
-      });
+    this.api.get(`report/${id}`).then(res => {
+      const report = res.data;
+      const school_name = res.data.school.name;
+      const school_id = res.data.school.id;
+      this.setState({ report });
+      this.setState({ school_name });
+      this.setState({ school_id });
+    });
   }
 
   getComments(id) {
-    this.api.get(`report/${id}/comments/1`)
-      .then(res => {
-        const comments = res.data;
-        this.setState({ comments });
-      });
+    this.api.get(`report/${id}/comments/1`).then(res => {
+      const comments = res.data;
+      this.setState({ comments });
+    });
   }
 
   handleClick = event => {

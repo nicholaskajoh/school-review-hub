@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import APIHelper from "../../api-helpers.js";
-
 
 class Reviews extends Component {
   constructor(props) {
@@ -22,14 +21,12 @@ class Reviews extends Component {
   }
 
   getReviews(id, page) {
-    this.api.get(`school/${id}/reviews/${page}`)
-      .then(res => {
-        const reviews = res.data;
-        this.hasPrevPage =
-          res.headers["x-has-previous"].toLowerCase() === "true";
-        this.hasNextPage = res.headers["x-has-next"].toLowerCase() === "true";
-        this.setState({ reviews, page });
-      });
+    this.api.get(`school/${id}/reviews/${page}`).then(res => {
+      const reviews = res.data;
+      this.hasPrevPage = res.headers["x-has-previous"].toLowerCase() === "true";
+      this.hasNextPage = res.headers["x-has-next"].toLowerCase() === "true";
+      this.setState({ reviews, page });
+    });
   }
 
   prevPage = () => {
@@ -56,53 +53,65 @@ class Reviews extends Component {
             </div>
           </div>
         </section>
-
-        <section className="section">
-          {this.state.reviews.map(review => (
-            <div className="card review">
-              <header className="card-header">
-                <p className="card-header-title">
-                  Last updated {new Date(review.updated_at).toDateString()}
-                </p>
-              </header>
-              <div className="card-content">
-                <div className="content">{review.content}</div>
+        <div className="columns is-centered">
+          <section className="column is-6 section">
+            <Link
+              to={`/add-review/${this.props.schoolId}`}
+              className="button is-danger"
+            >
+              <span className="icon">
+                <i className="fa fa-file-alt" />
+              </span>
+              <span>Publish Review on school</span>
+            </Link>
+            <br />
+            <br />
+            {this.state.reviews.map(review => (
+              <div className="card review">
+                <header className="card-header">
+                  <p className="card-header-title">
+                    Last updated {new Date(review.updated_at).toDateString()}
+                  </p>
+                </header>
+                <div className="card-content">
+                  <div className="content">{review.content}</div>
+                </div>
+                <footer className="card-footer">
+                  <div className="card-footer-item">
+                    <Link to={"/review/" + review.id}>Full review</Link>
+                  </div>
+                  <div className="card-footer-item">
+                    Upvotes ({review.upvotes})
+                  </div>
+                  <div className="card-footer-item">
+                    Comments ({review.comments_count})
+                  </div>
+                </footer>
               </div>
-              <footer className="card-footer">
-                <div className="card-footer-item">
-                  <Link to={"/review/" + review.id}>Full review</Link>
-                </div>
-                <div className="card-footer-item">
-                  Upvotes ({review.upvotes})
-                </div>
-                <div className="card-footer-item">
-                  Comments ({review.comments_count})
-                </div>
-              </footer>
-            </div>
-          ))}
+            ))}
 
-          {this.state.reviews.length === 0 ? (
-            <p className="has-text-centered">No reviews yet!</p>
-          ) : (
-            <nav className="pagination">
-              <button
-                className="button is-link"
-                onClick={this.prevPage}
-                disabled={!this.hasPrevPage}
-              >
-                Previous
-              </button>
-              <button
-                className="button is-link"
-                onClick={this.nextPage}
-                disabled={!this.hasNextPage}
-              >
-                Next
-              </button>
-            </nav>
-          )}
-        </section>
+            {this.state.reviews.length === 0 ? (
+              <p className="has-text-centered">No reviews yet!</p>
+            ) : (
+              <nav className="pagination">
+                <button
+                  className="button is-link"
+                  onClick={this.prevPage}
+                  disabled={!this.hasPrevPage}
+                >
+                  Previous
+                </button>
+                <button
+                  className="button is-link"
+                  onClick={this.nextPage}
+                  disabled={!this.hasNextPage}
+                >
+                  Next
+                </button>
+              </nav>
+            )}
+          </section>
+        </div>
       </div>
     );
   }
