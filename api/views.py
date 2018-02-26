@@ -94,7 +94,7 @@ class ReportView(generics.RetrieveAPIView):
 
 class CommentsView(APIView):
     def get(self, request, entity, id, page=1):
-        comments = Comment.objects.filter(entity=entity, entity_id=id)
+        comments = Comment.objects.filter(entity=entity, entity_id=id).order_by('-created_at')
         comments = paginate(comments, page, 10)
         serializer =  CommentSerializer(comments, many=True)
         response = Response(serializer.data)
@@ -273,6 +273,30 @@ class AddReportView(APIView):
             )
             return Response(data=ReportSerializer(report).data, status=status.HTTP_200_OK)
         return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+
+class CommentView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request):
+        data = {
+            'comment': request.data['comment'],
+            'entity_id': request.data['entity_id'],
+            'entity': request.data['entity'],
+            'commenter': request.user.id
+        }
+        form = CommentForm(data or None)
+        if form.is_valid():
+            comment_ = form.cleaned_data['comment']
+            entity_id = form.cleaned_data['entity_id']
+            entity = form.cleaned_data['entity']
+            commenter = form.cleaned_data['commenter']
+            comment = Comment.objects.create(
+                commenter=commenter,entity_id=entity_id,
+                entity=entity,comment=comment_
+            )
+            return Response(data=CommentSerializer(comment).data,status=status.HTTP_200_OK)
+        return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)    
 
 
 class LogoutView(APIView):

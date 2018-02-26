@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
-from .models import Review, Report
+from .models import Review, Report, Comment
 
 class RegisterForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -49,3 +49,8 @@ class ReportForm(ModelForm):
     class Meta:
         model = Report
         fields = ['content', 'school', 'reporter']
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment', 'entity', 'entity_id', 'commenter']

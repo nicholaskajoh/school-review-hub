@@ -14,6 +14,7 @@ class Report extends Component {
       school_name: "",
       school_id: "",
       comments: [],
+      comment: "",
       isloading: ""
     };
   }
@@ -48,6 +49,57 @@ class Report extends Component {
         const comments = res.data;
         this.setState({ comments });
       });
+  }
+
+  handleChange = event => {
+    this.setState({ comment: event.target.value });
+  };
+
+  handleSubmit = event => {
+    const data = { 
+      comment: this.state.comment,
+      entity_id: this.state.report['id'],
+      entity: 'report'
+      };
+    this.submitComment(data);
+    event.preventDefault();
+  };
+
+  async submitComment(data) {
+    // this.setState({ toastId: toast("Publishing...", { autoClose: true }) });
+    try
+    {
+      const res = await this.api.post("add-comment", data, true);
+      await this.setState({ toastId: toast("Comment Added", { autoClose: true }) });
+      // await this.setState({
+      //   toastId: toast.update(this.toastId, {
+      //     render: "Done",
+      //     type: toast.TYPE.SUCCESS,
+      //     autoClose: 2000,
+      //     className: css({
+      //       transform: "rotateY(360deg)",
+      //       transition: "transform 0.6s"
+      //     })
+      //   })
+      // });
+      window.location.reload();
+    }
+    catch (e)
+    {
+      this.errors = errors_to_array(e);
+      await this.setState({ toastId: toast(`Error: ${this.errors}`, { autoClose: true }) });
+      // await this.setState({
+      //   toastId: toast.update(this.toastId, {
+      //     render: `Failed ${this.errors}`,
+      //     type: toast.TYPE.ERROR,
+      //     autoClose: 2000,
+      //     className: css({
+      //       transform: "rotateY(360deg)",
+      //       transition: "transform 0.6s"
+      //     })
+      //   })
+      // });
+    }
   }
 
   handleClick = event => {
@@ -126,15 +178,21 @@ class Report extends Component {
                   perspective.
                 </p>
                 <br />
-                <form>
+                <form onSubmit={this.handleSubmit}>
                   <div className="field">
                     <div className="control">
                       <textarea
                         className="textarea"
                         type="text"
+                        value={this.state.content}
+                        onChange={this.handleChange}
                         placeholder="Write a comment"
+                        required
                       />
                     </div>
+                    <p className="help is-danger is-size-5">
+                      {this.errors}
+                    </p>
                     <br />
                     <div className="field is-grouped is-grouped-centered">
                       <p className="control">
