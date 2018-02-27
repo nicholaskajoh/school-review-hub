@@ -37,7 +37,7 @@ class SchoolView(generics.RetrieveAPIView):
 class SchoolReviewsView(APIView):
     def get(self, request, id, page=1):
         reviews = Review.objects.filter(school__id=id).order_by('-updated_at')
-        reviews = paginate(reviews, page, 1)
+        reviews = paginate(reviews, page, 10)
         serializer =  ReviewSerializer(reviews, many=True)
         response = Response(serializer.data)
         # add pagination headers
@@ -95,7 +95,7 @@ class ReportView(generics.RetrieveAPIView):
 class CommentsView(APIView):
     def get(self, request, entity, id, page=1):
         comments = Comment.objects.filter(entity=entity, entity_id=id).order_by('-created_at')
-        comments = paginate(comments, page, 10)
+        comments = paginate(comments, page, 5)
         serializer =  CommentSerializer(comments, many=True)
         response = Response(serializer.data)
         # add pagination headers

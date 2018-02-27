@@ -15,7 +15,9 @@ class Review extends Component{
       school_name: "",
       school_id: "",
       comments: [],
-      isloading: ""
+      isloading: "",
+      current_page: 0,
+      has_more_comments : false
     };
     this.errors = [];
   }
@@ -48,9 +50,35 @@ class Review extends Component{
     this.api.get(`review/${id}/comments/1`)
       .then(res => {
         const comments = res.data;
+        const has_more_comments = res.headers['x-has-next'] === "True";
+        this.setState({ has_more_comments });
+        const current_page = 1;
         this.setState({ comments });
+        this.setState({ current_page });
       });
   }
+
+  getMoreComments(id, page) {
+    this.api.get(`review/${id}/comments/${page}`)
+      .then(res => {
+        let comments = res.data;
+        let old_comments = this.state.comments;
+        comments = old_comments.concat(comments);
+        const has_more_comments = res.headers['x-has-next'] === "True";
+        this.setState({ has_more_comments });
+        const current_page = page;
+        this.setState({ comments });
+        this.setState({ current_page });
+        const isLoading = "";
+        this.setState({ isLoading });
+      });
+  }
+
+  handleClick = event => {
+    const isLoading = "is-loading";
+    this.setState({ isLoading });
+    this.getMoreComments(this.state.review['id'], this.state.current_page+1);
+  };
 
   handleChange = event => {
     this.setState({ comment: event.target.value });
@@ -101,13 +129,6 @@ class Review extends Component{
       //   })
       // });
     }
-  }
-  
-  handleClick = event => {
-    const isLoading = "is-loading";
-    this.setState({isLoading});
-    // this.getReview(reviewId);
-    // this.getComments(reviewId);
   }
 
   handleUpvote = event => {
@@ -217,8 +238,8 @@ class Review extends Component{
                   <CommentCard comment={comment} />
                 ))}
               </div>
-
-              <div className="field is-grouped is-grouped-centered">
+              {this.state.has_more_comments ? (
+                <div className="field is-grouped is-grouped-centered">
                 <p className="control">
                   <button
                     className={"button is-danger " + this.state.isLoading}
@@ -229,6 +250,9 @@ class Review extends Component{
                   </button>
                 </p>
               </div>
+              ): (
+              <p className="has-text-centered">end of comments</p>
+              )}
             </div>
           </div>
         </div>

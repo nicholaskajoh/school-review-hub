@@ -12,7 +12,11 @@ const CommentCard = ({ comment }) => (
       </div>
       <div className="card-footer">
 	      <div className="card-footer-item">Upvotes ({comment.upvotes})</div>
-	      <div className="card-footer-item"><TimeAgo>{new Date(comment.created_at) }</TimeAgo></div>
+	      <div className="card-footer-item">
+        <strong>
+        <TimeAgo>{new Date(comment.created_at) }</TimeAgo>
+        </strong>
+        </div>
 	  </div>
     </div>
   </div>
