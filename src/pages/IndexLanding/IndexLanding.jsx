@@ -23,7 +23,7 @@ class IndexLanding extends Component {
                 This is School Review Hub
               </h1>
               <h2 className="subtitle has-text-white">
-                Crowd-sourced anonymous reviews of Nigerian univeristies at your
+                Crowd-sourced anonymous reviews of Nigerian universities at your
                 finger tips!
               </h2>
             </div>

@@ -533,13 +533,14 @@ Request: DELETE
 Params:
 - id: id of the report.
 
-### /rating/{school1\_id}/{school2\_id}**
+### /rating/{school1\_id}/{school2\_id}
 Delete a user's rating.
 
 Request: DELETE
 
 Params:
-- school1_id & 2: school ids.
+- school1_id: id of the first school.
+- school2_id: id of the second school.
 
 ### /rating
 Update a user's rating.
@@ -556,3 +557,76 @@ Sample data:
   ...
 ]
 ```
+
+### /upvote/{entity_id}/{entity_type}
+Upvote.
+
+Request: GET
+
+Params:
+- entity_id: id of the review, report or comment.
+- entity: review, report or comment.
+
+### /add-report
+Publish a report.
+
+Request: POST
+
+Post data:
+- content: content of the report.
+- school: id of the school.
+
+Sample data:
+```
+{
+  id: 20,
+  content: "There has been great...",
+  school: {
+    id: 19,
+    name: "Ahmadu Bello University, Zaria",
+    description: "ABU is a federal government research university in Zaria, Kaduna State. It was founded on October 4, 1962, as the University of Northern Nigeria. The university operates...",
+    website: "http://abu.edu.ng",
+    logo_url: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Ahmadu_Bello_University_logo.png",
+    rating: 76,
+    reviews_count: 52,
+    reports_count: 7
+
+  }
+  created_at: "05-01-2018 23:01:34",
+  created_at: "05-01-2018 23:01:34",
+  comments_count: 10,
+  upvotes: 54
+  ```
+}
+
+### /add-review
+Publish a review.
+
+Request: POST
+
+Post data:
+- content: content of the review.
+- school: id of the school.
+
+Sample data:
+```
+{
+  id: 20,
+  content: "There has been great...",
+  school: {
+    id: 19,
+    name: "Ahmadu Bello University, Zaria",
+    description: "ABU is a federal government research university in Zaria, Kaduna State. It was founded on October 4, 1962, as the University of Northern Nigeria. The university operates...",
+    website: "http://abu.edu.ng",
+    logo_url: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Ahmadu_Bello_University_logo.png",
+    rating: 76,
+    reviews_count: 52,
+    reports_count: 7
+
+  }
+  created_at: "05-01-2018 23:01:34",
+  created_at: "05-01-2018 23:01:34",
+  comments_count: 10,
+  upvotes: 54
+  ```
+}
