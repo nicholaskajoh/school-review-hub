@@ -13,24 +13,35 @@ class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
 
+
 class SchoolFactory(factory.django.DjangoModelFactory):
+    name = factory.Faker('name')
+    description = factory.Faker('text')
+    location = '{}, {}'.format(factory.Faker('city'), factory.Faker('state'))
+    logo_url = '{}{}'.format(factory.Faker('domain_name'), factory.Faker('file_path'))
+    website = factory.Faker('domain_name')
     rating = float(randint(10, 200))
     rank = randint(1, 30)
 
     class Meta:
         model = 'api.School'
 
+
 class ReviewFactory(factory.django.DjangoModelFactory):
+    content = factory.Faker('text')
     reviewer = factory.SubFactory(UserFactory)
     school = factory.SubFactory(SchoolFactory)
 
     class Meta:
         model = 'api.Review'
 
+
 class CriterionFactory(factory.django.DjangoModelFactory):
+    description = factory.Faker('text')
 
     class Meta:
         model = 'api.Criterion'
+
 
 class ComparisonFactory(factory.django.DjangoModelFactory):
     criterion = factory.SubFactory(CriterionFactory)
@@ -42,6 +53,7 @@ class ComparisonFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'api.Comparison'
 
+
 class CommentFactory(factory.django.DjangoModelFactory):
     ENTITY_CHOICES = (
         ('review', 'Review'),
@@ -49,17 +61,21 @@ class CommentFactory(factory.django.DjangoModelFactory):
     )
     # entity = models.CharField(max_length=15, choices=ENTITY_CHOICES)
     # entity_id = models.IntegerField()
+    content = factory.Faker('text')
     commenter = factory.SubFactory(UserFactory)
 
     class Meta:
         model = 'api.Comment'
 
+
 class ReportFactory(factory.django.DjangoModelFactory):
+    content = factory.Faker('text')
     school = factory.SubFactory(SchoolFactory)
     reporter = factory.SubFactory(UserFactory)
 
     class Meta:
         model = 'api.Report'
+
 
 class UpvoteFactory(factory.django.DjangoModelFactory):
     upvoter = factory.SubFactory(UserFactory)

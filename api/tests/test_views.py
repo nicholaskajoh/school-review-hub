@@ -27,8 +27,9 @@ class SchoolReviewsViewTestCase(TestCase):
         name='CU',location='Ogun',logo_url='',website='covenantuniversity.edu.ng',
         rank=1,rating=140.0,
         )
-        self.review1 = ReviewFactory(reviewer=self.user1, school=self.school)
-        self.review2 = ReviewFactory(reviewer=self.user2, school=self.school)
+        # create 11 reviews for pagination
+        for x in range(11):
+            ReviewFactory(reviewer=self.user1, school=self.school)
 
     def test_if_school_reviews_endpoint_is_working(self):
         url = reverse('school_reviews', kwargs={'id':self.school.pk,'page':1})
@@ -39,15 +40,15 @@ class SchoolReviewsViewTestCase(TestCase):
         url = reverse('school_reviews', kwargs={'id':self.school.pk,'page':1})
         response = self.client.get(url)
         reviews = Review.objects.filter(school=self.school).order_by('-updated_at')
-        reviews = paginate(reviews, 1, 1)
+        reviews = paginate(reviews, 1, 10)
         serialized = ReviewSerializer(reviews, many=True)
         self.assertEqual(response.data, serialized.data)
 
-    def test_if_school_reviews_endpoint_returns_second_review_with_page_2(self):
+    def test_if_school_reviews_endpoint_returns_correct_next_page(self):
         url = reverse('school_reviews', kwargs={'id':self.school.pk,'page':2})
         response = self.client.get(url)
         reviews = Review.objects.filter(school=self.school).order_by('-updated_at')
-        reviews = paginate(reviews, 2, 1)
+        reviews = paginate(reviews, 2, 10)
         serialized = ReviewSerializer(reviews, many=True)
         self.assertEqual(response.data, serialized.data)
 
@@ -57,7 +58,7 @@ class SchoolReviewsViewTestCase(TestCase):
         response = self.client.get(url)
         reviews = Review.objects.filter(school=self.school).order_by('-updated_at')
         # get result of the last page
-        reviews = paginate(reviews, 2, 1)
+        reviews = paginate(reviews, 2, 10)
         serialized = ReviewSerializer(reviews, many=True)
         # it should return the last page results
         self.assertEqual(response.data, serialized.data)
@@ -78,20 +79,14 @@ class SchoolReviewsViewTestCase(TestCase):
 class SchoolReportsViewTestCase(TestCase):
 
     def setUp(self):
-        self.user1 = UserFactory()
-        self.user2 = UserFactory()
+        self.user = UserFactory()
         self.school = SchoolFactory(
         name='CU',location='Ogun',logo_url='',website='covenantuniversity.edu.ng',
         rank=1,rating=140.0,
         )
-        self.report = ReportFactory(reporter=self.user1, school=self.school)
-        self.report2 = ReportFactory(reporter=self.user2, school=self.school)
-        # create 10 reports
-        for x in range(10):
-            if x % 2 == 0:
-                ReportFactory(reporter=self.user1, school=self.school)
-            else:
-                ReportFactory(reporter=self.user2, school=self.school)
+        # create 11 reports for pagination
+        for x in range(11):
+            ReportFactory(reporter=self.user, school=self.school)
 
     def test_if_school_reports_endpoint_is_working(self):
         url = reverse('school_reports', kwargs={'id':self.school.pk,'page':1})
@@ -103,6 +98,14 @@ class SchoolReportsViewTestCase(TestCase):
         response = self.client.get(url)
         reports = Report.objects.filter(school=self.school).order_by('-updated_at')
         reports = paginate(reports, 1, 10)
+        serialized = ReportSerializer(reports, many=True)
+        self.assertEqual(response.data, serialized.data)
+    
+    def test_if_school_reports_endpoint_returns_correct_next_page(self):
+        url = reverse('school_reports', kwargs={'id':self.school.pk,'page':2})
+        response = self.client.get(url)
+        reports = Report.objects.filter(school=self.school).order_by('-updated_at')
+        reports = paginate(reports, 2, 10)
         serialized = ReportSerializer(reports, many=True)
         self.assertEqual(response.data, serialized.data)
 
