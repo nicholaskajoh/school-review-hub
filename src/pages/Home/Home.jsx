@@ -26,9 +26,15 @@ class Home extends Component {
       reviewsErrorLoading: false,
 
       schoolsSpinner: 'fa-spinner fa-spin',
+      matchesSpinner: 'fa-spinner fa-spin',
+      reviewsSpinner: 'fa-spinner fa-spin',
+      toastId: null,
       errors: []
     };
-    this.toastId = null;
+    this.getSchools = this.getSchools.bind(this);
+    this.getMatches = this.getMatches.bind(this);
+    this.getReviews = this.getReviews.bind(this);
+
   }
 
   componentDidMount() {
@@ -38,7 +44,8 @@ class Home extends Component {
   }
 
   async getSchools() {
-    this.setState({ schoolsHaveLoaded: false });
+    this.setState({ schoolsHaveLoaded: false, schoolsErrorLoading: false,
+      schoolsSpinner: 'fa-spinner fa-spin' });
     try
     {
       const res = await this.api.get('top-schools');
@@ -48,27 +55,30 @@ class Home extends Component {
     catch (e)
     {
       this.setState({ errors: errors_to_array(e),
-        schoolsErrorLoading:true, schoolsSpinner:'fa-redo-alt',
+        schoolsErrorLoading:true, schoolsSpinner:'fa-redo-alt'
       });
-      if (this.toastId)
+      if (toast.isActive(this.state.toastId))
       {
         toast.update(
-          this.toastId,
+          this.state.toastId,
           {
             render: 'An error occured',
             type: toast.TYPE.ERROR,
           }
-        );
+        )
       }
       else
       {
-        this.toastId = toast.error('An error occured');
+        this.setState({ 
+          toastId:toast.error('An error occured')
+        });
       }
     }
   }
 
   async getMatches() {
-    this.setState({ matchesHaveLoaded: false });
+    this.setState({ matchesHaveLoaded: false, matchesErrorLoading: false,
+      matchesSpinner: 'fa-spinner fa-spin' });
     try
     {
       const res = await this.api.get('suggested-matches', true);
@@ -77,26 +87,30 @@ class Home extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e), matchesErrorLoading:true });
-      if (this.toastId)
+      this.setState({ errors: errors_to_array(e), matchesErrorLoading:true,
+        matchesSpinner:'fa-redo-alt' });
+      if (toast.isActive(this.state.toastId) || this.state.toastId)
       {
         toast.update(
-          this.toastId,
+          this.state.toastId,
           {
             render: 'An error occured',
             type: toast.TYPE.ERROR,
           }
-        );
+        )
       }
       else
       {
-        this.toastId = toast.error('An error occured');
+        this.setState({ 
+          toastId:toast.error('An error occured')
+        });
       }
     }
   }
 
   async getReviews() {
-    this.setState({ reviewsHaveLoaded: false });
+    this.setState({ reviewsHaveLoaded: false, reviewsErrorLoading:false,
+      reviewsSpinner: 'fa-spinner fa-spin' });
     try
     {
       const res = await this.api.get('top-reviews');
@@ -105,20 +119,23 @@ class Home extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e), reviewsErrorLoading:true });
-      if (this.toastId)
+      this.setState({ errors: errors_to_array(e), reviewsErrorLoading:true,
+        reviewsSpinner:'fa-redo-alt' });
+      if (toast.isActive(this.state.toastId) || this.state.toastId)
       {
         toast.update(
-          this.toastId,
+          this.state.toastId,
           {
             render: 'An error occured',
             type: toast.TYPE.ERROR,
           }
-        );
+        )
       }
       else
       {
-        this.toastId = toast.error('An error occured');
+        this.setState({ 
+          toastId:toast.error('An error occured')
+        });
       }
     }
   }
@@ -167,7 +184,7 @@ class Home extends Component {
             isLoaded={this.state.schoolsHaveLoaded}
             errorLoading={this.state.schoolsErrorLoading}
             spinner={this.state.schoolsSpinner}
-            // onreload={this.getSchools}
+            reload={this.getSchools}
         />
         </TabPanel>
         <TabPanel>
@@ -175,7 +192,8 @@ class Home extends Component {
             matches={this.state.suggestedMatches}
             isLoaded={this.state.matchesHaveLoaded}
             errorLoading={this.state.matchesErrorLoading}
-            // onreload={this.getMatches}
+            spinner={this.state.matchesSpinner}
+            reload={this.getMatches}
           />
         </TabPanel>
         <TabPanel>
@@ -183,7 +201,8 @@ class Home extends Component {
             reviews={this.state.topReviews}
             isLoaded={this.state.reviewsHaveLoaded}
             errorLoading={this.state.reviewsErrorLoading}
-            // onreload={this.getReviews}
+            spinner={this.state.reviewsSpinner}
+            reload={this.getReviews}
           />
         </TabPanel>
         <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>

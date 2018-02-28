@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import TimeAgo from 'react-time-ago';
 
 
-const TopReviews = ({ reviews, isLoaded, errorLoading, onreload }) => {
+const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
   let rendering;
-  if (isLoaded && !errorLoading) {
+  if (isLoaded)
+  {
     rendering = (
       reviews.map((review, index) => (
         <div className="card" style={{ marginBottom: 15 }}>
@@ -34,19 +35,14 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, onreload }) => {
         </div>
       ))
     )
-  } else if (errorLoading) {
-    rendering = (
-      <div title="reload" className="has-text-centered">
-      <button onClick={onreload}>
-        <i className="fa fa-redo-alt fa-2x" />
-      </button>
-      </div>
-    )
   }
-  else {
+  else
+  {
     rendering = (
-      <div className="has-text-centered">
-          <i className="fa fa-spinner fa-spin fa-2x" />
+      <div title="Reload" className="has-text-centered">
+        <button disabled={errorLoading === false}  onClick={reload}>
+          <i className={"fa " + spinner + " fa-2x"} />
+        </button>
       </div>
     )
   }

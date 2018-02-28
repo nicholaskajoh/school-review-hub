@@ -17,9 +17,10 @@ class RatingForm extends Component {
       school2: {},
       formData: {},
       isLoaded: false,
-      errors: []
+      toastId: null,
+      errors: [],
     };
-    this.toastId = null;
+    this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   componentDidMount() {
@@ -31,7 +32,6 @@ class RatingForm extends Component {
   }
 
   async getCriteria() {
-    this.setState({ isLoaded: false });
     try
     {
       const res = await this.api.get('criteria');
@@ -40,20 +40,22 @@ class RatingForm extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
-      if (this.toastId)
+      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      if (toast.isActive(this.state.toastId))
       {
         toast.update(
-          this.toastId,
+          this.state.toastId,
           {
             render: 'An error occured',
             type: toast.TYPE.ERROR,
           }
-        );
+        )
       }
       else
       {
-        this.toastId = toast.error('An error occured');
+        this.setState({ 
+          toastId:toast.error('An error occured')
+        });
       }
     }
   }
@@ -69,20 +71,22 @@ class RatingForm extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
-      if (this.toastId)
+      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      if (toast.isActive(this.state.toastId) || this.state.toastId)
       {
         toast.update(
-          this.toastId,
+          this.state.toastId,
           {
             render: 'An error occured',
             type: toast.TYPE.ERROR,
           }
-        );
+        )
       }
       else
       {
-        this.toastId = toast.error('An error occured');
+        this.setState({ 
+          toastId:toast.error('An error occured')
+        });
       }
     }
   }
@@ -104,19 +108,21 @@ class RatingForm extends Component {
     catch (e)
     {
       this.setState({ errors: errors_to_array(e) });
-      if (this.toastId)
+      if (toast.isActive(this.state.toastId) || this.state.toastId)
       {
         toast.update(
-          this.toastId,
+          this.state.toastId,
           {
             render: 'An error occured',
             type: toast.TYPE.ERROR,
           }
-        );
+        )
       }
       else
       {
-        this.toastId = toast.error('An error occured');
+        this.setState({ 
+          toastId:toast.error('An error occured')
+        });
       }
     }
   }
@@ -145,6 +151,92 @@ class RatingForm extends Component {
   };
 
   render() {
+    let rendering;
+    if (this.state.isLoaded)
+    {
+      rendering = (
+        <form onSubmit={this.handleSubmit}>
+          {this.state.criteria.map((criterion, index) => (
+            <article className="message is-info" key={index}>
+              <div className="message-header">
+                <p>{criterion.description}</p>
+              </div>
+              <div className="message-body">
+                <div className="control">
+                  <div className="pretty p-default p-round">
+                    <input
+                      type="radio"
+                      name={criterion.id}
+                      value={this.state.school1.id}
+                      onChange={this.handleChange}
+                    />
+                    <div className="state p-success-o">
+                      <label>{this.state.school1.name}</label>
+                    </div>
+                  </div>
+
+                  <br />
+                  <br />
+                  <div className="pretty p-default p-round">
+                    <input
+                      type="radio"
+                      name={criterion.id}
+                      value={this.state.school2.id}
+                      onChange={this.handleChange}
+                    />
+                    <div className="state p-success-o">
+                      <label>{this.state.school2.name}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+          <div className="has-text-right buttons is-centered">
+                <button
+                  className="button is-large is-success"
+                  type="submit"
+                  disabled={
+                    Object.keys(this.state.formData).length !==
+                    this.state.criteria.length
+                  }
+                >
+                  <i className="fa fa-star golden-star" aria-hidden="true" />&nbsp;
+                  Submit Ratings
+                </button>
+              </div>
+          </form>
+        )
+    }
+    // else if (this.state.errors.length > 0)
+    // {
+    //   rendering = (
+    //     <div title="Reload" className="has-text-centered">
+    //       <button onClick={this.componentDidMount}>
+    //         <i className={"fa fa-redo-alt fa-2x"} />
+    //       </button>
+    //     </div>
+    //   )
+    // }
+    else 
+    {
+      // if (this.state.errors.length > 0)
+      // {
+        rendering = 
+          <div title="Reload" className="has-text-centered">
+          <button onClick={this.componentDidMount}>
+            <i className={"fa fa-redo-alt fa-2x"} />
+          </button>
+          </div>  
+      // }
+      // else
+      // {
+      //   rendering = 
+      //   <div className="has-text-centered">
+      //     <i className="fa fa-spinner fa-spin fa-2x" />
+      //   </div>
+      // }      
+    }
     return (
       <div>
         <section className="hero is-small is-warning is-bold">
@@ -162,64 +254,7 @@ class RatingForm extends Component {
         <br />
 
         <div className="container">
-          {this.state.isLoaded ? (
-            <form onSubmit={this.handleSubmit}>
-              {this.state.criteria.map((criterion, index) => (
-                <article className="message is-info" key={index}>
-                  <div className="message-header">
-                    <p>{criterion.description}</p>
-                  </div>
-                  <div className="message-body">
-                    <div className="control">
-                      <div className="pretty p-default p-round">
-                        <input
-                          type="radio"
-                          name={criterion.id}
-                          value={this.state.school1.id}
-                          onChange={this.handleChange}
-                        />
-                        <div className="state p-success-o">
-                          <label>{this.state.school1.name}</label>
-                        </div>
-                      </div>
-
-                      <br />
-                      <br />
-                      <div className="pretty p-default p-round">
-                        <input
-                          type="radio"
-                          name={criterion.id}
-                          value={this.state.school2.id}
-                          onChange={this.handleChange}
-                        />
-                        <div className="state p-success-o">
-                          <label>{this.state.school2.name}</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              ))}
-
-              <div className="has-text-right buttons is-centered">
-                <button
-                  className="button is-large is-success"
-                  type="submit"
-                  disabled={
-                    Object.keys(this.state.formData).length !==
-                    this.state.criteria.length
-                  }
-                >
-                  <i className="fa fa-star golden-star" aria-hidden="true" />&nbsp;
-                  Submit Ratings
-                </button>
-              </div>
-            </form>
-          ) : (
-            <div className="has-text-centered">
-              <i className="fa fa-spinner fa-spin fa-2x" />
-            </div>
-          )}
+          {rendering}
         </div>
 
         <br />

@@ -14,9 +14,11 @@ class Profile extends Component {
       user: {},
       ratings: [],
       ratingsPage: 1,
+      isLoaded: false,
+      toastId: null,
       errors: []
     };
-    this.toastId = null;
+    this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -31,7 +33,7 @@ class Profile extends Component {
   }
 
   welcomeUser() {
-    this.toastId = toast.info('Welcome, You are anonymous!');
+    this.setState({ toastId : toast.info('Welcome, You are anonymous!') });
   }
 
   async getUserInfo() {
@@ -39,22 +41,31 @@ class Profile extends Component {
     {
       const res = await this.api.get('profile', true);
       const user = res.data;
-      this.setState({ user:user });
+      this.setState({ user:user, isLoaded:true });
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
-      toast.update(
-        this.toastId,
-        {
-          render: 'An error occured',
-          type: toast.TYPE.ERROR,
-          className: css({
-            transform: 'rotateY(360deg)',
-            transition: 'transform 0.6s'
-          })
-        }
-      );
+      this.setState({ errors: errors_to_array(e), isLoaded:false });
+      if (toast.isActive(this.state.toastId) || this.state.toastId)
+      {
+        toast.update(
+          this.state.toastId,
+          {
+            render: 'An error occured',
+            type: toast.TYPE.ERROR,
+            className: css({
+              transform: 'rotateY(360deg)',
+              transition: 'transform 0.6s'
+            })
+          }
+        )
+      }
+      else
+      {
+        this.setState({ 
+          toastId:toast.error('An error occured')
+        });
+      }
     }
   }
 
@@ -63,22 +74,31 @@ class Profile extends Component {
     {
       const res = await this.api.get(`profile/ratings/${page}`, true);
       const ratings = res.data;
-      this.setState({ ratings:ratings });
+      this.setState({ ratings:ratings, isLoaded:true });
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
-      toast.update(
-        this.toastId,
-        {
-          render: 'An error occured',
-          type: toast.TYPE.ERROR,
-          className: css({
-            transform: 'rotateY(360deg)',
-            transition: 'transform 0.6s'
-          })
-        }
-      );
+      this.setState({ errors: errors_to_array(e), isLoaded:false });
+      if (toast.isActive(this.state.toastId) || this.state.toastId)
+      {
+        toast.update(
+          this.state.toastId,
+          {
+            render: 'An error occured',
+            type: toast.TYPE.ERROR,
+            className: css({
+              transform: 'rotateY(360deg)',
+              transition: 'transform 0.6s'
+            })
+          }
+        )
+      }
+      else
+      {
+        this.setState({ 
+          toastId:toast.error('An error occured')
+        });
+      }
     }
   }
 
@@ -92,22 +112,89 @@ class Profile extends Component {
       catch (e)
       {
         this.setState({ errors: errors_to_array(e) });
-        toast.update(
-          this.toastId,
-          {
-            render: 'An error occured',
-            type: toast.TYPE.ERROR,
-            className: css({
-              transform: 'rotateY(360deg)',
-              transition: 'transform 0.6s'
-            })
-          }
-        );
+        if (toast.isActive(this.state.toastId) || this.state.toastId)
+        {
+          toast.update(
+            this.state.toastId,
+            {
+              render: 'An error occured',
+              type: toast.TYPE.ERROR,
+              className: css({
+                transform: 'rotateY(360deg)',
+                transition: 'transform 0.6s'
+              })
+            }
+          )
+        }
+        else
+        {
+          this.setState({ 
+            toastId:toast.error('An error occured')
+          });
+        }
       }
     }
   }
 
   render() {
+    let rendering;
+    if (this.state.isLoaded)
+    {
+      rendering = 
+      <div className="container">
+      <div className="notification is-light">
+        Your profile is private. Only you can see it!
+      </div>
+
+      <h2 className="title">
+        {this.state.user.first_name}{' '}
+        <small>@{this.state.user.username}</small>
+      </h2>
+      <h4 className="subtitle">{this.state.user.email}</h4>
+
+      <hr />
+
+      <h4 className="subtitle">Ratings</h4>
+
+      {this.state.ratings.map((rating, index) => (
+        <div className="box" key={index}>
+          {rating[2]} <strong> vs </strong> {rating[3]} &nbsp;
+          <Link
+            className="button is-info is-small"
+            to={"/rate/" + rating[0] + "/" + rating[1]}
+          >
+            Update
+          </Link>{' '}
+          &nbsp;
+          <button
+            className="button is-danger is-small"
+            onClick={() => this.deleteRating(rating[0], rating[1])}
+          >
+            Delete
+          </button>
+        </div>
+      ))}
+    </div>
+    }
+    else 
+    {
+      // if (this.state.errors.length > 0)
+      // {
+        rendering = 
+          <div title="Reload" className="has-text-centered">
+          <button onClick={this.componentDidMount}>
+            <i className={"fa fa-redo-alt fa-2x"} />
+          </button>
+          </div>  
+      // }
+      // else
+      // {
+      //   rendering = 
+      //   <div className="has-text-centered">
+      //     <i className="fa fa-spinner fa-spin fa-2x" />
+      //   </div>
+      // }      
+    }
 
     return (
       <div>
@@ -120,40 +207,7 @@ class Profile extends Component {
         </section>
 
         <div className="section">
-          <div className="container">
-            <div className="notification is-light">
-              Your profile is private. Only you can see it!
-            </div>
-
-            <h2 className="title">
-              {this.state.user.first_name}{' '}
-              <small>@{this.state.user.username}</small>
-            </h2>
-            <h4 className="subtitle">{this.state.user.email}</h4>
-
-            <hr />
-
-            <h4 className="subtitle">Ratings</h4>
-
-            {this.state.ratings.map((rating, index) => (
-              <div className="box" key={index}>
-                {rating[2]} <strong> vs </strong> {rating[3]} &nbsp;
-                <Link
-                  className="button is-info is-small"
-                  to={"/rate/" + rating[0] + "/" + rating[1]}
-                >
-                  Update
-                </Link>{' '}
-                &nbsp;
-                <button
-                  className="button is-danger is-small"
-                  onClick={() => this.deleteRating(rating[0], rating[1])}
-                >
-                  Delete
-                </button>
-              </div>
-            ))}
-          </div>
+          { rendering }
         </div>
         <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
       </div>

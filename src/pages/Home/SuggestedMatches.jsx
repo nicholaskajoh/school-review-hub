@@ -2,9 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 
-const SuggestedMatches = ({ matches, isLoaded, errorLoading, onreload }) => {
+const SuggestedMatches = ({ matches, isLoaded, errorLoading, spinner, reload }) => {
   let rendering;
-  if (isLoaded && !errorLoading) {
+  if (isLoaded)
+  {
     rendering = (
       matches.map((match, index) => (
         <div className="box">
@@ -38,19 +39,14 @@ const SuggestedMatches = ({ matches, isLoaded, errorLoading, onreload }) => {
         </div>
       ))
     )
-  } else if (errorLoading) {
-    rendering = (
-      <div title="reload" className="has-text-centered">
-      <button onClick={onreload}>
-        <i className="fa fa-redo-alt fa-2x" />
-      </button>
-      </div>
-    )
   }
-  else {
+  else
+  {
     rendering = (
-      <div className="has-text-centered">
-          <i className="fa fa-spinner fa-spin fa-2x" />
+      <div title="Reload" className="has-text-centered">
+        <button disabled={errorLoading === false}  onClick={reload}>
+          <i className={"fa " + spinner + " fa-2x"} />
+        </button>
       </div>
     )
   }

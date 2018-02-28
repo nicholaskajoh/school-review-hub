@@ -2,9 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 
-const TopSchools = ({ schools, isLoaded, errorLoading, spinner, onreload }) => {
+const TopSchools = ({ schools, isLoaded, errorLoading, spinner, reload }) => {
   let rendering;
-  if (isLoaded) {
+  if (isLoaded)
+  {
     rendering = (
       schools.map((school, index) => (
         <div className="column is-3 has-text-centered" key={index}>
@@ -60,10 +61,12 @@ const TopSchools = ({ schools, isLoaded, errorLoading, spinner, onreload }) => {
   else
   {
     rendering = (
+      <div className="column has-text-centered">
       <div title="Reload" className="has-text-centered">
-        <button disabled={errorLoading === false} >
+        <button disabled={errorLoading === false}  onClick={reload}>
           <i className={"fa " + spinner + " fa-2x"} />
         </button>
+      </div>
       </div>
     )
   }

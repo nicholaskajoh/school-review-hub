@@ -16,9 +16,12 @@ class School extends Component {
       school: {},
       lowerRatedSchools: [],
       numLowerRatedSchools: 0,
+      isLoaded: false,
+      toastId: null,
       errors: []
     };
     this.toastId = toast();
+    this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -42,14 +45,23 @@ class School extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
-      toast.update(
-        this.toastId,
-        {
-          render: 'An error occured',
-          type: toast.TYPE.ERROR,
-        }
-      );
+      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      if (toast.isActive(this.state.toastId))
+      {
+        toast.update(
+          this.state.toastId,
+          {
+            render: 'An error occured',
+            type: toast.TYPE.ERROR,
+          }
+        )
+      }
+      else
+      {
+        this.setState({ 
+          toastId:toast.error('An error occured')
+        });
+      }
     }
   }
 
@@ -60,35 +72,74 @@ class School extends Component {
       let lowerRatedSchools = res.data;
       const numLowerRatedSchools = lowerRatedSchools.length;
       lowerRatedSchools = lowerRatedSchools.slice(0, 3);
-      this.setState({ lowerRatedSchools:lowerRatedSchools, numLowerRatedSchools:numLowerRatedSchools });
+      this.setState({ lowerRatedSchools:lowerRatedSchools,
+        numLowerRatedSchools:numLowerRatedSchools, isLoaded:true
+       });
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
-      toast.update(
-        this.toastId,
-        {
-          render: 'An error occured',
-          type: toast.TYPE.ERROR,
-        }
-      );
+      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      if (toast.isActive(this.state.toastId) || this.state.toastId)
+      {
+        toast.update(
+          this.state.toastId,
+          {
+            render: 'An error occured',
+            type: toast.TYPE.ERROR,
+          }
+        )
+      }
+      else
+      {
+        this.setState({ 
+          toastId:toast.error('An error occured')
+        });
+      }
     }
   }
 
   render() {
-    return (
+    let rendering;
+    if (this.state.isLoaded)
+    {
+      rendering = 
       <div>
-        <Heading school={this.state.school} />
+      <Heading school={this.state.school} />
 
         <Highlights
           school={this.state.school}
           lowerRatedSchools={this.state.lowerRatedSchools}
           numLowerRatedSchools={this.state.numLowerRatedSchools}
         />
-        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
         <Reviews schoolId={this.props.match.params.id} />
 
         <Reports schoolId={this.props.match.params.id} />
+        </div>
+    }
+    else
+    {
+       // if (this.state.errors.length > 0)
+    // {
+    rendering = 
+      <div title="Reload" className="has-text-centered">
+      <button onClick={this.componentDidMount}>
+        <i className={"fa fa-redo-alt fa-2x"} />
+      </button>
+      </div>  
+    // }
+    // else
+    // {
+    //   rendering = 
+    //   <div className="has-text-centered">
+    //     <i className="fa fa-spinner fa-spin fa-2x" />
+    //   </div>
+    // }
+    }
+    return (
+      <div>
+        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
+        <br />
+        { rendering }
       </div>
     );
   }
