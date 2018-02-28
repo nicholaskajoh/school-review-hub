@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./SRHIndex.css";
-import { toast, ToastContainer } from 'react-toastify';
-import APIHelper, { errors_to_array } from '../../api-helpers.js';
-
+import { toast, ToastContainer } from "react-toastify";
+import { PacmanLoader } from "react-spinners";
+import APIHelper, { errors_to_array } from "../../api-helpers.js";
 
 class SRHIndex extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class SRHIndex extends Component {
     this.state = {
       schools: [],
       page: 1,
-      showLoadingSpinner: true
+      loading: true
     };
   }
 
@@ -25,17 +25,18 @@ class SRHIndex extends Component {
   }
 
   async getSchools(page) {
-    this.setState({ showLoadingSpinner: true });
-    try
-    {
+    this.setState({ loading: true });
+    try {
       const res = await this.api.get(`srh-index/${page}`);
       const schools = res.data;
       this.hasPrevPage = res.headers["x-has-previous"].toLowerCase() === "true";
       this.hasNextPage = res.headers["x-has-next"].toLowerCase() === "true";
-      this.setState({ schools:schools, page:page, showLoadingSpinner: false });
-    }
-    catch (e)
-    {
+      this.setState({
+        schools: schools,
+        page: page,
+        loading: false
+      });
+    } catch (e) {
       this.setState({ errors: errors_to_array(e) });
       toast.error(`Error: ${this.state.errors}`);
     }
@@ -62,7 +63,10 @@ class SRHIndex extends Component {
               <h1 className="title">SRH Index</h1>
             </div>
           </div>
-          <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
+          <ToastContainer
+            autoClose={3000}
+            position={toast.POSITION.TOP_CENTER}
+          />
         </section>
 
         <br />
@@ -74,22 +78,22 @@ class SRHIndex extends Component {
                 <tr>
                   <th>
                     <i className="fa fa-trophy is-custom-yellow" /> Rank
-                </th>
+                  </th>
                   <th>
                     <i className="fa fa-shield-alt is-custom-yellow" /> Crest
-                </th>
+                  </th>
                   <th>
                     <i className="fa fa-graduation-cap is-custom-yellow" /> Name
-                </th>
+                  </th>
                   <th>
                     <i className="fa fa-star is-custom-yellow" /> Rating
-                </th>
+                  </th>
                   <th>
                     <i className="fa fa-users is-custom-yellow" /> Reviews
-                </th>
+                  </th>
                   <th>
                     <i className="fa fa-comment-alt is-custom-yellow" /> Reports
-                </th>
+                  </th>
                 </tr>
               </thead>
 
@@ -101,7 +105,7 @@ class SRHIndex extends Component {
                       <img
                         className="image is-48x48 rounded-img"
                         src={school.logo_url}
-                        alt={school.name + ' logo'}
+                        alt={school.name + " logo"}
                       />
                     </td>
                     <td>
@@ -114,19 +118,21 @@ class SRHIndex extends Component {
                 ))}
               </tbody>
             </table>
-
+          </div>
+          <div class="is-centered">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center"
+              }}
+            >
+              <PacmanLoader color={"#FF3860"} loading={this.state.loading} />
+            </div>
           </div>
 
-          {this.state.showLoadingSpinner ? (
-            <div className="has-text-centered">
-              <i className="fa fa-spinner fa-spin fa-2x" />
-            </div>
-          ) : (
-              ''
-            )}
-
-
-          <br /><br />
+          <br />
+          <br />
 
           <nav className="pagination">
             <button
@@ -134,20 +140,24 @@ class SRHIndex extends Component {
               onClick={this.prevPage}
               disabled={!this.hasPrevPage}
             >
-              <i className="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp; Previous
+              <i className="fa fa-arrow-circle-left" aria-hidden="true" />&nbsp;
+              Previous
             </button>
             <button
               className="button is-small is-transparent"
               onClick={this.nextPage}
               disabled={!this.hasNextPage}
             >
-              Next &nbsp;&nbsp;&nbsp;<i className="fa fa-arrow-circle-right" aria-hidden="true"></i>
+              Next &nbsp;&nbsp;&nbsp;<i
+                className="fa fa-arrow-circle-right"
+                aria-hidden="true"
+              />
             </button>
           </nav>
 
           <br />
         </div>
-      </div >
+      </div>
     );
   }
 }
