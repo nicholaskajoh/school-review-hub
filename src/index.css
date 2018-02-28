@@ -13,7 +13,6 @@ p {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -64,4 +63,13 @@ p {
 
 .is-gold-text {
   color: #ffd700 !important;
+}
+
+.reload-btn {
+  border: none;
+  background-color: #011627;
+  border-radius: 6px;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 30px;
 }
