@@ -1,7 +1,6 @@
 from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError
 from .models import Review, Report, Comment
 
 class RegisterForm(ModelForm):
@@ -21,36 +20,60 @@ class RegisterForm(ModelForm):
         fields = ['username', 'email', 'password']
         error_messages = {
             'username': {
-                'required': 'A username is required.',
+                'required': 'Username is required'
             },
             'email': {
-                'required': 'An email address is required.',
+                'required': 'Email address is required'
             },
             'password': {
-                'required': 'A password is required.',
-            },
+                'required': 'Password is required'
+            }
         }
 
     def clean(self):
         cleaned_data = super(RegisterForm, self).clean()
-        username = cleaned_data.get("username")
-        email = cleaned_data.get("email")
+        username = cleaned_data.get('username')
+        email = cleaned_data.get('email')
         # email must be unique
-        if User.objects.filter(email=email).exists() and email != "":
-            raise ValidationError("A user with that email address already exists.")
+        if User.objects.filter(email=email).exists():
+            self.add_error('email', 'That email address is already in use')
         return cleaned_data
 
 class ReviewForm(ModelForm):
     class Meta:
         model = Review
         fields = ['content', 'school', 'reviewer']
+        error_messages = {
+            'content': {
+                'required': 'Content of the review is required'
+            },
+            'school': {
+                'required': 'School is required'
+            }
+        }
 
 class ReportForm(ModelForm):
     class Meta:
         model = Report
         fields = ['content', 'school', 'reporter']
+        error_messages = {
+            'content': {
+                'required': 'Content of the report is required'
+            },
+            'school': {
+                'required': 'School is required'
+            }
+        }
 
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = ['comment', 'entity', 'entity_id', 'commenter']
+        error_messages = {
+            'comment': {
+                'required': 'Content of the comment is required'
+            },
+            'entity': {
+                'required': 'Entity is required'
+            }
+        }
