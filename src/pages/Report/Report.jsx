@@ -19,6 +19,7 @@ class Report extends Component {
       isloading: '',
       current_page: 0,
       has_more_comments : false,
+      upvoted: false,
       errors: []
     };
     this.toastId = null;
@@ -182,6 +183,7 @@ class Report extends Component {
       toast.info('Upvoted sucessfully');
       const reportId = this.state.report['id'];
       this.getReport(reportId);
+      this.setState({ upvoted: true });
     }
     catch (e)
     {
@@ -237,7 +239,17 @@ class Report extends Component {
                   </div>
                   <div className="card-footer">
                   <div className="card-footer-item">
-                    <button className="button is-danger is-small" onClick={this.handleUpvote}>Upvote Report</button>
+                      {!this.state.upvoted ? (
+                      <button className="button is-danger is-small"
+                      onClick={this.handleUpvote}> 
+                      Upvote Report
+                      </button>
+                      ): (
+                        <button className="button is-danger is-small"
+                      disabled>
+                      Upvoted
+                      </button>
+                      )}
                   </div>
                   </div>
                 </div>

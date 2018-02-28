@@ -17,8 +17,9 @@ class Review extends Component{
       comments: [],
       comment: '',
       isloading: '',
-      current_page: 0,
+      current_page: 10,
       has_more_comments : false,
+      upvoted: false,
       errors: []
     };
     this.toastId = null;
@@ -183,6 +184,7 @@ class Review extends Component{
       toast.info('Upvoted sucessfully');
       const reviewId = this.state.review['id'];
       this.getReview(reviewId);
+      this.setState({ upvoted: true });
     }
     catch (e)
     {
@@ -235,13 +237,23 @@ class Review extends Component{
                   <div className="card-footer-item">Comments ({this.state.review.comments_count})</div>
                   <div className="card-footer-item">Upvotes ({this.state.review.upvotes})</div>
                   </div>
-                  <div className="card-footer">
-                  <div className="card-footer-item">
-                    <button className="button is-danger is-small" onClick={this.handleUpvote}>Upvote Review</button>
-                  </div>
-                  </div>
+              <div className="card-footer">
+                <div className="card-footer-item">
+                {!this.state.upvoted ? (
+                  <button className="button is-danger is-small"
+                  onClick={this.handleUpvote}> 
+                  Upvote Review
+                  </button>
+                  ): (
+                    <button className="button is-danger is-small"
+                  disabled>
+                  Upvoted
+                  </button>
+                  )}
                 </div>
               </div>
+            </div>
+          </div>
 
               <div className="review-section">
                 <h3 className="title">Your view?</h3>
