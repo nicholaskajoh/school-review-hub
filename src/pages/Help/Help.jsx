@@ -1,13 +1,14 @@
-import React from 'react';
-import './Help.css';
-
+import React from "react";
+import "./Help.css";
 
 const Help = () => (
   <div>
     <section className="hero is-small is-warning is-bold">
       <div className="hero-body">
         <div className="container">
-          <h1 className="title">Help</h1>
+          <h1 className="title">
+            <i className="fa fa-question-circle" /> Help
+          </h1>
         </div>
       </div>
     </section>

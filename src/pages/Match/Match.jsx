@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import './Match.css';
-import APIHelper, { errors_to_array } from '../../api-helpers.js';
-
+import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "./Match.css";
+import APIHelper, { errors_to_array } from "../../api-helpers.js";
 
 class Match extends Component {
   constructor(props) {
@@ -11,8 +10,8 @@ class Match extends Component {
     this.api = new APIHelper();
     this.state = {
       schools: [],
-      school1_id: '',
-      school2_id: '',
+      school1_id: "",
+      school2_id: "",
       hasSelectedSchools: false,
       errors: []
     };
@@ -23,16 +22,13 @@ class Match extends Component {
 
   async getSchools() {
     this.setState({ schoolsHaveLoaded: false });
-    try
-    {
-      const res = await this.api.get('schools-list');
+    try {
+      const res = await this.api.get("schools-list");
       const schools = res.data;
       this.setState({ schools: schools });
-    }
-    catch (e)
-    {
+    } catch (e) {
       this.setState({ errors: errors_to_array(e) });
-      toast.error('An error occured');
+      toast.error("An error occured");
     }
   }
 
@@ -44,7 +40,7 @@ class Match extends Component {
 
   handleSubmit = event => {
     if (this.state.school1_id === this.state.school2_id) {
-      toast.error('You can\'t match a school against itself!');
+      toast.error("You can't match a school against itself!");
     } else {
       this.setState({ hasSelectedSchools: true });
     }
@@ -102,8 +98,8 @@ class Match extends Component {
                     type="submit"
                     className="button is-danger is-medium"
                     disabled={
-                      this.state.school1_id === '' ||
-                      this.state.school2_id === ''
+                      this.state.school1_id === "" ||
+                      this.state.school2_id === ""
                     }
                   >
                     Rate
@@ -135,7 +131,10 @@ class Match extends Component {
                 </div>
               </div>
             </form>
-            <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
+            <ToastContainer
+              autoClose={3000}
+              position={toast.POSITION.TOP_CENTER}
+            />
           </div>
         </div>
       </div>

@@ -14,10 +14,25 @@ const Footer = () => (
         <p>
           &copy; SchoolReviewHub, {new Date().getFullYear()}. Built with
           <i className="fa fa-heart has-text-danger" /> by{" "}
-          <a href="https://twitter.com/nicholaskajoh">Nick </a>,{" "}
-          <a href="https://twitter.com/TNkemdilim">Toks </a>,{" "}
-          <a href="https://twitter.com/johnayeni_">John </a> and{" "}
-          <a href="https://twitter.com/olaoluwa_98">Awo </a>.
+          <a
+            href="https://twitter.com/nicholaskajoh"
+            className="has-text-warning"
+          >
+            Nick{" "}
+          </a>,{" "}
+          <a href="https://twitter.com/TNkemdilim" className="has-text-warning">
+            Toks{" "}
+          </a>,{" "}
+          <a href="https://twitter.com/johnayeni_" className="has-text-warning">
+            John{" "}
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://twitter.com/olaoluwa_98"
+            className="has-text-warning"
+          >
+            Awo{" "}
+          </a>.
         </p>
         <br />
         <Link

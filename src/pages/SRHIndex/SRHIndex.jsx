@@ -182,7 +182,9 @@ class SRHIndex extends Component {
         <section className="hero is-small is-warning is-bold">
           <div className="hero-body">
             <div className="container">
-              <h1 className="title">SRH Index</h1>
+              <h1 className="title">
+                <i class="fa fa-list-alt" /> SRH Index
+              </h1>
             </div>
           </div>
           <ToastContainer

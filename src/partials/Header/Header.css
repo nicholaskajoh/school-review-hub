@@ -1,11 +1,14 @@
 .navbar.is-link {
-  background-color: #011627 !important;
+    background-color: #011627 !important;
 }
 
-.navbar.is-link .navbar-end> a.navbar-item:hover,
+.navbar.is-link .navbar-end>a.navbar-item:hover,
 .navbar.is-link .navbar-item.has-dropdown:hover .navbar-link,
 .navbar.is-link .navbar-brand>a.navbar-item:hover {
-  background-color: #011627 !important;
-  opacity: 0.5;
+    background-color: #011627 !important;
+    opacity: 0.5;
 }
 
+a svg {
+    margin-right: 5px;
+}
