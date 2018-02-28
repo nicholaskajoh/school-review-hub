@@ -89,9 +89,11 @@ class Login extends React.Component {
                       />
                     </div>
                   </div>
-                  <p className="help is-danger is-size-5">
-                    {this.state.errors}
-                  </p>
+                  {this.state.errors.map(error => (
+                    <p className="help is-danger is-size-5">
+                      {error}
+                    </p>
+                  ))}
                   <button
                     type="submit"
                     className={
