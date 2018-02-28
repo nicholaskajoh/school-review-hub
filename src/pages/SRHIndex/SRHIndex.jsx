@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import "./SRHIndex.css";
-import { toast, ToastContainer } from "react-toastify";
-import { PacmanLoader } from "react-spinners";
-import APIHelper, { errors_to_array } from "../../api-helpers.js";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import './SRHIndex.css';
+import { toast, ToastContainer } from 'react-toastify';
+import { PacmanLoader } from 'react-spinners';
+import APIHelper, { errors_to_array } from '../../api-helpers.js';
 
 class SRHIndex extends Component {
   constructor(props) {
@@ -29,8 +29,8 @@ class SRHIndex extends Component {
     try {
       const res = await this.api.get(`srh-index/${page}`);
       const schools = res.data;
-      this.hasPrevPage = res.headers["x-has-previous"].toLowerCase() === "true";
-      this.hasNextPage = res.headers["x-has-next"].toLowerCase() === "true";
+      this.hasPrevPage = res.headers['x-has-previous'].toLowerCase() === 'true';
+      this.hasNextPage = res.headers['x-has-next'].toLowerCase() === 'true';
       this.setState({
         schools: schools,
         page: page,

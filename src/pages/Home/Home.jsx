@@ -20,6 +20,12 @@ class Home extends Component {
       schoolsHaveLoaded: false,
       matchesHaveLoaded: false,
       reviewsHaveLoaded: false,
+
+      schoolsErrorLoading: false,
+      matchesErrorLoading: false,
+      reviewsErrorLoading: false,
+
+      schoolsSpinner: 'fa-spinner fa-spin',
       errors: []
     };
     this.toastId = null;
@@ -41,20 +47,22 @@ class Home extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
+      this.setState({ errors: errors_to_array(e),
+        schoolsErrorLoading:true, schoolsSpinner:'fa-redo-alt',
+      });
       if (this.toastId)
       {
         toast.update(
           this.toastId,
           {
-            render: `Error: ${this.state.errors}`,
+            render: 'An error occured',
             type: toast.TYPE.ERROR,
           }
         );
       }
       else
       {
-        this.toastId = toast.error(`Error: ${this.state.errors}`);
+        this.toastId = toast.error('An error occured');
       }
     }
   }
@@ -69,20 +77,20 @@ class Home extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
+      this.setState({ errors: errors_to_array(e), matchesErrorLoading:true });
       if (this.toastId)
       {
         toast.update(
           this.toastId,
           {
-            render: `Error: ${this.state.errors}`,
+            render: 'An error occured',
             type: toast.TYPE.ERROR,
           }
         );
       }
       else
       {
-        this.toastId = toast.error(`Error: ${this.state.errors}`);
+        this.toastId = toast.error('An error occured');
       }
     }
   }
@@ -97,20 +105,20 @@ class Home extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
+      this.setState({ errors: errors_to_array(e), reviewsErrorLoading:true });
       if (this.toastId)
       {
         toast.update(
           this.toastId,
           {
-            render: `Error: ${this.state.errors}`,
+            render: 'An error occured',
             type: toast.TYPE.ERROR,
           }
         );
       }
       else
       {
-        this.toastId = toast.error(`Error: ${this.state.errors}`);
+        this.toastId = toast.error('An error occured');
       }
     }
   }
@@ -157,18 +165,25 @@ class Home extends Component {
           <TopSchools
             schools={this.state.topSchools}
             isLoaded={this.state.schoolsHaveLoaded}
+            errorLoading={this.state.schoolsErrorLoading}
+            spinner={this.state.schoolsSpinner}
+            // onreload={this.getSchools}
         />
         </TabPanel>
         <TabPanel>
           <SuggestedMatches
             matches={this.state.suggestedMatches}
             isLoaded={this.state.matchesHaveLoaded}
+            errorLoading={this.state.matchesErrorLoading}
+            // onreload={this.getMatches}
           />
         </TabPanel>
         <TabPanel>
           <TopReviews
             reviews={this.state.topReviews}
             isLoaded={this.state.reviewsHaveLoaded}
+            errorLoading={this.state.reviewsErrorLoading}
+            // onreload={this.getReviews}
           />
         </TabPanel>
         <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>

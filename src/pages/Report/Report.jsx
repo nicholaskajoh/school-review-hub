@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import "./Report.css";
-import CommentCard from "./../../partials/CommentCard/CommentCard";
-import { ToastContainer, toast } from "react-toastify";
-import APIHelper, { errors_to_array } from "../../api-helpers.js";
+import React, { Component } from 'react';
+import './Report.css';
+import CommentCard from './../../partials/CommentCard/CommentCard';
+import { ToastContainer, toast } from 'react-toastify';
+import APIHelper, { errors_to_array } from '../../api-helpers.js';
 
 class Report extends Component {
   constructor(props) {
@@ -10,11 +10,11 @@ class Report extends Component {
     this.api = new APIHelper();
     this.state = {
       report: [],
-      school_name: "",
-      school_id: "",
+      school_name: '',
+      school_id: '',
       comments: [],
-      comment: "",
-      isloading: "",
+      comment: '',
+      isloading: '',
       current_page: 0,
       has_more_comments: false,
       upvoted: false,
@@ -64,7 +64,7 @@ class Report extends Component {
       const res = await this.api.get(`report/${id}/comments/1`);
       const comments = res.data;
       const has_more_comments =
-        res.headers["x-has-next"].toLowerCase() === "true";
+        res.headers['x-has-next'].toLowerCase() === 'true';
       const current_page = 1;
 
       this.setState({
@@ -93,16 +93,16 @@ class Report extends Component {
       let old_comments = this.state.comments;
       comments = old_comments.concat(comments);
       const has_more_comments =
-        res.headers["x-has-next"].toLowerCase() === "true";
+        res.headers['x-has-next'].toLowerCase() === 'true';
       const current_page = page;
       this.setState({
         comments: comments,
         current_page: current_page,
         has_more_comments: has_more_comments,
-        isLoading: ""
+        isLoading: ''
       });
     } catch (e) {
-      this.setState({ errors: errors_to_array(e), isLoading: "" });
+      this.setState({ errors: errors_to_array(e), isLoading: '' });
       if (this.toastId) {
         toast.update(this.toastId, {
           render: `Error: ${this.state.errors}`,
@@ -115,8 +115,8 @@ class Report extends Component {
   }
 
   handleClick = event => {
-    this.setState({ isLoading: "is-loading" });
-    this.getMoreComments(this.state.report["id"], this.state.current_page + 1);
+    this.setState({ isLoading: 'is-loading' });
+    this.getMoreComments(this.state.report['id'], this.state.current_page + 1);
   };
 
   handleChange = event => {
@@ -126,8 +126,8 @@ class Report extends Component {
   handleSubmit = event => {
     const data = {
       comment: this.state.comment,
-      entity_id: this.state.report["id"],
-      entity: "report"
+      entity_id: this.state.report['id'],
+      entity: 'report'
     };
     this.submitComment(data);
     event.preventDefault();
@@ -139,13 +139,13 @@ class Report extends Component {
 
   async submitComment(data) {
     try {
-      await this.api.post("add-comment", data, true);
+      await this.api.post('add-comment', data, true);
 
-      const reportId = this.state.report["id"];
-      toast.info("Comment added");
+      const reportId = this.state.report['id'];
+      toast.info('Comment added');
       this.getReport(reportId);
       this.getComments(reportId);
-      this.setState({ comment: "" });
+      this.setState({ comment: '' });
     } catch (e) {
       this.setState({ errors: errors_to_array(e) });
       this.toastId = toast.error(`Error: ${this.state.errors}`);
@@ -154,9 +154,9 @@ class Report extends Component {
 
   async upVote(data) {
     try {
-      await this.api.get(`upvote/${data.report["id"]}/report`, true);
-      toast.info("Upvoted sucessfully");
-      const reportId = this.state.report["id"];
+      await this.api.get(`upvote/${data.report['id']}/report`, true);
+      toast.info('Upvoted sucessfully');
+      const reportId = this.state.report['id'];
       this.getReport(reportId);
       this.setState({ upvoted: true });
     } catch (e) {
