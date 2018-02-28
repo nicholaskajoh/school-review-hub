@@ -110,12 +110,16 @@ class CriteriaListView(generics.ListAPIView):
 
 
 class TopReviewsView(generics.ListAPIView):
-    queryset = Review.objects.filter(created_at__gt=timezone.now() - datetime.timedelta(days=30 * 3))[:5]
+    queryset = Review.objects.filter(
+        created_at__gt=timezone.now() - datetime.timedelta(days=30 * 3)
+    ).order_by('-created_at')[:5]
     serializer_class = ReviewSerializer
 
 
 class TopReportsView(generics.ListAPIView):
-    queryset = Report.objects.filter(created_at__gt=timezone.now() - datetime.timedelta(days=30 * 3))[:5]
+    queryset = Report.objects.filter(
+        created_at__gt=timezone.now() - datetime.timedelta(days=30 * 3)
+    ).order_by('-created_at')[:5]
     serializer_class = ReportSerializer
 
 
