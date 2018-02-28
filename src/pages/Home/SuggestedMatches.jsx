@@ -1,56 +1,60 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-
-const SuggestedMatches = ({ matches, isLoaded, errorLoading, spinner, reload }) => {
+const SuggestedMatches = ({
+  matches,
+  isLoaded,
+  errorLoading,
+  spinner,
+  reload
+}) => {
   let rendering;
-  if (isLoaded)
-  {
-    rendering = (
-      matches.map((match, index) => (
-        <div className="box">
-          <div className="columns has-text-centered">
-            <div className="column is-5">
-              <div>
-                <h4 className="subtitle">{match.school1}</h4>
-              </div>
+  if (isLoaded) {
+    rendering = matches.map((match, index) => (
+      <div className="box">
+        <div className="columns has-text-centered">
+          <div className="column is-5">
+            <div>
+              <h4 className="subtitle">{match.school1}</h4>
             </div>
-            <div className="column is-2">
-              <span
-                className="tag is-link is-rounded"
-                style={{ marginBottom: 10 }}
-              >
-                vs
-              </span>
-              <br />
-              <Link
-                className="button is-success is-small"
-                to={"/rate/" + match.school1_id + "/" + match.school2_id}
-              >
-                Rate
-              </Link>
-            </div>
-            <div className="column is-5">
-              <div>
-                <h4 className="subtitle">{match.school2}</h4>
-              </div>
+          </div>
+          <div className="column is-2">
+            <span
+              className="tag is-link is-rounded"
+              style={{ marginBottom: 10 }}
+            >
+              vs
+            </span>
+            <br />
+            <Link
+              className="button is-success is-small"
+              to={"/rate/" + match.school1_id + "/" + match.school2_id}
+            >
+              Rate
+            </Link>
+          </div>
+          <div className="column is-5">
+            <div>
+              <h4 className="subtitle">{match.school2}</h4>
             </div>
           </div>
         </div>
-      ))
-    )
-  }
-  else
-  {
+      </div>
+    ));
+  } else {
     rendering = (
       <div title="Reload" className="has-text-centered">
-        <button disabled={errorLoading === false}  onClick={reload}>
+        <button
+          className="reload-btn"
+          disabled={errorLoading === false}
+          onClick={reload}
+        >
           <i className={"fa " + spinner + " fa-2x"} />
         </button>
       </div>
-    )
+    );
   }
-    
+
   return (
     <section className="section" style={{ paddingTop: 0 }}>
       <div className="container">
