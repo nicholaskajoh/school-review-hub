@@ -1,75 +1,75 @@
 body {
-  font-style: normal !important;
+    font-style: normal !important;
 }
 
 p {
-  font-weight: normal !important;
+    font-weight: normal !important;
 }
 
 .is-pattern-bg {
-  background-image: url("./assets/img/pattern-bg-1.jpg");
-  /* border-top: 1px solid gray; */
-  margin-top: 20px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
+    background-image: url("./assets/img/pattern-bg-1.jpg");
+    /* border-top: 1px solid gray; */
+    margin-top: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .is-dark-blue p h1 a h3 {
-  color: #fff !important;
+    color: #fff !important;
 }
 
 .shield-img {
-  height: 120px;
-  width: 120px;
+    height: 120px;
+    width: 120px;
 }
 
 .rounded-img {
-  border-radius: 100%;
-  height: 35px !important;
-  width: 35px !important;
-  box-shadow: 0px 1px 1.5px 1px rgb(190, 190, 190);
+    border-radius: 100%;
+    height: 35px !important;
+    width: 35px !important;
+    box-shadow: 0px 1px 1.5px 1px rgb(190, 190, 190);
 }
 
 .is-custom-yellow {
-  color: #ff9f1c;
+    color: #ff9f1c;
 }
 
 .responsive-table {
-  overflow-x: auto;
-  margin: 20px;
+    overflow-x: auto;
+    margin: 20px;
 }
 
 .responsive-table::-webkit-scrollbar {
-  height: 6px !important;
-  background-color: #f5f5f5 !important;
+    height: 6px !important;
+    background-color: #f5f5f5 !important;
 }
 
 .responsive-table::-webkit-scrollbar-thumb {
-  background-color: rgb(151, 149, 149);
+    background-color: rgb(151, 149, 149);
 }
 
 .responsive-table::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #f5f5f5;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #f5f5f5;
 }
 
 .golden-star {
-  color: #ffd700 !important;
+    color: #ffd700 !important;
 }
 
 .is-gold-text {
-  color: #ffd700 !important;
+    color: #ffd700 !important;
 }
 
 .reload-btn {
-  border: none;
-  background-color: #011627;
-  border-radius: 6px;
-  color: #ffffff;
-  cursor: pointer;
-  padding: 30px;
+    border: none;
+    background-color: #011627;
+    border-radius: 6px;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 30px;
 }
