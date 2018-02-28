@@ -36,7 +36,7 @@ class Reviews extends Component {
     catch (e)
     {
       this.setState({ errors: errors_to_array(e) });
-      toast.error(`Error: ${this.state.errors}`);
+      toast.error('An error occured');
     }
   }
 

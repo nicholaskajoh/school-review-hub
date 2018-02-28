@@ -50,11 +50,11 @@ class Review extends Component {
       this.setState({ errors: errors_to_array(e) });
       if (this.toastId) {
         toast.update(this.toastId, {
-          render: `Error: ${this.state.errors}`,
+          render: 'An error occured',
           type: toast.TYPE.ERROR
         });
       } else {
-        this.toastId = toast.error(`Error: ${this.state.errors}`);
+        this.toastId = toast.error('An error occured');
       }
     }
   }
@@ -76,11 +76,11 @@ class Review extends Component {
       this.setState({ errors: errors_to_array(e) });
       if (this.toastId) {
         toast.update(this.toastId, {
-          render: `Error: ${this.state.errors}`,
+          render: 'An error occured',
           type: toast.TYPE.ERROR
         });
       } else {
-        this.toastId = toast.error(`Error: ${this.state.errors}`);
+        this.toastId = toast.error('An error occured');
       }
     }
   }
@@ -105,11 +105,11 @@ class Review extends Component {
       this.setState({ errors: errors_to_array(e), isLoading: '' });
       if (this.toastId) {
         toast.update(this.toastId, {
-          render: `Error: ${this.state.errors}`,
+          render: 'An error occured',
           type: toast.TYPE.ERROR
         });
       } else {
-        this.toastId = toast.error(`Error: ${this.state.errors}`);
+        this.toastId = toast.error('An error occured');
       }
     }
   }
@@ -148,7 +148,7 @@ class Review extends Component {
       this.setState({ comment: '' });
     } catch (e) {
       this.setState({ errors: errors_to_array(e) });
-      this.toastId = toast.error(`Error: ${this.state.errors}`);
+      this.toastId = toast.error('An error occured');
     }
   }
 
@@ -162,7 +162,7 @@ class Review extends Component {
       this.setState({ upvoted: true });
     } catch (e) {
       this.setState({ errors: errors_to_array(e) });
-      this.toastId = toast.error(`Error: ${this.state.errors}`);
+      this.toastId = toast.error('An error occured');
     }
   }
 

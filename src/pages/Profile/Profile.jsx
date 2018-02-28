@@ -47,7 +47,7 @@ class Profile extends Component {
       toast.update(
         this.toastId,
         {
-          render: `Error ${this.state.errors}`,
+          render: 'An error occured',
           type: toast.TYPE.ERROR,
           className: css({
             transform: 'rotateY(360deg)',
@@ -71,7 +71,7 @@ class Profile extends Component {
       toast.update(
         this.toastId,
         {
-          render: `Error ${this.state.errors}`,
+          render: 'An error occured',
           type: toast.TYPE.ERROR,
           className: css({
             transform: 'rotateY(360deg)',
@@ -95,7 +95,7 @@ class Profile extends Component {
         toast.update(
           this.toastId,
           {
-            render: `Error ${this.state.errors}`,
+            render: 'An error occured',
             type: toast.TYPE.ERROR,
             className: css({
               transform: 'rotateY(360deg)',

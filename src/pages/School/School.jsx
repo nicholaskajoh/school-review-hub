@@ -46,7 +46,7 @@ class School extends Component {
       toast.update(
         this.toastId,
         {
-          render: `Error: ${this.state.errors}`,
+          render: 'An error occured',
           type: toast.TYPE.ERROR,
         }
       );
@@ -68,7 +68,7 @@ class School extends Component {
       toast.update(
         this.toastId,
         {
-          render: `Error: ${this.state.errors}`,
+          render: 'An error occured',
           type: toast.TYPE.ERROR,
         }
       );

@@ -46,14 +46,14 @@ class RatingForm extends Component {
         toast.update(
           this.toastId,
           {
-            render: `Error: ${this.state.errors}`,
+            render: 'An error occured',
             type: toast.TYPE.ERROR,
           }
         );
       }
       else
       {
-        this.toastId = toast.error(`Error: ${this.state.errors}`);
+        this.toastId = toast.error('An error occured');
       }
     }
   }
@@ -75,14 +75,14 @@ class RatingForm extends Component {
         toast.update(
           this.toastId,
           {
-            render: `Error: ${this.state.errors}`,
+            render: 'An error occured',
             type: toast.TYPE.ERROR,
           }
         );
       }
       else
       {
-        this.toastId = toast.error(`Error: ${this.state.errors}`);
+        this.toastId = toast.error('An error occured');
       }
     }
   }
@@ -109,14 +109,14 @@ class RatingForm extends Component {
         toast.update(
           this.toastId,
           {
-            render: `Error: ${this.state.errors}`,
+            render: 'An error occured',
             type: toast.TYPE.ERROR,
           }
         );
       }
       else
       {
-        this.toastId = toast.error(`Error: ${this.state.errors}`);
+        this.toastId = toast.error('An error occured');
       }
     }
   }
