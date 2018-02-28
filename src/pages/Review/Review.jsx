@@ -3,13 +3,15 @@ import './Review.css';
 import { ToastContainer, toast } from 'react-toastify';
 import CommentCard from './../../partials/CommentCard/CommentCard';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
+import TimeAgo from 'react-time-ago';
+
 
 class Review extends Component {
   constructor(props) {
     super(props);
     this.api = new APIHelper();
     this.state = {
-      review: [],
+      review: {created_at: ''},
       school_name: '',
       school_id: '',
       comments: [],
@@ -44,6 +46,8 @@ class Review extends Component {
       const review = res.data;
       const school_name = res.data.school.name;
       const school_id = res.data.school.id;
+      console.log(`I have got the review in my palm: +====>   ${review}`);
+      console.log(review);
       this.setState({
         review: review,
         school_name: school_name,
@@ -274,10 +278,10 @@ class Review extends Component {
             </div>
             <div className="card-footer">
               <div className="card-footer-item">
-                Comments ({this.state.review.comments_count})
+                Upvotes ({this.state.review.upvotes})
               </div>
               <div className="card-footer-item">
-                Upvotes ({this.state.review.upvotes})
+                <TimeAgo>{new Date(this.state.review.created_at)}</TimeAgo>
               </div>
             </div>
             <div className="card-footer">
@@ -333,7 +337,7 @@ class Review extends Component {
             </div>
           </form>
           <br />
-          <h3 className="title">Comments:</h3>
+          <h3 className="title">Comments ({this.state.review.comments_count}):</h3>
           <br />
           {this.state.comments.map(comment => (
             <CommentCard comment={comment} />

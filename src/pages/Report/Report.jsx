@@ -3,13 +3,15 @@ import './Report.css';
 import CommentCard from './../../partials/CommentCard/CommentCard';
 import { ToastContainer, toast } from 'react-toastify';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
+import TimeAgo from 'react-time-ago';
+
 
 class Report extends Component {
   constructor(props) {
     super(props);
     this.api = new APIHelper();
     this.state = {
-      report: [],
+      report: {created_at: ''},
       school_name: '',
       school_id: '',
       comments: [],
@@ -275,10 +277,10 @@ class Report extends Component {
               </div>
               <div className="card-footer">
                 <div className="card-footer-item">
-                  Comments ({this.state.report.comments_count})
+                  Upvotes ({this.state.report.upvotes})
                 </div>
                 <div className="card-footer-item">
-                  Upvotes ({this.state.report.upvotes})
+                  <TimeAgo>{new Date(this.state.report.created_at)}</TimeAgo>
                 </div>
               </div>
               <div className="card-footer">
@@ -333,7 +335,7 @@ class Report extends Component {
               </div>
             </form>
             <br />
-            <h3 className="title">Comments:</h3>
+            <h3 className="title">Comments ({this.state.report.comments_count}):</h3>
             <br />
             {this.state.comments.map(comment => (
               <CommentCard comment={comment} />
