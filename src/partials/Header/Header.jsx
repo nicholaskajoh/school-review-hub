@@ -1,7 +1,9 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import "./Header.css";
-import logo from "../../logo.png";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import './Header.css';
+import logo from '../../logo.png';
+import { getAuth } from '../../api-helpers.js';
+
 
 class Header extends Component {
   constructor(props) {
@@ -16,7 +18,7 @@ class Header extends Component {
   };
 
   isAuth() {
-    return localStorage.getItem("authToken") !== null;
+    return getAuth();
   }
 
   render() {
@@ -31,7 +33,7 @@ class Header extends Component {
           <div
             className={
               "navbar-burger burger" +
-              (this.state.isNavbarActive ? " is-active" : "")
+              (this.state.isNavbarActive ? " is-active" : '')
             }
             onClick={this.toggleNavbar}
           >
@@ -43,7 +45,7 @@ class Header extends Component {
 
         <div
           className={
-            "navbar-menu" + (this.state.isNavbarActive ? " is-active" : "")
+            "navbar-menu" + (this.state.isNavbarActive ? " is-active" : '')
           }
           onClick={this.toggleNavbar}
         >
@@ -55,7 +57,7 @@ class Header extends Component {
                 Home
               </Link>
             ) : (
-              ""
+              ''
             )}
             <Link className="navbar-item" to="/srh-index">
               SRH Index
@@ -65,7 +67,7 @@ class Header extends Component {
                 Match & Rate
               </Link>
             ) : (
-              ""
+              ''
             )}
             {/* <Link className="navbar-item" to="/search">
               <i className="fa fa-search"></i>
@@ -88,7 +90,7 @@ class Header extends Component {
                 </div>
               </div>
             ) : (
-              ""
+              ''
             )}
 
             {!this.isAuth() ? (
@@ -107,7 +109,7 @@ class Header extends Component {
                 </div>
               </div>
             ) : (
-              ""
+              ''
             )}
           </div>
         </div>

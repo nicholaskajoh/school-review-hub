@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import APIHelper from "../../api-helpers.js";
+import APIHelper from '../../api-helpers.js';
 
 
 class Logout extends React.Component {
@@ -8,12 +8,20 @@ class Logout extends React.Component {
     super(props);
     this.api = new APIHelper();
     this.logout();
-    localStorage.removeItem("authToken");
   }
 
-  logout() {
-    this.api.get('logout', true)
-      .catch(e => console.log(e));
+  async logout() {
+    try
+    {
+      await this.api.get('logout', true);
+      localStorage.removeItem('authToken');
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      toast.error(`Error: ${this.state.errors}`);
+      localStorage.removeItem('authToken');
+    }
   }
 
   render() {

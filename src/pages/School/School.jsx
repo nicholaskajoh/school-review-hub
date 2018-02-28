@@ -1,10 +1,11 @@
-import React, { Component } from "react";
-import Heading from "./Heading";
-import Highlights from "./Highlights";
-import Reviews from "./Reviews";
-import Reports from "./Reports";
-import "./School.css";
-import APIHelper from "../../api-helpers.js";
+import React, { Component } from 'react';
+import Heading from './Heading';
+import Highlights from './Highlights';
+import Reviews from './Reviews';
+import Reports from './Reports';
+import './School.css';
+import { toast, ToastContainer } from 'react-toastify';
+import APIHelper, { errors_to_array } from '../../api-helpers.js';
 
 
 class School extends Component {
@@ -14,8 +15,10 @@ class School extends Component {
     this.state = {
       school: {},
       lowerRatedSchools: [],
-      numLowerRatedSchools: 0
+      numLowerRatedSchools: 0,
+      errors: []
     };
+    this.toastId = toast();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,20 +33,46 @@ class School extends Component {
     this.getLowerRatedSchools(schoolId);
   }
 
-  getSchool(id) {
-    this.api.get(`school/${id}`).then(res => {
+  async getSchool(id) {
+    try
+    {
+      const res = await this.api.get(`school/${id}`);
       const school = res.data;
-      this.setState({ school });
-    });
+      this.setState({ school:school });
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      toast.update(
+        this.toastId,
+        {
+          render: `Error: ${this.state.errors}`,
+          type: toast.TYPE.ERROR,
+        }
+      );
+    }
   }
 
-  getLowerRatedSchools(id) {
-    this.api.get(`rated-higher-than/${id}`).then(res => {
-      var lowerRatedSchools = res.data;
+  async getLowerRatedSchools(id) {
+    try
+    {
+      const res = await this.api.get(`rated-higher-than/${id}`);
+      let lowerRatedSchools = res.data;
       const numLowerRatedSchools = lowerRatedSchools.length;
       lowerRatedSchools = lowerRatedSchools.slice(0, 3);
-      this.setState({ lowerRatedSchools, numLowerRatedSchools });
-    });
+      this.setState({ lowerRatedSchools:lowerRatedSchools, numLowerRatedSchools:numLowerRatedSchools });
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      toast.update(
+        this.toastId,
+        {
+          render: `Error: ${this.state.errors}`,
+          type: toast.TYPE.ERROR,
+        }
+      );
+    }
   }
 
   render() {
@@ -56,6 +85,7 @@ class School extends Component {
           lowerRatedSchools={this.state.lowerRatedSchools}
           numLowerRatedSchools={this.state.numLowerRatedSchools}
         />
+        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
         <Reviews schoolId={this.props.match.params.id} />
 
         <Reports schoolId={this.props.match.params.id} />

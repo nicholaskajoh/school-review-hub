@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { css } from 'glamor';
 import './Profile.css';
-import APIHelper from "../../api-helpers.js";
+import APIHelper, { errors_to_array } from '../../api-helpers.js';
 
 
 class Profile extends Component {
@@ -12,8 +13,10 @@ class Profile extends Component {
     this.state = {
       user: {},
       ratings: [],
-      ratingsPage: 1
+      ratingsPage: 1,
+      errors: []
     };
+    this.toastId = null;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -28,56 +31,81 @@ class Profile extends Component {
   }
 
   welcomeUser() {
-    toast.info("Welcome, You are anonymous!");
+    this.toastId = toast.info('Welcome, You are anonymous!');
   }
 
-  getUserInfo() {
-    this.api.get('profile', true)
-      .then(res => {
-        const user = res.data;
-        this.setState({ user });
-      })
-      .catch(e => {
-        if (e.response.status === 401) {
-          localStorage.removeItem("authToken");
-          window.location.replace("/login");
-        }
-      });
-  }
-
-  getUserRatings(page) {
-    this.api.get(`profile/ratings/${page}`, true)
-      .then(res => {
-        const ratings = res.data;
-        // console.log(ratings);
-        this.setState({ ratings });
-      })
-      .catch(e => {
-        if (e.response.status === 401) {
-          localStorage.removeItem("authToken");
-          window.location.replace("/login");
-        }
-      });
-  }
-
-  deleteRating = (school1Id, school2Id) => {
-    if (window.confirm("Are you sure you want to delete this?")) {
-      this.api.delete(`rating/${school1Id}/${school2Id}`, true)
-        .then(res => {
-          // this.getUserRatings(1);
-          const ratings = res.data;
-          // console.log(ratings);
-          this.setState({ ratings });
-        })
-        .catch(e => {
-          if (e.response.status === 401) {
-            localStorage.removeItem("authToken");
-            window.location.replace("/login");
-          }
-        });
+  async getUserInfo() {
+    try
+    {
+      const res = await this.api.get('profile', true);
+      const user = res.data;
+      this.setState({ user:user });
     }
-  };
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      toast.update(
+        this.toastId,
+        {
+          render: `Error ${this.state.errors}`,
+          type: toast.TYPE.ERROR,
+          className: css({
+            transform: 'rotateY(360deg)',
+            transition: 'transform 0.6s'
+          })
+        }
+      );
+    }
+  }
 
+  async getUserRatings(page) {
+    try
+    {
+      const res = await this.api.get(`profile/ratings/${page}`, true);
+      const ratings = res.data;
+      this.setState({ ratings:ratings });
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      toast.update(
+        this.toastId,
+        {
+          render: `Error ${this.state.errors}`,
+          type: toast.TYPE.ERROR,
+          className: css({
+            transform: 'rotateY(360deg)',
+            transition: 'transform 0.6s'
+          })
+        }
+      );
+    }
+  }
+
+  async deleteRating(school1Id, school2Id) {
+    if (window.confirm('Are you sure you want to delete this?')) {
+      try
+      {
+        await this.api.delete(`rating/${school1Id}/${school2Id}`, true);
+        this.getUserRatings(1);
+      }
+      catch (e)
+      {
+        this.setState({ errors: errors_to_array(e) });
+        toast.update(
+          this.toastId,
+          {
+            render: `Error ${this.state.errors}`,
+            type: toast.TYPE.ERROR,
+            className: css({
+              transform: 'rotateY(360deg)',
+              transition: 'transform 0.6s'
+            })
+          }
+        );
+      }
+    }
+  }
 
   render() {
 
@@ -98,7 +126,7 @@ class Profile extends Component {
             </div>
 
             <h2 className="title">
-              {this.state.user.first_name}{" "}
+              {this.state.user.first_name}{' '}
               <small>@{this.state.user.username}</small>
             </h2>
             <h4 className="subtitle">{this.state.user.email}</h4>
@@ -115,7 +143,7 @@ class Profile extends Component {
                   to={"/rate/" + rating[0] + "/" + rating[1]}
                 >
                   Update
-                </Link>{" "}
+                </Link>{' '}
                 &nbsp;
                 <button
                   className="button is-danger is-small"
@@ -127,7 +155,7 @@ class Profile extends Component {
             ))}
           </div>
         </div>
-        <ToastContainer />
+        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
       </div>
     );
   }

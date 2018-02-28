@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import './Register.css';
-import APIHelper, { errors_to_array } from "../../api-helpers.js";
+import APIHelper, { errors_to_array } from '../../api-helpers.js';
 
 
 class Register extends React.Component {
@@ -10,13 +10,12 @@ class Register extends React.Component {
     super(props);
     this.api = new APIHelper();
     this.state = {
-      username: "",
-      email: "",
-      password: "",
-      isAuth: false
+      username: '',
+      email: '',
+      password: '',
+      clicked: '',
+      errors: []
     };
-    this.clicked = "";
-    this.errors = [];
   }
 
   handleChange = event => {
@@ -26,8 +25,7 @@ class Register extends React.Component {
   };
 
   handleSubmit = event => {
-    this.clicked = "is-loading";
-    this.forceUpdate();
+    this.setState({ clicked: 'is-loading' });
     this.register(this.state.username, this.state.email, this.state.password);
     event.preventDefault();
   };
@@ -36,30 +34,37 @@ class Register extends React.Component {
     try
     {
       const res = await this.api.post( 'register', {username, email, password} );
-      this.clicked = "";
       if (res.data.token)
       {
-        localStorage.setItem("authToken", res.data.token);
-        this.setState({ isAuth: true });
+        localStorage.setItem('authToken', res.data.token);
+        toast.info('Sign up sucessful, redirecting you home...');
+        let func = this.props.history;
+        window.setTimeout(function(){
+          func.push('/home');
+        }, 3500);
       }
       else
       {
-        toast.error("Error occured!");
-        this.errors = ["registeration was successful but your authorization was not, please try to login"]
-        this.forceUpdate();
+        this.setState({ clicked: '',
+          errors: ['registeration was successful but your authorization was not, please try to login']
+        });
+
+        toast.error('Error occured!');
+        let func = this.props.history;
+        window.setTimeout(function(){
+          func.push('/login');
+        }, 3500);
       }
     }
     catch (e)
     {
-      this.errors = errors_to_array(e);
-      toast.error("Error occured!");
-      this.clicked = "";
-      this.forceUpdate();
+      this.setState({ errors: errors_to_array(e), clicked: '' });
+      toast.error('Error occured!');
     }
   }
 
   render() {
-    if (this.state.isAuth || localStorage.getItem("authToken")) {
+    if (localStorage.getItem('authToken')) {
       return <Redirect to="/home" push={true} />;
     }
 
@@ -112,17 +117,17 @@ class Register extends React.Component {
                     </div>
                   </div>
                   <p className="help is-danger is-size-5">
-                    {this.errors}
+                    {this.state.errors}
                   </p>
                   <button
                     type="submit"
                     className={
-                      "button is-fullwidth is-info is-large " + this.clicked
+                      "button is-fullwidth is-info is-large " + this.state.clicked
                     }
                     disabled={
-                      this.state.username === "" ||
-                      this.state.email === "" ||
-                      this.state.password === ""
+                      this.state.username === '' ||
+                      this.state.email === '' ||
+                      this.state.password === ''
                     }
                   >
                     Create account
@@ -136,7 +141,7 @@ class Register extends React.Component {
             </div>
           </div>
         </div>
-        <ToastContainer />
+        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
       </section>
     );
   }

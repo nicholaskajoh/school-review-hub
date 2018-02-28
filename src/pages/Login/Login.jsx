@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import './Login.css';
-import APIHelper, { errors_to_array } from "../../api-helpers.js";
+import APIHelper, { errors_to_array } from '../../api-helpers.js';
 
 
 class Login extends React.Component {
@@ -10,12 +10,11 @@ class Login extends React.Component {
     super(props);
     this.api = new APIHelper();
     this.state = {
-      username: "",
-      password: "",
-      isAuth: false
+      username: '',
+      password: '',
+      errors: [],
+      clicked: ''
     };
-    this.clicked = "";
-    this.errors = [];
   }
 
   handleChange = event => {
@@ -25,8 +24,7 @@ class Login extends React.Component {
   };
 
   handleSubmit = event => {
-    this.clicked = "is-loading";
-    this.forceUpdate();
+    this.setState({ clicked: 'is-loading' });
     this.login(this.state.username, this.state.password);
     event.preventDefault();
   };
@@ -35,21 +33,22 @@ class Login extends React.Component {
     try
     {
       const res = await this.api.post('token-auth', {username, password});
-      this.clicked = "";
-      localStorage.setItem("authToken", res.data.token);
-      this.setState({ isAuth: true });
+      localStorage.setItem('authToken', res.data.token);
+      toast.info('Logging in...');
+      let func = this.props.history;
+      window.setTimeout(function(){
+        func.push('/home');
+      }, 3500);
     }
     catch (e)
     {
-      this.errors = errors_to_array(e);
-      toast.error("Error occured!");
-      this.clicked = "";
-      this.forceUpdate();
+      this.setState({ errors: errors_to_array(e), clicked: '' });
+      toast.error('Error occured!');
     }
   }
 
   render() {
-    if (this.state.isAuth || localStorage.getItem("authToken")) {
+    if (localStorage.getItem('authToken')) {
       return <Redirect to="/home" push={true} />;
     }
 
@@ -91,15 +90,15 @@ class Login extends React.Component {
                     </div>
                   </div>
                   <p className="help is-danger is-size-5">
-                    {this.errors}
+                    {this.state.errors}
                   </p>
                   <button
                     type="submit"
                     className={
-                      "button is-fullwidth is-info is-large " + this.clicked
+                      "button is-fullwidth is-info is-large " + this.state.clicked
                     }
                     disabled={
-                      this.state.username === "" || this.state.password === ""
+                      this.state.username === '' || this.state.password === ''
                     }
                   >
                     Login
@@ -113,7 +112,7 @@ class Login extends React.Component {
             </div>
           </div>
         </div>
-        <ToastContainer />
+        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
       </section>
     );
   }

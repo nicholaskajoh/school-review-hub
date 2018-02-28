@@ -8,7 +8,7 @@ const Heading = (props) => (
         <article className="media">
           <div className="media-left">
             <figure className="image is-128x128">
-              <img src={props.school.logo_url} alt={props.school.name + " logo"}/>
+              <img src={props.school.logo_url} alt={props.school.name + ' logo'}/>
             </figure>
           </div>
           <div className="media-content">

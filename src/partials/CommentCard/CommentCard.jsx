@@ -1,5 +1,5 @@
-import React from "react";
-import "./CommentCard.css";
+import React from 'react';
+import './CommentCard.css';
 import TimeAgo from 'react-time-ago';
 import 'react-time-ago/Tooltip.css';
 

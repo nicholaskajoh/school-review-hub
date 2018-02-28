@@ -1,11 +1,12 @@
-import React, { Component } from "react";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import TopSchools from "./TopSchools";
-import SuggestedMatches from "./SuggestedMatches";
-import TopReviews from "./TopReviews";
-import "react-tabs/style/react-tabs.css";
-import "./Home.css";
-import APIHelper from "../../api-helpers.js";
+import React, { Component } from 'react';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import TopSchools from './TopSchools';
+import SuggestedMatches from './SuggestedMatches';
+import TopReviews from './TopReviews';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-tabs/style/react-tabs.css';
+import './Home.css';
+import APIHelper, { errors_to_array } from '../../api-helpers.js';
 
 
 class Home extends Component {
@@ -18,8 +19,10 @@ class Home extends Component {
       topReviews: [],
       schoolsHaveLoaded: false,
       matchesHaveLoaded: false,
-      reviewsHaveLoaded: false
+      reviewsHaveLoaded: false,
+      errors: []
     };
+    this.toastId = null;
   }
 
   componentDidMount() {
@@ -28,40 +31,88 @@ class Home extends Component {
     this.getReviews();
   }
 
-  getSchools() {
+  async getSchools() {
     this.setState({ schoolsHaveLoaded: false });
-    
-    this.api.get('top-schools')
-      .then(res => {
-        const topSchools = res.data;
-        this.setState({ topSchools, schoolsHaveLoaded: true });
-      });
+    try
+    {
+      const res = await this.api.get('top-schools');
+      const topSchools = res.data;
+      this.setState({ topSchools: topSchools, schoolsHaveLoaded: true });
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      if (this.toastId)
+      {
+        toast.update(
+          this.toastId,
+          {
+            render: `Error: ${this.state.errors}`,
+            type: toast.TYPE.ERROR,
+          }
+        );
+      }
+      else
+      {
+        this.toastId = toast.error(`Error: ${this.state.errors}`);
+      }
+    }
   }
 
-  getMatches() {
+  async getMatches() {
     this.setState({ matchesHaveLoaded: false });
-    
-    this.api.get('suggested-matches', true)
-      .then(res => {
-        const suggestedMatches = res.data;
-        this.setState({ suggestedMatches, matchesHaveLoaded: true });
-      }).catch(e => {
-        if (e.response.status === 401)
-        {
-          localStorage.removeItem("authToken");
-          window.location.replace("/login");
-        }
-      });
+    try
+    {
+      const res = await this.api.get('suggested-matches', true);
+      const suggestedMatches = res.data;
+      this.setState({ suggestedMatches: suggestedMatches, matchesHaveLoaded: true });
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      if (this.toastId)
+      {
+        toast.update(
+          this.toastId,
+          {
+            render: `Error: ${this.state.errors}`,
+            type: toast.TYPE.ERROR,
+          }
+        );
+      }
+      else
+      {
+        this.toastId = toast.error(`Error: ${this.state.errors}`);
+      }
+    }
   }
 
-  getReviews() {
+  async getReviews() {
     this.setState({ reviewsHaveLoaded: false });
-
-    this.api.get('top-reviews')
-      .then(res => {
-        const topReviews = res.data;
-        this.setState({ topReviews, reviewsHaveLoaded: true });
-      });
+    try
+    {
+      const res = await this.api.get('top-reviews');
+      const topReviews = res.data;
+      this.setState({ topReviews: topReviews, reviewsHaveLoaded: true });
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      if (this.toastId)
+      {
+        toast.update(
+          this.toastId,
+          {
+            render: `Error: ${this.state.errors}`,
+            type: toast.TYPE.ERROR,
+          }
+        );
+      }
+      else
+      {
+        this.toastId = toast.error(`Error: ${this.state.errors}`);
+      }
+    }
   }
 
   render() {
@@ -120,6 +171,7 @@ class Home extends Component {
             isLoaded={this.state.reviewsHaveLoaded}
           />
         </TabPanel>
+        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
       </Tabs>
     );
   }

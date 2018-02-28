@@ -1,6 +1,7 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import APIHelper from "../../api-helpers.js";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import APIHelper, { errors_to_array } from '../../api-helpers.js';
 import TimeAgo from 'react-time-ago';
 
 
@@ -10,7 +11,8 @@ class Reports extends Component {
     this.api = new APIHelper();
     this.state = {
       reports: [],
-      page: 1
+      page: 1,
+      errors: []
     };
   }
 
@@ -22,13 +24,20 @@ class Reports extends Component {
     this.getReports(this.props.schoolId, 1);
   }
 
-  getReports(id, page) {
-    this.api.get(`school/${id}/reports/${page}`).then(res => {
+  async getReports(id, page) {
+    try
+    {
+      const res = await this.api.get(`school/${id}/reports/${page}`);
       const reports = res.data;
-      this.hasPrevPage = res.headers["x-has-previous"].toLowerCase() === "true";
-      this.hasNextPage = res.headers["x-has-next"].toLowerCase() === "true";
-      this.setState({ reports, page });
-    });
+      this.hasPrevPage = res.headers['x-has-previous'].toLowerCase() === 'true';
+      this.hasNextPage = res.headers['x-has-next'].toLowerCase() === 'true';
+      this.setState({ reports:reports, page:page });
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      toast.error(`Error: ${this.state.errors}`);
+    }
   }
 
   prevPage = () => {
@@ -54,6 +63,7 @@ class Reports extends Component {
               </h1>
             </div>
           </div>
+          <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
         </section>
         <div className="columns is-centered">
           <section className=" column is-6 section">

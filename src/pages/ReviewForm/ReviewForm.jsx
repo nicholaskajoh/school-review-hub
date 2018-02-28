@@ -1,8 +1,7 @@
-import React, { Component } from "react";
-import { toast, ToastContainer } from "react-toastify";
-// import { css } from "glamor";
-import "./ReviewForm.css";
-import APIHelper, { errors_to_array } from "../../api-helpers.js";
+import React, { Component } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import './ReviewForm.css';
+import APIHelper, { errors_to_array } from '../../api-helpers.js';
 
 
 class ReviewForm extends Component {
@@ -11,10 +10,9 @@ class ReviewForm extends Component {
     this.api = new APIHelper();
     this.state = {
       school: [],
-      content: "",
-      toastId: null
+      content: '',
+      errors:[]
     };
-    this.errors = [];
   }
 
   componentWillReceiveProps(nextProps) {
@@ -27,11 +25,18 @@ class ReviewForm extends Component {
     this.getSchool(id);
   }
 
-  getSchool(id) {
-    this.api.get(`school/${id}`).then(res => {
+  async getSchool(id) {
+    try
+    {
+      const res = await this.api.get(`school/${id}`);
       const school = res.data;
-      this.setState({ school });
-    });
+      this.setState({ school:school });
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      toast.error(`Error: ${this.state.errors}`);
+    }
   }
 
   handleChange = event => {
@@ -45,39 +50,19 @@ class ReviewForm extends Component {
   };
 
   async submitReview(data) {
-    // this.setState({ toastId: toast("Publishing...", { autoClose: true }) });
     try
     {
-      const res = await this.api.post("add-review", data, true);
-      await this.setState({ toastId: toast("Published", { autoClose: false }) });
-      // await this.setState({
-      //   toastId: toast.update(this.toastId, {
-      //     render: "Done",
-      //     type: toast.TYPE.SUCCESS,
-      //     autoClose: 2000,
-      //     className: css({
-      //       transform: "rotateY(360deg)",
-      //       transition: "transform 0.6s"
-      //     })
-      //   })
-      // });
-      window.location.replace(`../review/${res.data['id']}`);
+      const res = await this.api.post('add-review', data, true);
+      toast.info('Review published, redirecting...');
+      let func = this.props.history;
+      window.setTimeout(function(){
+        func.push(`../review/${res.data['id']}`);
+      }, 3500);
     }
     catch (e)
     {
-      this.errors = errors_to_array(e);
-      await this.setState({ toastId: toast(`Error: ${this.errors}`, { autoClose: true }) });
-      // await this.setState({
-      //   toastId: toast.update(this.toastId, {
-      //     render: `Failed ${this.errors}`,
-      //     type: toast.TYPE.ERROR,
-      //     autoClose: 2000,
-      //     className: css({
-      //       transform: "rotateY(360deg)",
-      //       transition: "transform 0.6s"
-      //     })
-      //   })
-      // });
+      this.setState({ errors: errors_to_array(e) });
+      toast.error(`Error: ${this.state.errors}`);
     }
   }
 
@@ -90,7 +75,7 @@ class ReviewForm extends Component {
               <h1 className="title">Publish Review</h1>
             </div>
           </div>
-          <ToastContainer />
+          <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
         </section>
         <div className="section columns is-centered">
           <div className="column is-6">
@@ -109,7 +94,7 @@ class ReviewForm extends Component {
                 required
               />
               <p className="help is-danger is-size-5">
-                {this.errors}
+                {this.state.errors}
               </p>
               <br/ >
               <div className="field is-grouped is-grouped-centered">

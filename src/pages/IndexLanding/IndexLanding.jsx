@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import "./IndexLanding.css";
-import ratingImg from "../../assets/img/rating.png";
-import reportImg from "../../assets/img/report.png";
-import reviewImg from "../../assets/img/review.png";
-import rankingImg from "../../assets/img/ranking.png";
-import { getAuth } from "../../api-helpers.js";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import './IndexLanding.css';
+import ratingImg from '../../assets/img/rating.png';
+import reportImg from '../../assets/img/report.png';
+import reviewImg from '../../assets/img/review.png';
+import rankingImg from '../../assets/img/ranking.png';
+import { getAuth } from '../../api-helpers.js';
 
 
 class IndexLanding extends Component {

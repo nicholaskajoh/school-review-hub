@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import "./Report.css";
-import CommentCard from "./../../partials/CommentCard/CommentCard";
+import React, { Component } from 'react';
+import './Report.css';
+import CommentCard from './../../partials/CommentCard/CommentCard';
 import { ToastContainer, toast } from 'react-toastify';
-import APIHelper, { errors_to_array } from "../../api-helpers.js";
+import APIHelper, { errors_to_array } from '../../api-helpers.js';
 import TimeAgo from 'react-time-ago';
 
 
@@ -12,15 +12,16 @@ class Report extends Component {
     this.api = new APIHelper();
     this.state = {
       report: [],
-      school_name: "",
-      school_id: "",
+      school_name: '',
+      school_id: '',
       comments: [],
-      comment: "",
-      isloading: "",
+      comment: '',
+      isloading: '',
       current_page: 0,
-      has_more_comments : false
+      has_more_comments : false,
+      errors: []
     };
-    this.errors = [];
+    this.toastId = null;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -35,49 +36,106 @@ class Report extends Component {
     this.getComments(reportId);
   }
 
-  getReport(id) {
-    this.api.get(`report/${id}`)
-      .then(res => {
-        const report = res.data;
-        const school_name = res.data.school.name;
-        const school_id = res.data.school.id;
-        this.setState({ report });
-        this.setState({ school_name });
-        this.setState({ school_id });
-    });
+  async getReport(id) {
+    try
+    {
+      const res = await this.api.get(`report/${id}`);
+      const report = res.data;
+      const school_name = res.data.school.name;
+      const school_id = res.data.school.id;
+      this.setState({ report:report, school_name:school_name, school_id:school_id });
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      if (this.toastId)
+      {
+        toast.update(
+          this.toastId,
+          {
+            render: `Error: ${this.state.errors}`,
+            type: toast.TYPE.ERROR,
+          }
+        );
+      }
+      else
+      {
+        this.toastId = toast.error(`Error: ${this.state.errors}`);
+      }
+    }
   }
 
-  getComments(id) {
-    this.api.get(`report/${id}/comments/1`)
-      .then(res => {
-        const comments = res.data;
-        const has_more_comments = res.headers['x-has-next'] === "True";
-        this.setState({ has_more_comments });
-        const current_page = 1;
-        this.setState({ comments });
-        this.setState({ current_page });
+  async getComments(id) {
+    try
+    {
+      const res = await this.api.get(`report/${id}/comments/1`);
+      const comments = res.data;
+      const has_more_comments = res.headers['x-has-next'].toLowerCase() === 'true';
+      const current_page = 1;
+
+      this.setState({ comments:comments,
+        current_page:current_page,
+        has_more_comments:has_more_comments
       });
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      if (this.toastId)
+      {
+        toast.update(
+          this.toastId,
+          {
+            render: `Error: ${this.state.errors}`,
+            type: toast.TYPE.ERROR,
+          }
+        );
+      }
+      else
+      {
+        this.toastId = toast.error(`Error: ${this.state.errors}`);
+      }
+    }
   }
 
-  getMoreComments(id, page) {
-    this.api.get(`report/${id}/comments/${page}`)
-      .then(res => {
-        let comments = res.data;
-        let old_comments = this.state.comments;
-        comments = old_comments.concat(comments);
-        const has_more_comments = res.headers['x-has-next'] === "True";
-        this.setState({ has_more_comments });
-        const current_page = page;
-        this.setState({ comments });
-        this.setState({ current_page });
-        const isLoading = "";
-        this.setState({ isLoading });
+  async getMoreComments(id, page) {
+    try
+    {
+      const res = await this.api.get(`report/${id}/comments/${page}`);
+
+      let comments = res.data;
+      let old_comments = this.state.comments;
+      comments = old_comments.concat(comments);
+      const has_more_comments = res.headers['x-has-next'].toLowerCase() === 'true';  
+      const current_page = page;
+      this.setState({ comments:comments,
+        current_page:current_page,
+        has_more_comments:has_more_comments,
+        isLoading: ''
       });
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e), isLoading: '' });
+      if (this.toastId)
+      {
+        toast.update(
+          this.toastId,
+          {
+            render: `Error: ${this.state.errors}`,
+            type: toast.TYPE.ERROR,
+          }
+        );
+      }
+      else
+      {
+        this.toastId = toast.error(`Error: ${this.state.errors}`);
+      }
+    }
   }
 
   handleClick = event => {
-    const isLoading = "is-loading";
-    this.setState({ isLoading });
+    this.setState({ isLoading:'is-loading' });
     this.getMoreComments(this.state.report['id'], this.state.current_page+1);
   };
 
@@ -95,58 +153,40 @@ class Report extends Component {
     event.preventDefault();
   };
 
-  async submitComment(data) {
-    // this.setState({ toastId: toast("Publishing...", { autoClose: true }) });
-    try
-    {
-      await this.api.post("add-comment", data, true);
-      await this.setState({ toastId: toast("Comment Added", { autoClose: true }) });
-      // await this.setState({
-      //   toastId: toast.update(this.toastId, {
-      //     render: "Done",
-      //     type: toast.TYPE.SUCCESS,
-      //     autoClose: 2000,
-      //     className: css({
-      //       transform: "rotateY(360deg)",
-      //       transition: "transform 0.6s"
-      //     })
-      //   })
-      // });
-      window.location.reload();
-    }
-    catch (e)
-    {
-      this.errors = errors_to_array(e);
-      await this.setState({ toastId: toast(`Error: ${this.errors}`, { autoClose: true }) });
-      // await this.setState({
-      //   toastId: toast.update(this.toastId, {
-      //     render: `Failed ${this.errors}`,
-      //     type: toast.TYPE.ERROR,
-      //     autoClose: 2000,
-      //     className: css({
-      //       transform: "rotateY(360deg)",
-      //       transition: "transform 0.6s"
-      //     })
-      //   })
-      // });
-    }
-  }
-
   handleUpvote = event => {
     this.upVote(this.state);
   };
+
+  async submitComment(data) {
+    try
+    {
+      await this.api.post('add-comment', data, true);
+
+      const reportId = this.state.report['id'];
+      toast.info('Comment added');      
+      this.getReport(reportId);
+      this.getComments(reportId);
+      this.setState( { comment:'' } );
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      this.toastId = toast.error(`Error: ${this.state.errors}`);
+    }
+  }
 
   async upVote(data){
     try
     {
       await this.api.get(`upvote/${data.report['id']}/report`, true);
-      await toast.info("Upvoted sucessfully");
-      window.location.reload();
+      toast.info('Upvoted sucessfully');
+      const reportId = this.state.report['id'];
+      this.getReport(reportId);
     }
     catch (e)
     {
-      this.errors = errors_to_array(e);
-      toast.error("Error occured while upvoting");
+      this.setState({ errors: errors_to_array(e) });
+      this.toastId = toast.error(`Error: ${this.state.errors}`);
     }
   }
 
@@ -159,7 +199,7 @@ class Report extends Component {
               <h1 className="title">Report</h1>
             </div>
           </div>
-          <ToastContainer />
+          <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
         </section>
         <div className="section">
           <div className="container">
@@ -216,14 +256,14 @@ class Report extends Component {
                       <textarea
                         className="textarea"
                         type="text"
-                        value={this.state.content}
+                        value={this.state.comment}
                         onChange={this.handleChange}
                         placeholder="Write a comment"
                         required
                       />
                     </div>
                     <p className="help is-danger is-size-5">
-                      {this.errors}
+                    {this.state.errors}
                     </p>
                     <br />
                     <div className="field is-grouped is-grouped-centered">

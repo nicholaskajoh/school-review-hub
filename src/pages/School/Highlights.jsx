@@ -34,7 +34,7 @@ const Highlights = (props) => (
                                     <article className="media">
                                         <div className="media-left">
                                             <figure className="image is-32x32">
-                                                <img src={school.logo_url} alt={school + " logo"}/>
+                                                <img src={school.logo_url} alt={school + ' logo'}/>
                                             </figure>
                                         </div>
                                         <div className="media-content">
@@ -48,13 +48,13 @@ const Highlights = (props) => (
                                         <br/>
                                         And {props.numLowerRatedSchools - 3} other(s).
                                     </p>
-                                : ""}
+                                : ''}
 
                                 {props.numLowerRatedSchools === 0 ?
                                     <div className="has-text-center">
                                         This school is rated the least on our Index.
                                     </div>
-                                : ""}
+                                : ''}
                             </div>
                         </div>
                     </article>

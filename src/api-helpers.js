@@ -3,7 +3,7 @@ import axios from 'axios';
 
 class APIHelper {
     constructor(){
-        this.token = localStorage.getItem("authToken");
+        this.token = localStorage.getItem('authToken');
         this.api_base_url = process.env.REACT_APP_API_DOMAIN_NAME + '/api/';
     }
 
@@ -40,7 +40,7 @@ class APIHelper {
 
 
 export function getAuth(){
-    return localStorage.getItem("authToken") !== null || localStorage.getItem("authToken") === "";
+    return localStorage.getItem('authToken') !== null || localStorage.getItem('authToken') === '';
 }
 
 
@@ -49,22 +49,35 @@ export function errors_to_array(e){
     {
         if (e.response.status === 500){
             console.log('ERROR 500: Server ran into a problem');
-            return ["We ran into an error, we'll notify the development team right away"];
+            return ['We ran into an error, we\'ll notify the development team right away'];
         }
         else if (e.response.status === 404)
         {
             console.log('ERROR 404: Page not found');
-            return ["Something is wrong, please refresh the page"];
+            return ['Something is wrong, please refresh the page'];
+        }
+        else if (e.response.status === 401)
+        {
+            console.log('ERROR 401: Unauthorized');
+            localStorage.removeItem('authToken');
+            window.location.replace('/login');
         }
         else
         {
             let msg = [];
             console.log('ERROR 400: error in response');
-            // console.log(e.response.data);
 
             Object.keys(e.response.data).forEach(function(key) {
-                for (var i = 0; i < e.response.data[key].length; i++) {
-                    msg.push(`${key}: ${e.response.data[key][i]}`);
+                for (var i = 0; i < e.response.data[key].length; i++)
+                {
+                    if (key !== '__all__' && key !== 'non_field_errors')
+                    {
+                        msg.push(`${key}: ${e.response.data[key][i]}`);
+                    }
+                    else
+                    {
+                        msg.push(`${e.response.data[key][i]}`);
+                    }
                 }
             });
             return msg;
@@ -73,7 +86,7 @@ export function errors_to_array(e){
     else
     {
         console.log('ERROR 0: Server Is Down');
-        return ["OMG! Server is down. We'll notify the development team right away."];
+        return ['OMG! Server is down. We\'ll notify the development team right away.'];
     }
 }
 

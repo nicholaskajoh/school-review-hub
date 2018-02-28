@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./SRHIndex.css";
-import APIHelper from "../../api-helpers.js";
+import { toast, ToastContainer } from 'react-toastify';
+import APIHelper, { errors_to_array } from '../../api-helpers.js';
 
 
 class SRHIndex extends Component {
@@ -23,17 +24,21 @@ class SRHIndex extends Component {
     this.getSchools(1);
   }
 
-  getSchools(page) {
+  async getSchools(page) {
     this.setState({ showLoadingSpinner: true });
-    
-    this.api.get(`srh-index/${page}`)
-      .then(res => {
-        const schools = res.data;
-        this.hasPrevPage =
-        res.headers["x-has-previous"].toLowerCase() === "true";
-        this.hasNextPage = res.headers["x-has-next"].toLowerCase() === "true";
-        this.setState({ schools, page, showLoadingSpinner: false });
-      });
+    try
+    {
+      const res = await this.api.get(`srh-index/${page}`);
+      const schools = res.data;
+      this.hasPrevPage = res.headers["x-has-previous"].toLowerCase() === "true";
+      this.hasNextPage = res.headers["x-has-next"].toLowerCase() === "true";
+      this.setState({ schools:schools, page:page, showLoadingSpinner: false });
+    }
+    catch (e)
+    {
+      this.setState({ errors: errors_to_array(e) });
+      toast.error(`Error: ${this.state.errors}`);
+    }
   }
 
   prevPage = () => {
@@ -57,6 +62,7 @@ class SRHIndex extends Component {
               <h1 className="title">SRH Index</h1>
             </div>
           </div>
+          <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
         </section>
 
         <br />
@@ -95,7 +101,7 @@ class SRHIndex extends Component {
                       <img
                         className="image is-48x48 rounded-img"
                         src={school.logo_url}
-                        alt={school.name + " logo"}
+                        alt={school.name + ' logo'}
                       />
                     </td>
                     <td>
@@ -116,7 +122,7 @@ class SRHIndex extends Component {
               <i className="fa fa-spinner fa-spin fa-2x" />
             </div>
           ) : (
-              ""
+              ''
             )}
 
 
