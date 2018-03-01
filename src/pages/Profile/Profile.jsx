@@ -51,7 +51,7 @@ class Profile extends Component {
         toast.update(
           this.state.toastId,
           {
-            render: 'An error occured',
+            render: `${this.state.errors}`,
             type: toast.TYPE.ERROR,
             className: css({
               transform: 'rotateY(360deg)',
@@ -63,7 +63,7 @@ class Profile extends Component {
       else
       {
         this.setState({ 
-          toastId:toast.error('An error occured')
+          toastId:toast.error(`${this.state.errors}`)
         });
       }
     }
@@ -84,7 +84,7 @@ class Profile extends Component {
         toast.update(
           this.state.toastId,
           {
-            render: 'An error occured',
+            render: `${this.state.errors}`,
             type: toast.TYPE.ERROR,
             className: css({
               transform: 'rotateY(360deg)',
@@ -96,7 +96,7 @@ class Profile extends Component {
       else
       {
         this.setState({ 
-          toastId:toast.error('An error occured')
+          toastId:toast.error(`${this.state.errors}`)
         });
       }
     }
@@ -117,7 +117,7 @@ class Profile extends Component {
           toast.update(
             this.state.toastId,
             {
-              render: 'An error occured',
+              render: `${this.state.errors}`,
               type: toast.TYPE.ERROR,
               className: css({
                 transform: 'rotateY(360deg)',
@@ -129,7 +129,7 @@ class Profile extends Component {
         else
         {
           this.setState({ 
-            toastId:toast.error('An error occured')
+            toastId:toast.error(`${this.state.errors}`)
           });
         }
       }
@@ -178,22 +178,12 @@ class Profile extends Component {
     }
     else 
     {
-      // if (this.state.errors.length > 0)
-      // {
-        rendering = 
-          <div title="Reload" className="has-text-centered">
-          <button onClick={this.componentDidMount}>
-            <i className={"fa fa-redo-alt fa-2x"} />
-          </button>
-          </div>  
-      // }
-      // else
-      // {
-      //   rendering = 
-      //   <div className="has-text-centered">
-      //     <i className="fa fa-spinner fa-spin fa-2x" />
-      //   </div>
-      // }      
+      rendering = 
+        <div title="Reload" className="has-text-centered">
+        <button className="reload-btn" onClick={this.componentDidMount}>
+          <i className={"fa fa-redo-alt fa-2x"} />
+        </button>
+        </div>
     }
 
     return (

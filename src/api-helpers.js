@@ -70,14 +70,14 @@ export function errors_to_array(e){
             Object.keys(e.response.data).forEach(function(key) {
                 for (var i = 0; i < e.response.data[key].length; i++)
                 {
-                    if (key !== '__all__' && key !== 'non_field_errors')
-                    {
-                        msg.push(`${key}: ${e.response.data[key][i]}`);
-                    }
-                    else
-                    {
+                    // if (key !== '__all__' && key !== 'non_field_errors')
+                    // {
+                    //     msg.push(`${key}: ${e.response.data[key][i]}`);
+                    // }
+                    // else
+                    // {
                         msg.push(`${e.response.data[key][i]}`);
-                    }
+                    // }
                 }
             });
             return msg;
@@ -85,8 +85,8 @@ export function errors_to_array(e){
     }
     else
     {
-        console.log('ERROR 0: Server Is Down');
-        return ['OMG! Server is down. We\'ll notify the development team right away.'];
+        console.log('ERROR 0: Server is down or there is no internet connection');
+        return ['Unable to connect, try again'];
     }
 }
 

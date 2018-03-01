@@ -1,9 +1,8 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import "./SRHIndex.css";
-import { toast, ToastContainer } from "react-toastify";
-// import { PacmanLoader } from 'react-spinners';
-import APIHelper, { errors_to_array } from "../../api-helpers.js";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import './SRHIndex.css';
+import { toast, ToastContainer } from 'react-toastify';
+import APIHelper, { errors_to_array } from '../../api-helpers.js';
 
 class SRHIndex extends Component {
   constructor(props) {
@@ -32,8 +31,8 @@ class SRHIndex extends Component {
     try {
       const res = await this.api.get(`srh-index/${page}`);
       const schools = res.data;
-      this.hasPrevPage = res.headers["x-has-previous"].toLowerCase() === "true";
-      this.hasNextPage = res.headers["x-has-next"].toLowerCase() === "true";
+      this.hasPrevPage = res.headers['x-has-previous'].toLowerCase() === 'true';
+      this.hasNextPage = res.headers['x-has-next'].toLowerCase() === 'true';
       this.setState({
         schools: schools,
         page: page,
@@ -43,12 +42,12 @@ class SRHIndex extends Component {
       this.setState({ errors: errors_to_array(e), isLoaded: false });
       if (toast.isActive(this.state.toastId)) {
         toast.update(this.state.toastId, {
-          render: "An error occured",
+          render: `${this.state.errors}`,
           type: toast.TYPE.ERROR
         });
       } else {
         this.setState({
-          toastId: toast.error("An error occured")
+          toastId: toast.error(`${this.state.errors}`)
         });
       }
     }
@@ -118,19 +117,6 @@ class SRHIndex extends Component {
               </tbody>
             </table>
           </div>
-          {/* <div class="is-centered">
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center"
-          }}
-        >
-          <PacmanLoader color={"#FF3860"} loading={this.state.loading} />
-        </div>
-      </div> */}
-          {/* <br />
-      <br /> */}
           <nav className="pagination">
             <button
               className="button is-small is-transparent"
@@ -156,8 +142,6 @@ class SRHIndex extends Component {
         </div>
       );
     } else {
-      // if (this.state.errors.length > 0)
-      // {
       rendering = (
         <div title="Reload" className="has-text-centered">
           <br />
@@ -166,15 +150,7 @@ class SRHIndex extends Component {
           </button>
           <br />
         </div>
-      );
-      // }
-      // else
-      // {
-      //   rendering =
-      //   <div className="has-text-centered">
-      //     <i className="fa fa-spinner fa-spin fa-2x" />
-      //   </div>
-      // }
+      )
     }
 
     return (
