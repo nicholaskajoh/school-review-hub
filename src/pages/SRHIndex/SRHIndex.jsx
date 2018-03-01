@@ -159,10 +159,10 @@ class SRHIndex extends Component {
       // if (this.state.errors.length > 0)
       // {
       rendering = (
-        <div title="Reload reports" className="has-text-centered">
+        <div title="Reload" className="has-text-centered">
           <br />
           <button className="reload-btn" onClick={this.componentDidMount}>
-            <i className={"fa fa-redo-alt fa-2x"} />
+            <i className="fa fa-redo-alt fa-2x" />
           </button>
           <br />
         </div>

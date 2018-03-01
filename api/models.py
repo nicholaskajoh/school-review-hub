@@ -5,7 +5,7 @@ class School(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
     location = models.CharField(max_length=200)
-    logo_url = models.URLField(max_length=300, default="")
+    logo_url = models.URLField(max_length=300, default='')
     website = models.URLField()
     rank = models.IntegerField()
     rating = models.DecimalField(max_digits=12, decimal_places=2)
@@ -35,7 +35,7 @@ class Comparison(models.Model):
     comparer = models.ForeignKey(User, related_name='comparer', null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return ("{0} (vs) {1} [{2}], {3}"
+        return ('{0} (vs) {1} [{2}], {3}'
         .format(
             self.school1,
             self.school2,

@@ -1,6 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import TimeAgo from "react-time-ago";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import TimeAgo from 'react-time-ago';
+
 
 const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
   let rendering;
@@ -13,7 +14,7 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
         <div className="card-content">
           <div className="content">
             {review.content.substring(0, 150).trim() +
-              (review.content.length > 150 ? "..." : "")}{" "}
+              (review.content.length > 150 ? '...' : '')}{' '}
             <br />
             <strong>
               <TimeAgo>{new Date(review.created_at)}</TimeAgo>
