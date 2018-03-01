@@ -3,13 +3,15 @@ import './Review.css';
 import { ToastContainer, toast } from 'react-toastify';
 import CommentCard from './../../partials/CommentCard/CommentCard';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
+import TimeAgo from 'react-time-ago';
+
 
 class Review extends Component {
   constructor(props) {
     super(props);
     this.api = new APIHelper();
     this.state = {
-      review: [],
+      review: {created_at: ''},
       school_name: '',
       school_id: '',
       comments: [],
@@ -44,6 +46,8 @@ class Review extends Component {
       const review = res.data;
       const school_name = res.data.school.name;
       const school_id = res.data.school.id;
+      console.log(`I have got the review in my palm: +====>   ${review}`);
+      console.log(review);
       this.setState({
         review: review,
         school_name: school_name,
@@ -60,7 +64,7 @@ class Review extends Component {
         toast.update(
           this.state.toastId,
           {
-            render: 'An error occured',
+            render: `${this.state.errors}`,
             type: toast.TYPE.ERROR,
           }
         )
@@ -68,7 +72,7 @@ class Review extends Component {
       else
       {
         this.setState({ 
-          toastId:toast.error('An error occured')
+          toastId:toast.error(`${this.state.errors}`)
         });
       }
     }
@@ -98,7 +102,7 @@ class Review extends Component {
         toast.update(
           this.state.toastId,
           {
-            render: 'An error occured',
+            render: `${this.state.errors}`,
             type: toast.TYPE.ERROR,
           }
         )
@@ -106,7 +110,7 @@ class Review extends Component {
       else
       {
         this.setState({ 
-          toastId:toast.error('An error occured')
+          toastId:toast.error(`${this.state.errors}`)
         });
       }
     }
@@ -137,7 +141,7 @@ class Review extends Component {
         toast.update(
           this.state.toastId,
           {
-            render: 'An error occured',
+            render: `${this.state.errors}`,
             type: toast.TYPE.ERROR,
           }
         )
@@ -145,7 +149,7 @@ class Review extends Component {
       else
       {
         this.setState({ 
-          toastId:toast.error('An error occured')
+          toastId:toast.error(`${this.state.errors}`)
         });
       }
     }
@@ -225,7 +229,7 @@ class Review extends Component {
         toast.update(
           this.state.toastId,
           {
-            render: 'An error occured',
+            render: `${this.state.errors}`,
             type: toast.TYPE.ERROR,
           }
         )
@@ -233,7 +237,7 @@ class Review extends Component {
       else
       {
         this.setState({ 
-          toastId:toast.error('An error occured')
+          toastId:toast.error(`${this.state.errors}`)
         });
       }
     }
@@ -274,10 +278,10 @@ class Review extends Component {
             </div>
             <div className="card-footer">
               <div className="card-footer-item">
-                Comments ({this.state.review.comments_count})
+                Upvotes ({this.state.review.upvotes})
               </div>
               <div className="card-footer-item">
-                Upvotes ({this.state.review.upvotes})
+                {/* <TimeAgo>{new Date(this.state.review.created_at)}</TimeAgo> */}
               </div>
             </div>
             <div className="card-footer">
@@ -319,9 +323,11 @@ class Review extends Component {
                   required
                 />
               </div>
-              <p className="help is-danger is-size-5">
-                {this.state.errors}
-              </p>
+              {this.state.errors.map(error => (
+                <p className="help is-danger is-size-5">
+                  {error}
+                </p>
+              ))}
               <br />
               <div className="field is-grouped is-grouped-centered">
                 <p className="control">
@@ -333,7 +339,7 @@ class Review extends Component {
             </div>
           </form>
           <br />
-          <h3 className="title">Comments:</h3>
+          <h3 className="title">Comments ({this.state.review.comments_count}):</h3>
           <br />
           {this.state.comments.map(comment => (
             <CommentCard comment={comment} />
@@ -359,22 +365,12 @@ class Review extends Component {
   }
   else 
   {
-    // if (this.state.errors.length > 0)
-    // {
     rendering = 
       <div title="Reload" className="has-text-centered">
-      <button onClick={this.componentDidMount}>
-        <i className={"fa fa-redo-alt fa-2x"} />
+      <button className="reload-btn" onClick={this.componentDidMount}>
+        <i className="fa fa-redo-alt fa-2x" />
       </button>
-      </div>  
-    // }
-    // else
-    // {
-    //   rendering = 
-    //   <div className="has-text-centered">
-    //     <i className="fa fa-spinner fa-spin fa-2x" />
-    //   </div>
-    // }      
+      </div>
   }
 
   return (
@@ -382,7 +378,7 @@ class Review extends Component {
       <section className="hero is-small is-warning is-bold">
         <div className="hero-body">
           <div className="container">
-            <h1 className="title">Review</h1>
+            <h1 className="title"><i className="fa fa-users" /> Review</h1>
           </div>
         </div>
         <ToastContainer

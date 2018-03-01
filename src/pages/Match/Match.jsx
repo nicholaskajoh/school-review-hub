@@ -14,8 +14,10 @@ class Match extends Component {
       school1_id: '',
       school2_id: '',
       hasSelectedSchools: false,
+      isLoaded: false,
       errors: []
     };
+    this.componentDidMount = this.componentDidMount.bind(this);
   }
   componentDidMount() {
     this.getSchools();
@@ -27,12 +29,12 @@ class Match extends Component {
     {
       const res = await this.api.get('schools-list');
       const schools = res.data;
-      this.setState({ schools: schools });
+      this.setState({ schools: schools, isLoaded:true });
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
-      toast.error('An error occured');
+      this.setState({ errors: errors_to_array(e), isLoaded:false });
+      toast.error(`${this.state.errors}`);
     }
   }
 
@@ -52,6 +54,96 @@ class Match extends Component {
   };
 
   render() {
+    let rendering;
+    const { schools } = this.state;
+    if (this.state.isLoaded)
+    {
+      rendering = 
+      <div className="section match-section">
+      <div className="container">
+        <h1 className="title has-text-centered">
+          Match two schools and rate them...
+        </h1>
+
+        <form onSubmit={this.handleSubmit}>
+          <div className="columns is-centered">
+            <div className="column is-narrow">
+              <div className="field">
+                <div className="control">
+                  <div className="select is-rounded is-fullwidth is-medium">
+                    <select
+                      name="school1_id"
+                      value={this.state.school1_id}
+                      onChange={this.handleChange}
+                      className="fixed-width-select-box"
+                    >
+                      <option value="">Select School</option>
+                      {schools.map((school, i) => {
+                        return (
+                          <option value={school.id} key={i}>
+                            {school.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="column is-narrow">
+              <button
+                type="submit"
+                className="button is-danger is-medium"
+                disabled={
+                  this.state.school1_id === '' ||
+                  this.state.school2_id === ''
+                }
+              >
+                Rate
+              </button>
+            </div>
+
+            <div className="column is-narrow">
+              <div className="field has-addons">
+                <div className="control">
+                  <div className="select is-rounded is-fullwidth is-medium">
+                    <select
+                      name="school2_id"
+                      value={this.state.school2_id}
+                      onChange={this.handleChange}
+                      className="fixed-width-select-box"
+                    >
+                      <option value="">Select School</option>
+                      {schools.map((school, i) => {
+                        return (
+                          <option value={school.id} key={i}>
+                            {school.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    }
+    else {
+      rendering =
+        <div title="Reload" className="has-text-centered">
+          <br />
+          <br />
+          <br />
+          <br />
+          <button className="reload-btn" onClick={this.componentDidMount}>
+            <i className="fa fa-redo-alt fa-2x" />
+          </button>
+        </div>
+    }
     if (this.state.hasSelectedSchools) {
       return (
         <Redirect
@@ -60,84 +152,10 @@ class Match extends Component {
         />
       );
     }
-
-    const { schools } = this.state;
-
     return (
       <div>
-        <div className="section match-section">
-          <div className="container">
-            <h1 className="title has-text-centered">
-              Match two schools and rate them...
-            </h1>
-
-            <form onSubmit={this.handleSubmit}>
-              <div className="columns is-centered">
-                <div className="column is-narrow">
-                  <div className="field">
-                    <div className="control">
-                      <div className="select is-rounded is-fullwidth is-medium">
-                        <select
-                          name="school1_id"
-                          value={this.state.school1_id}
-                          onChange={this.handleChange}
-                          className="fixed-width-select-box"
-                        >
-                          <option value="">Select School</option>
-                          {schools.map((school, i) => {
-                            return (
-                              <option value={school.id} key={i}>
-                                {school.name}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="column is-narrow">
-                  <button
-                    type="submit"
-                    className="button is-danger is-medium"
-                    disabled={
-                      this.state.school1_id === '' ||
-                      this.state.school2_id === ''
-                    }
-                  >
-                    Rate
-                  </button>
-                </div>
-
-                <div className="column is-narrow">
-                  <div className="field has-addons">
-                    <div className="control">
-                      <div className="select is-rounded is-fullwidth is-medium">
-                        <select
-                          name="school2_id"
-                          value={this.state.school2_id}
-                          onChange={this.handleChange}
-                          className="fixed-width-select-box"
-                        >
-                          <option value="">Select School</option>
-                          {schools.map((school, i) => {
-                            return (
-                              <option value={school.id} key={i}>
-                                {school.name}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </form>
-            <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
-          </div>
-        </div>
+        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
+        { rendering }
       </div>
     );
   }

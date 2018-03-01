@@ -46,7 +46,7 @@ class RatingForm extends Component {
         toast.update(
           this.state.toastId,
           {
-            render: 'An error occured',
+            render: `${this.state.errors}`,
             type: toast.TYPE.ERROR,
           }
         )
@@ -54,7 +54,7 @@ class RatingForm extends Component {
       else
       {
         this.setState({ 
-          toastId:toast.error('An error occured')
+          toastId:toast.error(`${this.state.errors}`)
         });
       }
     }
@@ -77,7 +77,7 @@ class RatingForm extends Component {
         toast.update(
           this.state.toastId,
           {
-            render: 'An error occured',
+            render: `${this.state.errors}`,
             type: toast.TYPE.ERROR,
           }
         )
@@ -85,7 +85,7 @@ class RatingForm extends Component {
       else
       {
         this.setState({ 
-          toastId:toast.error('An error occured')
+          toastId:toast.error(`${this.state.errors}`)
         });
       }
     }
@@ -108,7 +108,7 @@ class RatingForm extends Component {
     catch (e)
     {
       this.setState({ errors: errors_to_array(e) });
-      if (toast.isActive(this.state.toastId) || this.state.toastId)
+      if (toast.isActive(this.state.toastId))
       {
         toast.update(
           this.state.toastId,
@@ -192,6 +192,11 @@ class RatingForm extends Component {
               </div>
             </article>
           ))}
+          {this.state.errors.map(error => (
+              <p className="help has-text-centered is-danger is-size-5">
+                {error}
+              </p>
+          ))}
           <div className="has-text-right buttons is-centered">
                 <button
                   className="button is-large is-success"
@@ -208,35 +213,16 @@ class RatingForm extends Component {
           </form>
         )
     }
-    // else if (this.state.errors.length > 0)
-    // {
-    //   rendering = (
-    //     <div title="Reload" className="has-text-centered">
-    //       <button onClick={this.componentDidMount}>
-    //         <i className={"fa fa-redo-alt fa-2x"} />
-    //       </button>
-    //     </div>
-    //   )
-    // }
     else 
     {
-      // if (this.state.errors.length > 0)
-      // {
-        rendering = 
-          <div title="Reload" className="has-text-centered">
-          <button onClick={this.componentDidMount}>
-            <i className={"fa fa-redo-alt fa-2x"} />
-          </button>
-          </div>  
-      // }
-      // else
-      // {
-      //   rendering = 
-      //   <div className="has-text-centered">
-      //     <i className="fa fa-spinner fa-spin fa-2x" />
-      //   </div>
-      // }      
+      rendering = 
+        <div title="Reload" className="has-text-centered">
+        <button className="reload-btn" onClick={this.componentDidMount}>
+          <i className="fa fa-redo-alt fa-2x" />
+        </button>
+        </div>
     }
+
     return (
       <div>
         <section className="hero is-small is-warning is-bold">

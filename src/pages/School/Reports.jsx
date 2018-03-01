@@ -138,24 +138,14 @@ class Reports extends Component {
     }
     else 
     {
-      // if (this.state.errors.length > 0)
-      // {
       rendering = 
         <div title="Reload reports" className="has-text-centered">
         <br />
-        <button onClick={this.componentDidMount}>
-          <i className={"fa fa-redo-alt fa-2x"} />
+        <button className="reload-btn" onClick={this.componentDidMount}>
+          <i className="fa fa-redo-alt fa-2x" />
         </button>
         <br />
-        </div>  
-      // }
-      // else
-      // {
-      //   rendering = 
-      //   <div className="has-text-centered">
-      //     <i className="fa fa-spinner fa-spin fa-2x" />
-      //   </div>
-      // }      
+        </div>
     }
 
     return (
