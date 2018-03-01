@@ -43,7 +43,7 @@ class Login extends React.Component {
     catch (e)
     {
       this.setState({ errors: errors_to_array(e), clicked: '' });
-      toast.error('Error occured!');
+      toast.error(`${this.state.errors}`);
     }
   }
 
