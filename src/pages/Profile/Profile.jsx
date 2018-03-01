@@ -191,7 +191,7 @@ class Profile extends Component {
         <section className="hero is-small is-warning is-bold">
           <div className="hero-body">
             <div className="container">
-              <h1 className="title">Profile</h1>
+              <h1 className="title"><i className="fa fa-user" /> Profile</h1>
             </div>
           </div>
         </section>

@@ -40,7 +40,7 @@ class RatingForm extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e), isLoaded: false, errors:[] });
+      this.setState({ errors: errors_to_array(e), isLoaded: false });
       if (toast.isActive(this.state.toastId))
       {
         toast.update(
@@ -71,7 +71,7 @@ class RatingForm extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e), isLoaded: false, errors:[] });
+      this.setState({ errors: errors_to_array(e), isLoaded: false });
       if (toast.isActive(this.state.toastId) || this.state.toastId)
       {
         toast.update(

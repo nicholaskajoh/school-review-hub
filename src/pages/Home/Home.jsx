@@ -8,6 +8,7 @@ import 'react-tabs/style/react-tabs.css';
 import './Home.css';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
 
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -133,6 +134,16 @@ class Home extends Component {
 
   render() {
     return (
+      <div>
+      <section className="hero is-small is-warning is-bold">
+          <div className="hero-body">
+            <div className="container">
+              <h1 className="title">
+                <i class="fa fa-home" /> Home
+              </h1>
+            </div>
+          </div>
+        </section>
       <Tabs>
         <div
           className="tabs is-toggle columns is-centered"
@@ -197,6 +208,7 @@ class Home extends Component {
         </TabPanel>
         <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER} />
       </Tabs>
+      </div>
     );
   }
 }

@@ -378,7 +378,7 @@ class Review extends Component {
       <section className="hero is-small is-warning is-bold">
         <div className="hero-body">
           <div className="container">
-            <h1 className="title">Review</h1>
+            <h1 className="title"><i className="fa fa-users" /> Review</h1>
           </div>
         </div>
         <ToastContainer
