@@ -53,7 +53,7 @@ class App extends Component {
           <DefaultLayout path='/school/:id' exact component={School} />
           <DefaultLayout path='/report/:id' exact component={Report} />
           <Route path='/logout' component={Logout} />
-          <DefaultLayout component={NotFound} />
+          <DefaultLayout component={NotFound} />          
         </Switch>
       </BrowserRouter>
     );

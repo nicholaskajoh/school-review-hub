@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import './Register.css';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
+import Error from './../Error/Error';
 
 
 class Register extends React.Component {
@@ -59,7 +60,7 @@ class Register extends React.Component {
     catch (e)
     {
       this.setState({ errors: errors_to_array(e), clicked: '' });
-      toast.error(`${this.state.errors}`);
+      toast.error(<Error errors={errors_to_array(e)}/>);
     }
   }
 
@@ -87,6 +88,7 @@ class Register extends React.Component {
                         autoFocus
                         value={this.state.name}
                         onChange={this.handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -100,6 +102,7 @@ class Register extends React.Component {
                         placeholder="Email"
                         value={this.state.email}
                         onChange={this.handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -113,6 +116,7 @@ class Register extends React.Component {
                         placeholder="Password"
                         value={this.state.password}
                         onChange={this.handleChange}
+                        required
                       />
                     </div>
                   </div>
