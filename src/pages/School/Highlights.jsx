@@ -34,7 +34,7 @@ const Highlights = (props) => (
                                     <article className="media">
                                         <div className="media-left">
                                             <figure className="image is-32x32">
-                                                <img src={school.logo_url} alt={school + ' logo'}/>
+                                                <img src={school.logo_url} alt={school.name + ' logo'}/>
                                             </figure>
                                         </div>
                                         <div className="media-content">
