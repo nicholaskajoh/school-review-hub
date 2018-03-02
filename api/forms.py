@@ -10,7 +10,7 @@ class RegisterForm(ModelForm):
         self.fields['username'].validators.append(
             RegexValidator(
                 regex='^[a-zA-Z][a-zA-Z0-9_-]+$',
-                message='Only alphabets, numbers, - and _ are allowed for usernames. Your username must start with an alphabet.',
+                message='Only alphabets, numbers, - and _ are allowed for usernames and your username must start with an alphabet.',
                 code='invalid_username',
             )
         )
