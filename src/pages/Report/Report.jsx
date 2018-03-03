@@ -21,6 +21,8 @@ class Report extends Component {
       current_page: 0,
       has_more_comments: false,
       upvoted: false,
+      upvoting: '',
+      commenting: '',
       toastId: null,
       errors: []
     };
@@ -31,12 +33,14 @@ class Report extends Component {
     const reportId = nextProps.match.params.id;
     this.getReport(reportId);
     this.getComments(reportId);
+    this.checkUpvote(reportId);
   }
 
   componentDidMount() {
     const reportId = this.props.match.params.id;
     this.getReport(reportId);
     this.getComments(reportId);
+    this.checkUpvote(reportId);
   }
 
   async getReport(id) {
@@ -114,6 +118,18 @@ class Report extends Component {
     }
   }
 
+  async checkUpvote(id){
+    try
+    {
+      const res = await this.api.get(`check-upvote/${id}/report`, true);
+      this.setState({ upvoted: true });
+    }
+    catch (e)
+    {
+      this.setState({ upvoted: false });
+    }
+  }
+
   async getMoreComments(id, page) {
     try
     {
@@ -164,6 +180,7 @@ class Report extends Component {
   };
 
   handleSubmit = event => {
+    this.setState({ commenting: 'is-loading' });
     const data = {
       comment: this.state.comment,
       entity_id: this.state.report['id'],
@@ -174,6 +191,7 @@ class Report extends Component {
   };
 
   handleUpvote = event => {
+    this.setState({ upvoting: 'is-loading' });
     this.upVote(this.state);
   };
 
@@ -186,11 +204,11 @@ class Report extends Component {
       toast.info('Comment added');
       this.getReport(reportId);
       this.getComments(reportId);
-      this.setState({ comment: '', errors:[] });
+      this.setState({ comment: '', errors:[], commenting:'' });
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
+      this.setState({ errors: errors_to_array(e), commenting:'' });
       if (toast.isActive(this.state.toastId) || this.state.toastId)
       {
         toast.update(
@@ -210,18 +228,28 @@ class Report extends Component {
     }
   }
 
+  toggleUpvote()
+  {
+    if (this.state.upvoted === true)
+      return false;
+    return true;
+  }
+
   async upVote(data) {
     try
     {
       await this.api.get(`upvote/${data.report['id']}/report`, true);
-      toast.info('Upvoted sucessfully');
+
+      if (this.toggleUpvote() === true){toast.info('Upvoted');}
+      else{toast.info('Removed Upvote');}
+
       const reportId = this.state.report['id'];
       this.getReport(reportId);
-      this.setState({ upvoted: true, errors:[] });
+      this.setState({ upvoted: this.toggleUpvote(), errors:[], upvoting:'' });
     }
     catch(e)
     {
-      this.setState({ errors: errors_to_array(e) });
+      this.setState({ errors: errors_to_array(e), upvoting:'' });
       if (toast.isActive(this.state.toastId) || this.state.toastId)
       {
         toast.update(
@@ -285,19 +313,19 @@ class Report extends Component {
               </div>
               <div className="card-footer">
                 <div className="card-footer-item">
-                  {!this.state.upvoted ? (
-                    <button
-                      className="button is-danger is-small"
-                      onClick={this.handleUpvote}
-                    >
-                      Upvote Report
-                    </button>
-                  ) : (
-                    <button className="button is-danger is-small" disabled>
-                      Upvoted
-                    </button>
-                  )}
-                </div>
+                {this.state.upvoted ? (
+                  <button
+                    className={"button is-danger is-small " + this.state.upvoting}
+                    onClick={this.handleUpvote}>
+                    Remove Upvote
+                  </button>
+                ) : (
+                  <button className={"button is-danger is-small " + this.state.upvoting}
+                    onClick={this.handleUpvote}>
+                    Upvote
+                  </button>
+                )}
+              </div>
               </div>
             </div>
           </div>
@@ -321,15 +349,15 @@ class Report extends Component {
                     required
                   />
                 </div>
-                {this.state.errors.map(error => (
-                  <p className="help is-danger is-size-5">
+                {this.state.errors.map((error, index) => (
+                  <p key={'report_error ' + index} className="help is-danger is-size-5">
                     {error}
                   </p>
                 ))}
                 <br />
                 <div className="field is-grouped is-grouped-centered">
                   <p className="control">
-                    <button type="submit" className="button is-danger">
+                    <button type="submit" className={"button is-danger " + this.state.commenting}>
                       Post Comment
                     </button>
                   </p>
@@ -340,7 +368,7 @@ class Report extends Component {
             <h3 className="title">Comments ({this.state.report.comments_count}):</h3>
             <br />
             {this.state.comments.map(comment => (
-              <CommentCard comment={comment} />
+              <CommentCard key={'report_comment ' + comment.id} comment={comment} />
             ))}
           </div>
           {this.state.has_more_comments ? (
