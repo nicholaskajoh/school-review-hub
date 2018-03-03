@@ -12,6 +12,10 @@ class Report extends Component {
     this.api = new APIHelper();
     this.state = {
       report: {created_at: ''},
+      own_report: false,
+      editing: false,
+      edited_report_content: '',
+      submitting_edit: '',
       school_name: '',
       school_id: '',
       comments: [],
@@ -34,6 +38,7 @@ class Report extends Component {
     this.getReport(reportId);
     this.getComments(reportId);
     this.checkUpvote(reportId);
+    this.checkOwner(reportId);
   }
 
   componentDidMount() {
@@ -41,6 +46,7 @@ class Report extends Component {
     this.getReport(reportId);
     this.getComments(reportId);
     this.checkUpvote(reportId);
+    this.checkOwner(reportId);
   }
 
   async getReport(id) {
@@ -53,6 +59,7 @@ class Report extends Component {
       this.setState({
         report: report,
         school_name: school_name,
+        edited_report_content: report.content,
         school_id: school_id,
         isLoaded:true,
         errors:[]
@@ -121,12 +128,22 @@ class Report extends Component {
   async checkUpvote(id){
     try
     {
-      const res = await this.api.get(`check-upvote/${id}/report`, true);
+      await this.api.get(`check-upvote/${id}/report`, true);
       this.setState({ upvoted: true });
     }
     catch (e)
     {
       this.setState({ upvoted: false });
+    }
+  }
+
+  async checkOwner(id) {
+    try {
+      await this.api.get(`check-owner/${id}/report`, true);
+      this.setState({ own_report: true });
+    }
+    catch (e) {
+      this.setState({ own_report: false });
     }
   }
 
@@ -176,8 +193,14 @@ class Report extends Component {
   };
 
   handleChange = event => {
-    this.setState({ comment: event.target.value });
+    this.setState({
+      [event.target.name]: event.target.value
+    });
   };
+
+  handleEdit = event => {
+    this.setState({ editing: true });
+  }
 
   handleSubmit = event => {
     this.setState({ commenting: 'is-loading' });
@@ -187,6 +210,17 @@ class Report extends Component {
       entity: 'report'
     };
     this.submitComment(data);
+    event.preventDefault();
+  };
+  
+  handleEditSubmit = event => {
+    this.setState({ submitting_edit: 'is-loading' });
+    const data = {
+      id: this.state.report.id,
+      content: this.state.edited_report_content,
+      school: this.state.school_id
+    };
+    this.submitEditedReport(data);
     event.preventDefault();
   };
 
@@ -225,6 +259,19 @@ class Report extends Component {
           toastId:toast.error('An error occured')
         });
       }
+    }
+  }
+
+  async submitEditedReport(data) {
+    try {
+      const res = await this.api.post('add-report', data, true);
+
+      toast.info('Report edited');
+      this.setState({ editing: false, submitting_edit: false, report: res.data })
+    }
+    catch (e) {
+      this.setState({ submitting_edit: false });
+      toast.error(`${errors_to_array}`);
     }
   }
 
@@ -300,7 +347,40 @@ class Report extends Component {
             <div className="media-content">
               <div className="content has-text-centered">
                 <p className="report-content">
-                  "{this.state.report.content}"
+                  {this.state.editing ? (
+                    <form onSubmit={this.handleEditSubmit}>
+                      <div className="field">
+                        <div className="control">
+                          <textarea
+                            className="textarea"
+                            type="text"
+                            name="edited_report_content"
+                            value={this.state.edited_report_content}
+                            onChange={this.handleChange}
+                            placeholder="Write a report"
+                            required
+                          />
+                        </div>
+                        {this.state.errors.map((error, index) => (
+                          <p key={'edit_report_error ' + index} className="help is-danger is-size-5">
+                            {error}
+                          </p>
+                        ))}
+                        <br />
+                        <div className="field is-grouped is-grouped-centered">
+                          <p className="control">
+                            <button type="submit" className={"button is-danger " + this.state.submitting_edit}>
+                              Submit
+                        </button>
+                          </p>
+                        </div>
+                      </div>
+                    </form>
+                  ) : (
+                      <p className="report-content">
+                        "{this.state.report.content}"
+                      </p>
+                    )}
                 </p>
               </div>
               <div className="card-footer">
@@ -326,6 +406,17 @@ class Report extends Component {
                   </button>
                 )}
               </div>
+                  {this.state.own_report ? (
+                    <div className="card-footer-item">
+                      <button title="you can edit your own report"
+                        className={"button is-danger is-small " + this.state.editing}
+                        onClick={this.handleEdit}>
+                        Edit
+                  </button>
+                    </div>
+                  ) : (
+                      ''
+                    )}
               </div>
             </div>
           </div>
@@ -343,6 +434,7 @@ class Report extends Component {
                   <textarea
                     className="textarea"
                     type="text"
+                    name="comment"
                     value={this.state.comment}
                     onChange={this.handleChange}
                     placeholder="Write a comment"

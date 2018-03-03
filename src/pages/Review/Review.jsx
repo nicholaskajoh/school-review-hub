@@ -12,6 +12,10 @@ class Review extends Component {
     this.api = new APIHelper();
     this.state = {
       review: {created_at: ''},
+      own_review: false,
+      editing: false,
+      edited_review_content: '',
+      submitting_edit: '',
       school_name: '',
       school_id: '',
       comments: [],
@@ -34,6 +38,7 @@ class Review extends Component {
     this.getReview(reviewId);
     this.getComments(reviewId);
     this.checkUpvote(reviewId);
+    this.checkOwner(reviewId);
   }
 
   componentDidMount() {
@@ -41,6 +46,7 @@ class Review extends Component {
     this.getReview(reviewId);
     this.getComments(reviewId);
     this.checkUpvote(reviewId);
+    this.checkOwner(reviewId);
   }
 
   async getReview(id) {
@@ -52,6 +58,7 @@ class Review extends Component {
       const school_id = res.data.school.id;
       this.setState({
         review: review,
+        edited_review_content: review.content,
         school_name: school_name,
         school_id: school_id,
         isLoaded:true,
@@ -121,12 +128,22 @@ class Review extends Component {
   async checkUpvote(id){
     try
     {
-      const res = await this.api.get(`check-upvote/${id}/review`, true);
+      await this.api.get(`check-upvote/${id}/review`, true);
       this.setState({ upvoted: true });
     }
     catch (e)
     {
       this.setState({ upvoted: false });
+    }
+  }
+
+  async checkOwner(id) {
+    try {
+      await this.api.get(`check-owner/${id}/review`, true);
+      this.setState({ own_review: true });
+    }
+    catch (e) {
+      this.setState({ own_review: false });
     }
   }
 
@@ -175,8 +192,14 @@ class Review extends Component {
   };
 
   handleChange = event => {
-    this.setState({ comment: event.target.value });
+    this.setState({
+      [event.target.name]: event.target.value
+    });
   };
+
+  handleEdit = event => {
+    this.setState({ editing: true });
+  }
 
   handleSubmit = event => {
     this.setState({ commenting: 'is-loading' });
@@ -186,6 +209,16 @@ class Review extends Component {
       entity: 'review'
     };
     this.submitComment(data);
+    event.preventDefault();
+  };
+
+  handleEditSubmit = event => {
+    this.setState({ submitting_edit: 'is-loading' });
+    const data = { id: this.state.review.id,
+      content: this.state.edited_review_content,
+      school: this.state.school_id 
+    };
+    this.submitEditedReview(data);
     event.preventDefault();
   };
 
@@ -224,6 +257,19 @@ class Review extends Component {
           toastId:toast.error('An error occured')
         });
       }
+    }
+  }
+
+  async submitEditedReview(data) {
+    try {
+      const res = await this.api.post('add-review', data, true);
+
+      toast.info('Review edited');
+      this.setState({ editing: false, submitting_edit: false, review: res.data})
+    }
+    catch (e) {
+      this.setState({ submitting_edit: false });
+      toast.error(`${errors_to_array}`);
     }
   }
 
@@ -297,9 +343,40 @@ class Review extends Component {
         <div className="box">
           <div className="media-content">
             <div className="content has-text-centered">
+            {this.state.editing ? (
+                  <form onSubmit={this.handleEditSubmit}>
+                  <div className="field">
+                    <div className="control">
+                      <textarea
+                        className="textarea"
+                        type="text"
+                        name="edited_review_content"
+                        value={this.state.edited_review_content}
+                        onChange={this.handleChange}
+                        placeholder="Write a review"
+                        required
+                      />
+                    </div>
+                    {this.state.errors.map((error, index) => (
+                      <p key={'edit_review_error ' + index} className="help is-danger is-size-5">
+                        {error}
+                      </p>
+                    ))}
+                    <br />
+                    <div className="field is-grouped is-grouped-centered">
+                      <p className="control">
+                          <button type="submit" className={"button is-danger " + this.state.submitting_edit}>
+                          Submit
+                          </button>
+                      </p>
+                    </div>
+                  </div>
+                </form>
+            ): (
               <p className="review-content">
                 "{this.state.review.content}"
               </p>
+            )}
             </div>
             <div className="card-footer">
               <div className="card-footer-item">
@@ -324,6 +401,17 @@ class Review extends Component {
                   </button>
                 )}
               </div>
+                  {this.state.own_review ? (
+                  <div className="card-footer-item">
+                    <button title="you can edit your own review"
+                      className={"button is-danger is-small " + this.state.editing}
+                      onClick={this.handleEdit}>
+                      Edit
+                  </button>
+                  </div>
+                  ) : (
+                      ''
+                    )}
             </div>
           </div>
         </div>
@@ -341,6 +429,7 @@ class Review extends Component {
               <div className="control">
                 <textarea
                   className="textarea"
+                  name="comment"
                   type="text"
                   value={this.state.comment}
                   onChange={this.handleChange}

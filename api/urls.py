@@ -29,4 +29,5 @@ urlpatterns = [
 	path('add-review', AddReviewView.as_view(), name='add_review'),
 	path('add-report', AddReportView.as_view(), name='add_report'),
 	path('check-upvote/<int:entity_id>/<entity_type>', CheckUpvoteView.as_view(), name='check_upvote'),
+	path('check-owner/<int:entity_id>/<entity_type>', CheckOwnerView.as_view(), name='check_owner'),
 ]
