@@ -262,10 +262,15 @@ class AddReviewView(APIView):
             content = form.cleaned_data['content']
             school = form.cleaned_data['school']
             reviewer = form.cleaned_data['reviewer']
-            review = Review.objects.create(
-                reviewer=reviewer,school=school,
-                content=content
-            )
+            review = Review.objects.filter(pk=request.data.get('id')).first()
+            if review:
+                review.content = content
+                review.save()
+            else:
+                review = Review.objects.create(
+                    reviewer=reviewer,school=school,
+                    content=content
+                )
             return Response(data=ReviewSerializer(review).data,status=status.HTTP_200_OK)
         return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)    
 
@@ -284,10 +289,15 @@ class AddReportView(APIView):
             content = form.cleaned_data['content']
             school = form.cleaned_data['school']
             reporter = form.cleaned_data['reporter']
-            report = Report.objects.create(
-                reporter=reporter,school=school,
-                content=content
-            )
+            report = Report.objects.filter(pk=request.data.get('id')).first()
+            if report:
+                report.content = content
+                report.save()
+            else:
+                report = Report.objects.create(
+                    reporter=reporter,school=school,
+                    content=content
+                )
             return Response(data=ReportSerializer(report).data, status=status.HTTP_200_OK)
         return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
@@ -314,6 +324,27 @@ class CommentView(APIView):
             )
             return Response(data=CommentSerializer(comment).data,status=status.HTTP_200_OK)
         return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)    
+
+
+class CheckOwnerView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request, entity_id, entity_type):
+        if entity_type == 'review':
+            review = Review.objects.filter(pk=entity_id).first()
+            if review and review.reviewer == request.user:
+                return Response(status=status.HTTP_200_OK)
+        
+        if entity_type == 'report':
+            report = Report.objects.filter(pk=entity_id).first()
+            if report and report.reporter == request.user:
+                return Response(status=status.HTTP_200_OK)
+
+        if entity_type == 'comment':
+            comment = Comment.objects.filter(pk=entity_id).first()
+            if comment and comment.commenter == request.user:
+                return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutView(APIView):

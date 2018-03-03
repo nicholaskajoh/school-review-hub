@@ -90,7 +90,7 @@ class Home extends Component {
         matchesErrorLoading: true,
         matchesSpinner: 'fa-redo-alt'
       });
-      if (toast.isActive(this.state.toastId) || this.state.toastId) {
+      if (toast.isActive(this.state.toastId)) {
         toast.update(this.state.toastId, {
           render: `${this.state.errors}`,
           type: toast.TYPE.ERROR
@@ -119,7 +119,7 @@ class Home extends Component {
         reviewsErrorLoading: true,
         reviewsSpinner: 'fa-redo-alt'
       });
-      if (toast.isActive(this.state.toastId) || this.state.toastId) {
+      if (toast.isActive(this.state.toastId)) {
         toast.update(this.state.toastId, {
           render: `${this.state.errors}`,
           type: toast.TYPE.ERROR

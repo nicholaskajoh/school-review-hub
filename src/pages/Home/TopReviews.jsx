@@ -13,6 +13,10 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
         </header>
         <div className="card-content">
           <div className="content">
+            {/* {review.is_edited ? (
+              <p>(edited)</p>
+              ):('')
+            } */}
             {review.content.substring(0, 150).trim() +
               (review.content.length > 150 ? '...' : '')}{' '}
             <br />
