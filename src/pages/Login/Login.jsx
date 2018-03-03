@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import './Login.css';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
+import ToastError from './../ToastError/ToastError';
 
 
 class Login extends React.Component {
@@ -43,7 +44,7 @@ class Login extends React.Component {
     catch (e)
     {
       this.setState({ errors: errors_to_array(e), clicked: '' });
-      toast.error('Error occured!');
+      toast.error(<ToastError errors={errors_to_array(e)} />);
     }
   }
 
@@ -73,6 +74,7 @@ class Login extends React.Component {
                         autoFocus
                         value={this.state.username}
                         onChange={this.handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -86,11 +88,12 @@ class Login extends React.Component {
                         placeholder="Password"
                         value={this.state.password}
                         onChange={this.handleChange}
+                        required
                       />
                     </div>
                   </div>
-                  {this.state.errors.map(error => (
-                    <p className="help is-danger is-size-5">
+                  {this.state.errors.map((error, index) => (
+                    <p key={'login_error ' + index} className="help is-danger is-size-5">
                       {error}
                     </p>
                   ))}

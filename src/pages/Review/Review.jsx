@@ -21,6 +21,8 @@ class Review extends Component {
       current_page: 0,
       has_more_comments: false,
       upvoted: false,
+      upvoting: '',
+      commenting: '',
       toastId: null,
       errors: []
     };
@@ -31,12 +33,14 @@ class Review extends Component {
     const reviewId = nextProps.match.params.id;
     this.getReview(reviewId);
     this.getComments(reviewId);
+    this.checkUpvote(reviewId);
   }
 
   componentDidMount() {
     const reviewId = this.props.match.params.id;
     this.getReview(reviewId);
     this.getComments(reviewId);
+    this.checkUpvote(reviewId);
   }
 
   async getReview(id) {
@@ -46,8 +50,6 @@ class Review extends Component {
       const review = res.data;
       const school_name = res.data.school.name;
       const school_id = res.data.school.id;
-      console.log(`I have got the review in my palm: +====>   ${review}`);
-      console.log(review);
       this.setState({
         review: review,
         school_name: school_name,
@@ -116,6 +118,18 @@ class Review extends Component {
     }
   }
 
+  async checkUpvote(id){
+    try
+    {
+      const res = await this.api.get(`check-upvote/${id}/review`, true);
+      this.setState({ upvoted: true });
+    }
+    catch (e)
+    {
+      this.setState({ upvoted: false });
+    }
+  }
+
   async getMoreComments(id, page) {
     try{
       const res = await this.api.get(`review/${id}/comments/${page}`);
@@ -165,6 +179,7 @@ class Review extends Component {
   };
 
   handleSubmit = event => {
+    this.setState({ commenting: 'is-loading' });
     const data = {
       comment: this.state.comment,
       entity_id: this.state.review['id'],
@@ -175,6 +190,7 @@ class Review extends Component {
   };
 
   handleUpvote = event => {
+    this.setState({ upvoting: 'is-loading' });
     this.upVote(this.state);
   };
 
@@ -187,11 +203,11 @@ class Review extends Component {
       toast.info('Comment added');
       this.getReview(reviewId);
       this.getComments(reviewId);
-      this.setState({ comment: '', error:[] });
+      this.setState({ comment: '', error:[], commenting:'' });
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
+      this.setState({ errors: errors_to_array(e), commenting:'' });
       if (toast.isActive(this.state.toastId) || this.state.toastId)
       {
         toast.update(
@@ -211,19 +227,28 @@ class Review extends Component {
     }
   }
 
+  toggleUpvote()
+  {
+    if (this.state.upvoted === true)
+      return false;
+    return true;
+  }
+
   async upVote(data) {
     try
     {
       await this.api.get(`upvote/${data.review['id']}/review`, true);
 
-      toast.info('Upvoted sucessfully');
+      if (this.toggleUpvote() === true){toast.info('Upvoted');}
+      else{toast.info('Removed Upvote');}
+
       const reviewId = this.state.review['id'];
       this.getReview(reviewId);
-      this.setState({ upvoted: true, errors:[] });
+      this.setState({ upvoted: this.toggleUpvote(), errors:[], upvoting:'' });
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
+      this.setState({ errors: errors_to_array(e), upvoting:'' });
       if (toast.isActive(this.state.toastId) || this.state.toastId)
       {
         toast.update(
@@ -286,16 +311,16 @@ class Review extends Component {
             </div>
             <div className="card-footer">
               <div className="card-footer-item">
-                {!this.state.upvoted ? (
+                {this.state.upvoted ? (
                   <button
-                    className="button is-danger is-small"
-                    onClick={this.handleUpvote}
-                  >
-                    Upvote Review
+                    className={"button is-danger is-small " + this.state.upvoting}
+                    onClick={this.handleUpvote}>
+                    Remove Upvote
                   </button>
                 ) : (
-                  <button className="button is-danger is-small" disabled>
-                    Upvoted
+                  <button className={"button is-danger is-small " + this.state.upvoting}
+                    onClick={this.handleUpvote}>
+                    Upvote
                   </button>
                 )}
               </div>
@@ -323,15 +348,15 @@ class Review extends Component {
                   required
                 />
               </div>
-              {this.state.errors.map(error => (
-                <p className="help is-danger is-size-5">
+              {this.state.errors.map((error, index) => (
+                <p key={'review_error ' + index} className="help is-danger is-size-5">
                   {error}
                 </p>
               ))}
               <br />
               <div className="field is-grouped is-grouped-centered">
                 <p className="control">
-                  <button type="submit" className="button is-danger">
+                  <button type="submit" className={"button is-danger " + this.state.commenting}>
                     Post Comment
                   </button>
                 </p>
@@ -342,7 +367,7 @@ class Review extends Component {
           <h3 className="title">Comments ({this.state.review.comments_count}):</h3>
           <br />
           {this.state.comments.map(comment => (
-            <CommentCard comment={comment} />
+            <CommentCard key={'review_comment ' + comment.id} comment={comment} />
           ))}
         </div>
         {this.state.has_more_comments ? (

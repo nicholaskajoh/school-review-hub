@@ -6,8 +6,8 @@ import TimeAgo from 'react-time-ago';
 const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
   let rendering;
   if (isLoaded) {
-    rendering = reviews.map((review, index) => (
-      <div className="card" style={{ marginBottom: 15 }}>
+    rendering = reviews.map(review => (
+      <div key={'top_review ' + review.id} className="card" style={{ marginBottom: 15 }}>
         <header className="card-header">
           <p className="card-header-title">{review.school.name}</p>
         </header>

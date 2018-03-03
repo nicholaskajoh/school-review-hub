@@ -156,8 +156,8 @@ class Profile extends Component {
 
       <h4 className="subtitle">Ratings</h4>
 
-      {this.state.ratings.map((rating, index) => (
-        <div className="box" key={index}>
+      {this.state.ratings.map(rating => (
+        <div className="box" key={'profile_rating ' + rating.id}>
           {rating[2]} <strong> vs </strong> {rating[3]} &nbsp;
           <Link
             className="button is-info is-small"

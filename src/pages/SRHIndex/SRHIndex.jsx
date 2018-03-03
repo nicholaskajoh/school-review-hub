@@ -96,8 +96,8 @@ class SRHIndex extends Component {
               </thead>
 
               <tbody>
-                {this.state.schools.map((school, index) => (
-                  <tr key={index}>
+                {this.state.schools.map(school => (
+                  <tr key={'srhindex_school ' + school.id}>
                     <td>{school.rank}</td>
                     <td>
                       <img
@@ -159,7 +159,7 @@ class SRHIndex extends Component {
           <div className="hero-body">
             <div className="container">
               <h1 className="title">
-                <i class="fa fa-list-alt" /> SRH Index
+                <i className="fa fa-list-alt" /> SRH Index
               </h1>
             </div>
           </div>

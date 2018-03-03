@@ -227,12 +227,25 @@ class UpvoteView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request, entity_id, entity_type):
-        upvote = Upvote.objects.update_or_create(
-            entity = entity_type,
-            entity_id = entity_id,
-            upvoter = request.user
-        )
+        upvote = Upvote.objects.filter(entity = entity_type,entity_id = entity_id,
+            upvoter = request.user).first()
+        if upvote:
+            upvote.delete()
+        else:
+            Upvote.objects.create(entity = entity_type,entity_id = entity_id,
+            upvoter = request.user)
         return Response(status=status.HTTP_200_OK)
+
+
+class CheckUpvoteView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request, entity_id, entity_type):
+        upvote = Upvote.objects.filter(entity = entity_type,entity_id = entity_id,
+            upvoter = request.user)
+        if upvote.exists():
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class AddReviewView(APIView):

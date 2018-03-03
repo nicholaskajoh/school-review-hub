@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 const TopSchools = ({ schools, isLoaded, errorLoading, spinner, reload }) => {
   let rendering;
   if (isLoaded) {
-    rendering = schools.map((school, index) => (
-      <div className="column is-3 has-text-centered" key={index}>
+    rendering = schools.map(school => (
+      <div className="column is-3 has-text-centered" key={'top_school ' + school.id}>
         <div className="box top-school-box">
           <img
             className="box-image image is-96x96"

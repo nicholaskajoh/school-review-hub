@@ -11,7 +11,7 @@ const SuggestedMatches = ({
   let rendering;
   if (isLoaded) {
     rendering = matches.map((match, index) => (
-      <div className="box">
+      <div key={'match ' + index} className="box">
         <div className="columns has-text-centered">
           <div className="column is-5">
             <div>
