@@ -139,7 +139,7 @@ class Home extends Component {
           <div className="hero-body">
             <div className="container">
               <h1 className="title">
-                <i class="fa fa-home" /> Home
+                <i className="fa fa-home" /> Home
               </h1>
             </div>
           </div>

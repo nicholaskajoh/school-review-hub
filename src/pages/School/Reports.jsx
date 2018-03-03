@@ -89,7 +89,7 @@ class Reports extends Component {
         <br />
         <br />
         {this.state.reports.map(report => (
-          <div className="card report">
+          <div key={'school_report ' + report.id} className="card report">
             <header className="card-header">
               <p className="card-header-title">
                 <strong><TimeAgo>{new Date(report.created_at)}</TimeAgo></strong>

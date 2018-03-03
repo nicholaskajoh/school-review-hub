@@ -78,9 +78,9 @@ class Match extends Component {
                       className="fixed-width-select-box"
                     >
                       <option value="">Select School</option>
-                      {schools.map((school, i) => {
+                      {schools.map(school => {
                         return (
-                          <option value={school.id} key={i}>
+                          <option value={school.id} key={'match_school1 ' + school.id}>
                             {school.name}
                           </option>
                         );
@@ -115,9 +115,9 @@ class Match extends Component {
                       className="fixed-width-select-box"
                     >
                       <option value="">Select School</option>
-                      {schools.map((school, i) => {
+                      {schools.map(school => {
                         return (
-                          <option value={school.id} key={i}>
+                          <option value={school.id} key={'match_school2' + school.id}>
                             {school.name}
                           </option>
                         );

@@ -156,8 +156,8 @@ class RatingForm extends Component {
     {
       rendering = (
         <form onSubmit={this.handleSubmit}>
-          {this.state.criteria.map((criterion, index) => (
-            <article className="message is-info" key={index}>
+          {this.state.criteria.map(criterion => (
+            <article className="message is-info" key={'criterion ' + criterion.id}>
               <div className="message-header">
                 <p>{criterion.description}</p>
               </div>

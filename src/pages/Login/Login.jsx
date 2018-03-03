@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import './Login.css';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
-import Error from './../Error/Error';
+import ToastError from './../ToastError/ToastError';
 
 
 class Login extends React.Component {
@@ -44,7 +44,7 @@ class Login extends React.Component {
     catch (e)
     {
       this.setState({ errors: errors_to_array(e), clicked: '' });
-      toast.error(<Error errors={errors_to_array(e)} />);
+      toast.error(<ToastError errors={errors_to_array(e)} />);
     }
   }
 
@@ -92,8 +92,8 @@ class Login extends React.Component {
                       />
                     </div>
                   </div>
-                  {this.state.errors.map((error, key) => (
-                    <p key={key} className="help is-danger is-size-5">
+                  {this.state.errors.map((error, index) => (
+                    <p key={'login_error ' + index} className="help is-danger is-size-5">
                       {error}
                     </p>
                   ))}

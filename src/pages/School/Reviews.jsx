@@ -89,7 +89,7 @@ class Reviews extends Component {
         <br />
         <br />
         {this.state.reviews.map(review => (
-          <div className="card review">
+            <div key={'school_review ' + review.id} className="card review">
             <header className="card-header">
               <p className="card-header-title">
                 <strong><TimeAgo>{new Date(review.created_at)}</TimeAgo></strong>
