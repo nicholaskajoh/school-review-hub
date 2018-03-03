@@ -54,7 +54,7 @@ export function errors_to_array(e){
         else if (e.response.status === 404)
         {
             console.log('ERROR 404: Page not found');
-            return ['Something is wrong, please refresh the page'];
+            return 404;
         }
         else if (e.response.status === 401)
         {

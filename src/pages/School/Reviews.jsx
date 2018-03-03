@@ -25,6 +25,7 @@ class Reviews extends Component {
 
   componentDidMount() {
     this.getReviews(this.props.schoolId, 1);
+    window.scrollTo(0, 0);
   }
 
   async getReviews(id, page) {

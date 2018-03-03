@@ -24,6 +24,7 @@ class SRHIndex extends Component {
 
   componentDidMount() {
     this.getSchools(1);
+    window.scrollTo(0, 0);
   }
 
   async getSchools(page) {

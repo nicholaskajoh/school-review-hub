@@ -29,6 +29,7 @@ class RatingForm extends Component {
       this.props.match.params.school1Id,
       this.props.match.params.school2Id
     );
+    window.scrollTo(0, 0);
   }
 
   async getCriteria() {

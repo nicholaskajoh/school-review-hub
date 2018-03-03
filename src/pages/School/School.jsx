@@ -34,6 +34,7 @@ class School extends Component {
     const schoolId = this.props.match.params.id;
     this.getSchool(schoolId);
     this.getLowerRatedSchools(schoolId);
+    window.scrollTo(0, 0);
   }
 
   async getSchool(id) {

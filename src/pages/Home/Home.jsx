@@ -40,6 +40,7 @@ class Home extends Component {
     this.getSchools();
     this.getMatches();
     this.getReviews();
+    window.scrollTo(0, 0);
   }
 
   async getSchools() {

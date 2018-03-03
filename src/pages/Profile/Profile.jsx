@@ -30,6 +30,7 @@ class Profile extends Component {
     this.welcomeUser();
     this.getUserInfo();
     this.getUserRatings(1);
+    window.scrollTo(0, 0);
   }
 
   welcomeUser() {

@@ -26,6 +26,7 @@ class ReviewForm extends Component {
   componentDidMount() {
     const id = this.props.match.params.id;
     this.getSchool(id);
+    window.scrollTo(0, 0);
   }
 
   async getSchool(id) {

@@ -60,7 +60,7 @@ class IndexLanding extends Component {
                   <p className="title is-4">Reports</p>
                   <p>
                     Report events -- good, bad and ugly -- happening in any
-                    univeristy that might be of interest to the public.
+                    university that might be of interest to the public.
                   </p>
                 </div>
               </div>
