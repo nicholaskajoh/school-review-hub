@@ -7,11 +7,13 @@ const TopSchools = ({ schools, isLoaded, errorLoading, spinner, reload }) => {
     rendering = schools.map(school => (
       <div className="column is-3 has-text-centered" key={'top_school ' + school.id}>
         <div className="box top-school-box">
+          <Link to={"/school/" + school.id}>
           <img
             className="box-image image is-96x96"
             src={school.logo_url}
             alt={school.name + " logo"}
           />
+          </Link>
 
           <div className="content has-text-centered">
             <h3 className="subtitle has-text-weight-semibold is-6 ">

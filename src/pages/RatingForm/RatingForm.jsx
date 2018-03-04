@@ -37,7 +37,7 @@ class RatingForm extends Component {
     {
       const res = await this.api.get('criteria');
       const criteria = res.data;
-      this.setState({ criteria:criteria, isLoaded: true });
+      this.setState({ criteria:criteria, isLoaded: true, errors:[] });
     }
     catch (e)
     {
@@ -68,7 +68,7 @@ class RatingForm extends Component {
       const res2 = this.api.get(`school/${school2Id}`);
 
       const [res3, res4] = await Promise.all([res1, res2]);
-      this.setState({ school1:res3.data, school2:res4.data });      
+      this.setState({ school1: res3.data, school2: res4.data, errors: []  });      
     }
     catch (e)
     {
