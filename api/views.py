@@ -125,10 +125,12 @@ class TopReportsView(generics.ListAPIView):
 
 class RatedHigherThanView(APIView):
     def get(self, request, school_id):
-        school = School.objects.get(id=school_id)
-        lower_rated_schools = School.objects.filter(rating__lt=school.rating).order_by('rank')
-        serializer =  SchoolSerializer(lower_rated_schools, many=True)
-        return Response(serializer.data)
+        school = School.objects.filter(id=school_id).first()
+        if school:
+            lower_rated_schools = School.objects.filter(rating__lt=school.rating).order_by('rank')
+            serializer =  SchoolSerializer(lower_rated_schools, many=True)
+            return Response(serializer.data)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class SuggestedMatchesView(APIView):

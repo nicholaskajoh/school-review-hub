@@ -4,6 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import CommentCard from './../../partials/CommentCard/CommentCard';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
 import TimeAgo from 'react-time-ago';
+import ObjectNotFound from './../ObjectNotFound/ObjectNotFound';
+import { Link } from "react-router-dom";
 
 
 class Review extends Component {
@@ -28,7 +30,8 @@ class Review extends Component {
       upvoting: '',
       commenting: '',
       toastId: null,
-      errors: []
+      errors: [],
+      notFound: false
     };
     this.componentDidMount = this.componentDidMount.bind(this);
   }
@@ -43,10 +46,18 @@ class Review extends Component {
 
   componentDidMount() {
     const reviewId = this.props.match.params.id;
-    this.getReview(reviewId);
-    this.getComments(reviewId);
-    this.checkUpvote(reviewId);
-    this.checkOwner(reviewId);
+    if ( !isNaN(Number(reviewId)))
+    {
+      this.getReview(reviewId);
+      this.getComments(reviewId);
+      this.checkUpvote(reviewId);
+      this.checkOwner(reviewId);
+      window.scrollTo(0, 0);
+    }
+    else
+    {
+      this.setState({ notFound: true });
+    }
   }
 
   async getReview(id) {
@@ -67,7 +78,12 @@ class Review extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      let errors = errors_to_array(e);
+      this.setState({ errors: errors, isLoaded: false });
+      if (errors === 404)
+      {
+        this.setState({ notFound: true});
+      }
       if (toast.isActive(this.state.toastId))
       {
         toast.update(
@@ -213,18 +229,29 @@ class Review extends Component {
   };
 
   handleEditSubmit = event => {
-    this.setState({ submitting_edit: 'is-loading' });
-    const data = { id: this.state.review.id,
-      content: this.state.edited_review_content,
-      school: this.state.school_id 
-    };
-    this.submitEditedReview(data);
-    event.preventDefault();
+    if (this.state.edited_review_content === this.state.review.content) {
+      toast.error('You have not made any change');
+      event.preventDefault();
+    }
+    else
+    {
+      this.setState({ submitting_edit: 'is-loading' });
+      const data = { id: this.state.review.id,
+        content: this.state.edited_review_content,
+        school: this.state.school_id 
+      };
+      this.submitEditedReview(data);
+      event.preventDefault();
+    }
   };
 
   handleUpvote = event => {
     this.setState({ upvoting: 'is-loading' });
     this.upVote(this.state);
+  };
+
+  cancelEdit = () => {
+    this.setState({ editing: false, edited_review_content: this.state.review.content });
   };
 
   async submitComment(data) {
@@ -315,6 +342,10 @@ class Review extends Component {
   }
 
   render() {
+    if (this.state.notFound) {
+      return <ObjectNotFound object_model="Review" />;
+    }
+
     let rendering;
     if (this.state.isLoaded)
     {
@@ -324,14 +355,13 @@ class Review extends Component {
         <div className="column" />
 
         <div className="column is-half">
-          <div className="content ">
+          <div className="content">
             <p className="title">
-              <a
+              <Link
                 className="has-text-black"
-                href={"/school/" + this.state.school_id}
-              >
-                {this.state.school_name} Review
-              </a>
+                to={"/school/" + this.state.school_id}
+                >{this.state.school_name}</Link>
+                {' '}Review
             </p>
           </div>
         </div>
@@ -365,8 +395,13 @@ class Review extends Component {
                     <br />
                     <div className="field is-grouped is-grouped-centered">
                       <p className="control">
-                          <button type="submit" className={"button is-danger " + this.state.submitting_edit}>
+                          <button type="submit" className={"button is-danger is-small " + this.state.submitting_edit}>
                           Submit
+                          </button>
+                      </p>
+                      <p className="control">
+                        <button onClick={this.cancelEdit} className="button is-small is-danger">
+                          Cancel
                           </button>
                       </p>
                     </div>

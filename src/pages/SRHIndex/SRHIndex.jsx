@@ -24,6 +24,7 @@ class SRHIndex extends Component {
 
   componentDidMount() {
     this.getSchools(1);
+    window.scrollTo(0, 0);
   }
 
   async getSchools(page) {
@@ -100,11 +101,13 @@ class SRHIndex extends Component {
                   <tr key={'srhindex_school ' + school.id}>
                     <td>{school.rank}</td>
                     <td>
-                      <img
-                        className="image is-48x48 rounded-img"
+                      <Link
+                        to={"/school/" + school.id}
+                      >
+                      <img className="image is-48x48 rounded-img"
                         src={school.logo_url}
-                        alt={school.name + " logo"}
-                      />
+                        alt={school.name + " logo"} />
+                        </Link>
                     </td>
                     <td>
                       <Link to={"/school/" + school.id}>{school.name}</Link>

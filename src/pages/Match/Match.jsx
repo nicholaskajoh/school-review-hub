@@ -15,16 +15,17 @@ class Match extends Component {
       school2_id: '',
       hasSelectedSchools: false,
       isLoaded: false,
+      errorLoading: false,
       errors: []
     };
     this.componentDidMount = this.componentDidMount.bind(this);
   }
   componentDidMount() {
     this.getSchools();
+    window.scrollTo(0, 0);
   }
 
   async getSchools() {
-    this.setState({ schoolsHaveLoaded: false });
     try
     {
       const res = await this.api.get('schools-list');
@@ -33,7 +34,7 @@ class Match extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e), isLoaded:false });
+      this.setState({ errors: errors_to_array(e), isLoaded:false, errorLoading:true });
       toast.error(`${this.state.errors}`);
     }
   }
@@ -131,17 +132,29 @@ class Match extends Component {
         </form>
       </div>
     </div>
-    }
-    else {
+    } 
+    else if(this.state.errorLoading)
+    (
       rendering =
         <div title="Reload" className="has-text-centered">
           <br />
           <br />
           <br />
           <br />
-          <button className="reload-btn" onClick={this.componentDidMount}>
-            <i className="fa fa-redo-alt fa-2x" />
-          </button>
+          {/* <button className="reload-btn" onClick={this.componentDidMount}> */}
+          <i className="fa fa-redo-alt fa-2x" />
+          {/* </button> */}
+        </div>
+    )
+    else 
+    {
+      rendering =
+        <div className="has-text-centered">
+          <br />
+          <br />
+          <br />
+          <br />
+          <i className="fa fa-spinner fa-spin fa-2x" />
         </div>
     }
     if (this.state.hasSelectedSchools) {

@@ -25,6 +25,7 @@ class Reports extends Component {
 
   componentDidMount() {
     this.getReports(this.props.schoolId, 1);
+    window.scrollTo(0, 0);
   }
 
   async getReports(id, page) {
