@@ -47,7 +47,7 @@ class Report extends Component {
   componentDidMount() {
     const reportId = this.props.match.params.id;
     if (!isNaN(Number(reportId))) {
-      this.getReview(reportId);
+      this.getReport(reportId);
       this.getComments(reportId);
       this.checkUpvote(reportId);
       this.checkOwner(reportId);

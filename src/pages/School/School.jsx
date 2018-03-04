@@ -6,6 +6,7 @@ import Reports from './Reports';
 import './School.css';
 import { toast, ToastContainer } from 'react-toastify';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
+import ObjectNotFound from './../ObjectNotFound/ObjectNotFound';
 
 
 class School extends Component {
@@ -18,7 +19,8 @@ class School extends Component {
       numLowerRatedSchools: 0,
       isLoaded: false,
       toastId: null,
-      errors: []
+      errors: [],
+      notFound: false
     };
     this.toastId = toast();
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -32,9 +34,14 @@ class School extends Component {
 
   componentDidMount() {
     const schoolId = this.props.match.params.id;
-    this.getSchool(schoolId);
-    this.getLowerRatedSchools(schoolId);
-    window.scrollTo(0, 0);
+    if (!isNaN(Number(schoolId))) {
+      this.getSchool(schoolId);
+      this.getLowerRatedSchools(schoolId);
+      window.scrollTo(0, 0);
+    }
+    else {
+      this.setState({ notFound: true });
+    }
   }
 
   async getSchool(id) {
@@ -46,7 +53,11 @@ class School extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      let errors = errors_to_array(e);
+      this.setState({ errors: errors, isLoaded: false });
+      if (errors === 404) {
+        this.setState({ notFound: true });
+      }
       if (toast.isActive(this.state.toastId))
       {
         toast.update(
@@ -100,6 +111,11 @@ class School extends Component {
   }
 
   render() {
+    if (this.state.notFound)
+    {
+      return <ObjectNotFound object_model="School" />;
+    }
+
     let rendering;
     if (this.state.isLoaded)
     {
