@@ -21,24 +21,15 @@ def paginate(input_list, page, results_per_page=10):
 class SchoolReviewsViewTestCase(TestCase):
 
     def setUp(self):
-        self.user1 = UserFactory()
-        self.user2 = UserFactory()
-        self.school = SchoolFactory(
-        name='CU',location='Ogun',logo_url='',website='covenantuniversity.edu.ng',
-        rank=1,rating=140.0,
-        )
+        self.school = SchoolFactory()
         # create 11 reviews for pagination
         for x in range(11):
-            ReviewFactory(reviewer=self.user1, school=self.school)
-
-    def test_if_school_reviews_endpoint_is_working(self):
-        url = reverse('school_reviews', kwargs={'id':self.school.pk,'page':1})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+            ReviewFactory(school=self.school)
 
     def test_if_school_reviews_endpoint_returns_review(self):
         url = reverse('school_reviews', kwargs={'id':self.school.pk,'page':1})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         reviews = Review.objects.filter(school=self.school).order_by('-updated_at')
         reviews = paginate(reviews, 1, 10)
         serialized = ReviewSerializer(reviews, many=True)
@@ -47,6 +38,7 @@ class SchoolReviewsViewTestCase(TestCase):
     def test_if_school_reviews_endpoint_returns_correct_next_page(self):
         url = reverse('school_reviews', kwargs={'id':self.school.pk,'page':2})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         reviews = Review.objects.filter(school=self.school).order_by('-updated_at')
         reviews = paginate(reviews, 2, 10)
         serialized = ReviewSerializer(reviews, many=True)
@@ -56,6 +48,7 @@ class SchoolReviewsViewTestCase(TestCase):
         # set page to a page higher than number of pages
         url = reverse('school_reviews', kwargs={'id':self.school.pk,'page':10})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         reviews = Review.objects.filter(school=self.school).order_by('-updated_at')
         # get result of the last page
         reviews = paginate(reviews, 2, 10)
@@ -66,6 +59,7 @@ class SchoolReviewsViewTestCase(TestCase):
     def test_if_school_reviews_endpoint_has_has_previous_and_has_next_keys(self):
         url = reverse('school_reviews', kwargs={'id':self.school.pk,'page':1})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         # page one should have 'X-Has-Next' but 'X-Has-Previous'
         self.assertEqual(response['X-Has-Next'], 'True')
         self.assertEqual(response['X-Has-Previous'], 'False')
@@ -79,23 +73,15 @@ class SchoolReviewsViewTestCase(TestCase):
 class SchoolReportsViewTestCase(TestCase):
 
     def setUp(self):
-        self.user = UserFactory()
-        self.school = SchoolFactory(
-        name='CU',location='Ogun',logo_url='',website='covenantuniversity.edu.ng',
-        rank=1,rating=140.0,
-        )
+        self.school = SchoolFactory()
         # create 11 reports for pagination
         for x in range(11):
-            ReportFactory(reporter=self.user, school=self.school)
-
-    def test_if_school_reports_endpoint_is_working(self):
-        url = reverse('school_reports', kwargs={'id':self.school.pk,'page':1})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+            ReportFactory(school=self.school)
 
     def test_if_school_reports_endpoint_returns_report(self):
         url = reverse('school_reports', kwargs={'id':self.school.pk,'page':1})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         reports = Report.objects.filter(school=self.school).order_by('-updated_at')
         reports = paginate(reports, 1, 10)
         serialized = ReportSerializer(reports, many=True)
@@ -104,6 +90,7 @@ class SchoolReportsViewTestCase(TestCase):
     def test_if_school_reports_endpoint_returns_correct_next_page(self):
         url = reverse('school_reports', kwargs={'id':self.school.pk,'page':2})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         reports = Report.objects.filter(school=self.school).order_by('-updated_at')
         reports = paginate(reports, 2, 10)
         serialized = ReportSerializer(reports, many=True)
@@ -113,6 +100,7 @@ class SchoolReportsViewTestCase(TestCase):
         # set page to a page higher than number of pages
         url = reverse('school_reports', kwargs={'id':self.school.pk,'page':10})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         reports = Report.objects.filter(school=self.school).order_by('-updated_at')
         # get result of the last page
         reports = paginate(reports, 2, 10)
@@ -123,6 +111,7 @@ class SchoolReportsViewTestCase(TestCase):
     def test_if_school_reports_endpoint_has_has_previous_and_has_next_keys(self):
         url = reverse('school_reports', kwargs={'id':self.school.pk,'page':1})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         # page one should have none of these 'X-Has-Next', 'X-Has-Previous'
         # since it has
         self.assertEqual(response['X-Has-Next'], 'True')
@@ -143,14 +132,10 @@ class SchoolViewTestCase(TestCase):
           rank=1,rating=140.0,
         )
 
-    def test_if_school_endpoint_is_working(self):
-        url = reverse('school', kwargs={'id':self.school.pk})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-
     def test_if_school_endpoint_returns_school(self):
         url = reverse('school', kwargs={'id':self.school.pk})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         serialized = SchoolSerializer(self.school)
         self.assertEqual(response.data, serialized.data)
 
@@ -177,14 +162,10 @@ class SchoolsListViewTestCase(TestCase):
           rank=3,rating=120.0,
         )
 
-    def test_if_school_list_endpoint_is_working(self):
-        url = reverse('schools_list')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-
     def test_if_school_list_endpoint_returns_all_schools(self):
         url = reverse('schools_list')
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         schools = School.objects.all()
         serialized = SchoolsListSerializer(schools, many=True)
         self.assertEqual(len(response.data), schools.count())
@@ -193,6 +174,7 @@ class SchoolsListViewTestCase(TestCase):
     def test_if_school_list_contains_only_id_and_data(self):
         url = reverse('schools_list')
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         for school in response.data:
             # test number of ordered dict it has, it should be 2 i.e ('id', ), ('name', '')
             self.assertEqual(school.__len__(), 2)
@@ -234,14 +216,10 @@ class TopSchoolsViewTestCase(TestCase):
           rank=7,rating=40.0,
         )
 
-    def test_if_top_schools_endpoint_is_working(self):
-        url = reverse('top_schools')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-
     def test_if_top_schools_endpoint_returns_5_top_schools(self):
         url = reverse('top_schools')
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         schools = School.objects.all().order_by('rank')[:5]
         serialized = SchoolSerializer(schools, many=True)
 
@@ -251,6 +229,7 @@ class TopSchoolsViewTestCase(TestCase):
     def test_if_top_schools_ranks_correctly(self):
         url = reverse('top_schools')
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         current_top = response.data[0]
         for top_school in response.data:
             self.assertTrue(top_school['rank'] >= current_top['rank'])
@@ -283,14 +262,10 @@ class SRHIndexViewTestCase(TestCase):
         for x in range(20):
             SchoolFactory()
 
-    def test_if_srh_index_endpoint_is_working(self):
-        url = reverse('srh_index', kwargs={'page':1})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-
     def test_if_srh_index_ranks_schools_correctly(self):
         url = reverse('srh_index', kwargs={'page':1})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         current = response.data[0]
         for school in response.data:
             self.assertTrue(school['rank'] >= current['rank'])
@@ -298,6 +273,7 @@ class SRHIndexViewTestCase(TestCase):
     def test_if_srh_index_returns_20_schools_on_page_one(self):
         url = reverse('srh_index', kwargs={'page':1})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         schools = School.objects.all().order_by('rank')
         schools = paginate(schools, 1, 20)
         serialized = SchoolSerializer(schools, many=True)
@@ -306,6 +282,7 @@ class SRHIndexViewTestCase(TestCase):
     def test_if_srh_index_returns_remaining_5_schools_on_page_two(self):
         url = reverse('srh_index', kwargs={'page':2})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         schools = School.objects.all().order_by('rank')
         schools = paginate(schools, 2, 20)
         serialized = SchoolSerializer(schools, many=True)
@@ -315,6 +292,7 @@ class SRHIndexViewTestCase(TestCase):
         # set page to a page higher than number of pages
         url = reverse('srh_index', kwargs={'page':10})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         schools = School.objects.all().order_by('rank')
         # get result of the last page
         schools = paginate(schools, 2, 20)
@@ -325,6 +303,7 @@ class SRHIndexViewTestCase(TestCase):
     def test_if_srh_index_endpoint_has_has_previous_and_has_next_keys(self):
         url = reverse('srh_index', kwargs={'page':1})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
         # page one should have 'X-Has-Next' but 'X-Has-Previous'
         self.assertEqual(response['X-Has-Next'], 'True')
         self.assertEqual(response['X-Has-Previous'], 'False')

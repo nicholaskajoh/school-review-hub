@@ -17,8 +17,8 @@ class UserFactory(factory.django.DjangoModelFactory):
 class SchoolFactory(factory.django.DjangoModelFactory):
     name = factory.Faker('name')
     description = factory.Faker('text')
-    location = '{}, {}'.format(factory.Faker('city'), factory.Faker('state'))
-    logo_url = '{}{}'.format(factory.Faker('domain_name'), factory.Faker('file_path'))
+    location = factory.Faker('city')
+    logo_url = factory.Faker('domain_name')
     website = factory.Faker('domain_name')
     rating = float(randint(10, 200))
     rank = randint(1, 30)
@@ -55,13 +55,15 @@ class ComparisonFactory(factory.django.DjangoModelFactory):
 
 
 class CommentFactory(factory.django.DjangoModelFactory):
-    ENTITY_CHOICES = (
-        ('review', 'Review'),
-        ('report', 'Report'),
-    )
+    # REVIEW = 'review'
+    # REPORT = 'report'
+    # ENTITY_CHOICES = (
+    #     (REVIEW, 'Review'),
+    #     (REPORT, 'Report'),
+    # )
     # entity = models.CharField(max_length=15, choices=ENTITY_CHOICES)
     # entity_id = models.IntegerField()
-    content = factory.Faker('text')
+    comment = factory.Faker('text')
     commenter = factory.SubFactory(UserFactory)
 
     class Meta:
@@ -79,11 +81,14 @@ class ReportFactory(factory.django.DjangoModelFactory):
 
 class UpvoteFactory(factory.django.DjangoModelFactory):
     upvoter = factory.SubFactory(UserFactory)
-    ENTITY_CHOICES = (
-        ('review', 'Review'),
-        ('report', 'Report'),
-        ('comment', 'Comment'),
-    )
+    # REVIEW = 'review'
+    # REPORT = 'report'
+    # COMMENT = 'comment'
+    # ENTITY_CHOICES = (
+    #     (REVIEW, 'Review'),
+    #     (REPORT, 'Report'),
+    #     (COMMENT, 'Comment'),
+    # )
     # entity_id
     # entity = models.CharField(max_length=15, choices=ENTITY_CHOICES)
 

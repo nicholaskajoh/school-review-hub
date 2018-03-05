@@ -101,3 +101,20 @@ class Upvote(models.Model):
     entity_id = models.IntegerField()
     upvoter = models.ForeignKey(User, related_name='upvoter', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        entity = self.entity
+        cls = Review
+        if entity == Upvote.REPORT:
+            cls = Report
+        elif entity == Upvote.COMMENT:
+            cls = Comment
+        entity_obj = cls.objects.get(pk=self.entity_id)
+        if cls == Comment:
+            if len(entity_obj.comment ) > 10:
+                return '{} upvotes {}: \'{}...\''.format(self.upvoter.username, entity, entity_obj.comment[:10])
+            return '{} upvotes {}: \'{}\''.format(self.upvoter.username, entity, entity_obj.comment)
+        
+        if len(entity_obj.content ) > 10:
+            return '{} upvotes {}: \'{}...\''.format(self.upvoter.username, entity, entity_obj.content[:10])
+        return '{} upvotes {}: \'{}\''.format(self.upvoter.username, entity, entity_obj.content)
