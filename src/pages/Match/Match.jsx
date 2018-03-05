@@ -15,7 +15,6 @@ class Match extends Component {
       school2_id: '',
       hasSelectedSchools: false,
       isLoaded: false,
-      errorLoading: false,
       errors: []
     };
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -30,7 +29,7 @@ class Match extends Component {
     {
       const res = await this.api.get('schools-list');
       const schools = res.data;
-      this.setState({ schools: schools, isLoaded:true });
+      this.setState({ schools: schools, isLoaded:true, errors:[] });
     }
     catch (e)
     {
@@ -133,30 +132,33 @@ class Match extends Component {
       </div>
     </div>
     } 
-    else if(this.state.errorLoading)
-    (
+    else
+    {
       rendering =
         <div title="Reload" className="has-text-centered">
           <br />
           <br />
           <br />
           <br />
-          {/* <button className="reload-btn" onClick={this.componentDidMount}> */}
+          <button className="reload-btn" onClick={this.componentDidMount}>
           <i className="fa fa-redo-alt fa-2x" />
-          {/* </button> */}
-        </div>
-    )
-    else 
-    {
-      rendering =
-        <div className="has-text-centered">
-          <br />
-          <br />
-          <br />
-          <br />
-          <i className="fa fa-spinner fa-spin fa-2x" />
+          </button>
         </div>
     }
+    // else 
+    // {
+    //   rendering = (
+    //       <div className="has-text-centered">
+    //       <br />
+    //       <br />
+    //       <br />
+    //       <br />
+    //     <button className="reload-btn">
+    //       <i className="fa fa-spinner fa-spin fa-2x" />
+    //     </button>
+    //     </div>
+    //     )
+    // }
     if (this.state.hasSelectedSchools) {
       return (
         <Redirect
