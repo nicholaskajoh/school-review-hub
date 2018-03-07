@@ -12,9 +12,9 @@ const Footer = () => (
     <div className="container">
       <nav className="level is-mobile">
         <div className="level-left">
-          <div>
+          <small><em>
             &copy; SchoolReviewHub, {new Date().getFullYear()}. Built with
-              <i className="fa fa-heart has-text-danger" /> by{" "}
+              &nbsp;<i className="fa fa-heart has-text-danger" /> by{" "}
             <a
               href="https://twitter.com/nicholaskajoh"
               className="has-text-warning"
@@ -34,41 +34,41 @@ const Footer = () => (
             >
               Awo{" "}
             </a>.
+            </em></small>
+        </div>
+
+            <div className="level-left">
+              <small><em>Share via: &nbsp;&nbsp;</em></small>
+          <Link
+                target="_blank"
+                to={text}
+                data-size="large">
+
+                <i className="fab fa-facebook-f fa-2x  footer-glyph"></i>
+              </Link>
+              &nbsp;&nbsp;
+    
+          <Link
+                target="_blank"
+                to={text}
+                data-size="large">
+
+                <i className="fab fa-twitter fa-2x  footer-glyph"></i>
+              </Link>
+              &nbsp;&nbsp;
+    
+          <Link
+                target="_blank"
+                to={text}
+                data-size="large">
+
+                <i className="fab fa-instagram fa-2x  footer-glyph"></i>
+              </Link>
             </div>
-        </div>
-
-        <div className="level-left">
-          Share via: &nbsp;&nbsp;
-          <Link
-            target="_blank"
-            to={text}
-            data-size="large">
-
-            <i className="fab fa-facebook-f fa-2x  footer-glyph"></i>
-          </Link>
-          &nbsp;&nbsp;
-
-          <Link
-            target="_blank"
-            to={text}
-            data-size="large">
-
-            <i className="fab fa-twitter fa-2x  footer-glyph"></i>
-          </Link>
-          &nbsp;&nbsp;
-
-          <Link
-            target="_blank"
-            to={text}
-            data-size="large">
-
-            <i className="fab fa-instagram fa-2x  footer-glyph"></i>
-          </Link>
-        </div>
       </nav>
 
-    </div>
+        </div>
   </footer >
-);
-
-export default Footer;
+      );
+      
+      export default Footer;
