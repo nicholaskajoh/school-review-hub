@@ -1,8 +1,9 @@
 import factory
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-from random import randint
+from faker import Faker
 
+fake = Faker()
 class UserFactory(factory.django.DjangoModelFactory):
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
@@ -15,13 +16,13 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 
 class SchoolFactory(factory.django.DjangoModelFactory):
-    name = factory.Faker('name')
+    name = factory.Faker('company')
     description = factory.Faker('text')
-    location = factory.Faker('city')
-    logo_url = factory.Faker('domain_name')
-    website = factory.Faker('domain_name')
-    rating = float(randint(10, 200))
-    rank = randint(1, 30)
+    location = '{}, {}'.format(fake.city(), fake.state())
+    logo_url = factory.Faker('image_url')
+    website = factory.Faker('url')
+    # rating = fake.random_int(10, 200)
+    # rank = fake.random_int(1, 30)
 
     class Meta:
         model = 'api.School'

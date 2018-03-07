@@ -31,7 +31,8 @@ class Report extends Component {
       commenting: '',
       toastId: null,
       errors: [],
-      notFound: false
+      notFound: false,
+      key: 0
     };
     this.componentDidMount = this.componentDidMount.bind(this);
   }
@@ -232,6 +233,7 @@ class Report extends Component {
   handleUpvote = event => {
     this.setState({ upvoting: 'is-loading' });
     this.upVote(this.state);
+    this.setState({ key: Math.random() });
   };
 
   cancelEdit = () => {
@@ -369,15 +371,15 @@ class Report extends Component {
 
                         <br />
 
-                        <div className="field is-grouped is-grouped-left">
+                        <div className="field is-grouped is-grouped-centered">
                           <p className="control">
                             <button type="submit" className={"button is-success is-small " + this.state.submitting_edit}>
-                              <i class="far fa-check-circle"></i>&nbsp;Submit
+                              <i className="far fa-check-circle"></i>&nbsp;Submit
                             </button>
                           </p>
                           <p className="control">
                             <button onClick={this.cancelEdit} className="button is-small is-warning">
-                              <i class="fas fa-ban"></i>&nbsp;Cancel
+                              <i className="fas fa-ban"></i>&nbsp;Cancel
                             </button>
                           </p>
                         </div>
@@ -397,13 +399,13 @@ class Report extends Component {
                     <div className="level-right">
                       <div className="level-item has-text-dark">
                         {this.state.upvoted ? (
-                          <button
+                          <button title="downvote this report"
                             className={"button is-default is-medium" + this.state.upvoting}
                             onClick={this.handleUpvote} key={this.state.key}>
                             <i className="fa fa-thumbs-down fa has-text-danger"></i>
                           </button>
                         ) : (
-                            <button className={"button is-default is-medium " + this.state.upvoting}
+                          <button title="upvote this report" className={"button is-default is-medium " + this.state.upvoting}
                               onClick={this.handleUpvote} key={this.state.key}>
                               <i className="fa fa-thumbs-up fa has-text-success"></i>
                             </button>
@@ -417,7 +419,7 @@ class Report extends Component {
                             <button title="Edit this report"
                               className={"button is-default is-medium " + this.state.editing}
                               onClick={this.handleEdit}>
-                              <i class="far fa-edit"></i>
+                              <i className="far fa-edit"></i>
                             </button>
                           </div>
                         ) : (
@@ -477,7 +479,7 @@ class Report extends Component {
               <div className="gap-medium"></div>
 
               <h3 className="title">Comments
-                {/* {this.state.report.comments_count} */}
+                ({this.state.report.comments_count})
               </h3>
 
               <hr />
@@ -502,7 +504,7 @@ class Report extends Component {
               </div>
             ) : (
                 <div className="has-text-centered">
-                  <i class="fab fa-pied-piper-alt fa-7x"></i>
+                  <i className="fab fa-pied-piper-alt fa-7x"></i>
                   <br /><br />
 
                   <p>
