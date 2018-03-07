@@ -9,3 +9,5 @@ factory-boy==2.9.2
 pdbpp
 django-extensions==1.9.9
 ipython==6.2.1
+coverage
+django_nose
