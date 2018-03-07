@@ -2,21 +2,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import TimeAgo from 'react-time-ago';
 
-
 const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
   let rendering;
   if (isLoaded) {
-
-    rendering =
+    rendering = (
       <div className="columns is-multiline">
-
         {reviews.map(review => (
-        <div key={'top_review ' + review.id} className="column is-4">
+          <div key={'top_review ' + review.id} className="column is-4">
 
             <div className="box">
               <article className="media">
                 <div className="media-content">
-
                   <div className="has-text-centered">
                     <Link
                       className="has-text-black-ter"
@@ -38,7 +34,11 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
                       </strong>
                       <br /><br />
 
-                      <small><em><Link to={"/review/" + review.id}>Read more</Link></em></small>
+                      <small>
+                        <em>
+                          <Link to={'/review/' + review.id}>Read more</Link>
+                        </em>
+                      </small>
                     </p>
                   </div>
                   <hr />
@@ -49,7 +49,6 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
                           <i className="fa fa-thumbs-up"></i></span>
                         &nbsp;{review.upvotes}
                       </a>
-
                       &nbsp;&nbsp;
                           <a className="level-item has-text-dark" title="comments">
                         <span className="icon is-small has-text-warning"><i className="fas fa-comment"></i></span>
@@ -57,17 +56,18 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
                       </a>
                     </div>
                     <div className="level-right">
-                      <small className="media-right"><TimeAgo>{new Date(review.created_at)}</TimeAgo></small>
+                      <small className="media-right">
+                        <TimeAgo>{new Date(review.created_at)}</TimeAgo>
+                      </small>
                     </div>
                   </nav>
                 </div>
               </article>
             </div>
-
           </div>
         ))}
-
       </div>
+    );
   } else {
     rendering = (
       <div title="Reload" className="has-text-centered">
@@ -76,7 +76,7 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
           disabled={errorLoading === false}
           onClick={reload}
         >
-          <i className={"fa " + spinner + " fa-2x"} />
+          <i className={'fa ' + spinner + ' fa-2x'} />
         </button>
       </div>
     );
