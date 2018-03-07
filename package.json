@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "REACT_APP_API_DOMAIN_NAME=https://schoolreviewhub.herokuapp.com react-scripts build",
+    "build": "GOOGLE_MAP_API_KEY=$(printenv GOOGLE_MAP_API_KEY) REACT_APP_API_DOMAIN_NAME=https://schoolreviewhub.herokuapp.com react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "postinstall": "npm run build"
