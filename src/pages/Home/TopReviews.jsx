@@ -8,7 +8,7 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
     rendering = (
       <div className="columns is-multiline">
         {reviews.map(review => (
-          <div key={review.id} className="column is-4">
+          <div key={'top_reviews ' + review.id} className="column is-4">
             <div className="box">
               <article className="media">
                 <div className="media-content">

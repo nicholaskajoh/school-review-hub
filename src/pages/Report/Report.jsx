@@ -394,41 +394,39 @@ class Report extends Component {
                     )}
 
                 </div>
-                <div className="card-footer">
-                  <nav className="level">
-                    <div className="level-right">
-                      <div className="level-item has-text-dark">
-                        {this.state.upvoted ? (
-                          <button title="downvote this report"
-                            className={"button is-default is-medium" + this.state.upvoting}
-                            onClick={this.handleUpvote} key={this.state.key}>
-                            <i className="fa fa-thumbs-down fa has-text-danger"></i>
-                          </button>
-                        ) : (
-                          <button title="upvote this report" className={"button is-default is-medium " + this.state.upvoting}
-                              onClick={this.handleUpvote} key={this.state.key}>
-                              <i className="fa fa-thumbs-up fa has-text-success"></i>
-                            </button>
-                          )}
-                        &nbsp;{this.state.report.upvotes}
-                      </div>
-
-                      <div className="level-item has-text-centered has-text-dark">
-                        {this.state.own_report ? (
-                          <div className="card-footer-item">
-                            <button title="Edit this report"
-                              className={"button is-default is-medium " + this.state.editing}
-                              onClick={this.handleEdit}>
-                              <i className="far fa-edit"></i>
-                            </button>
-                          </div>
-                        ) : (
-                            ''
-                          )}
-                      </div>
-                    </div>
-                  </nav>
+              <nav className="level">
+                <div className="level-left">
+                  <div className="level-item has-text-dark">
+                    {this.state.upvoted ? (
+                      <button
+                        className={"button is-default is-medium" + this.state.upvoting}
+                        onClick={this.handleUpvote} key={this.state.key}>
+                        <i className="fa fa-thumbs-down fa has-text-danger"></i>
+                      </button>
+                    ) : (
+                        <button className={"button is-default is-medium " + this.state.upvoting}
+                          onClick={this.handleUpvote} key={this.state.key}>
+                          <i className="fa fa-thumbs-up fa has-text-success"></i>
+                        </button>
+                      )}
+                    &nbsp;{this.state.report.upvotes}
+                  </div>
                 </div>
+
+                {this.state.own_report ? (
+                  <div className="level-right">
+                    <div className="level-item has-text-dark">
+                      <button title="Edit this report"
+                        className={"button is-default is-medium " + this.state.editing}
+                        onClick={this.handleEdit}>
+                        <i className="far fa-edit"></i>
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                    ''
+                  )}
+              </nav>
               </div>
             </div>
 
@@ -441,7 +439,7 @@ class Report extends Component {
               <hr />
 
               <p>
-                What's your opinion? Do you feel this review is rightly
+                What's your opinion? Do you feel this report is rightly
               spoken? Why not let others see the other side of the coin
               through your perspective.
               </p>
