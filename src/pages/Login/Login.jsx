@@ -5,7 +5,6 @@ import './Login.css';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
 import ToastError from './../ToastError/ToastError';
 
-
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -31,18 +30,15 @@ class Login extends React.Component {
   };
 
   async login(username, password) {
-    try
-    {
-      const res = await this.api.post('token-auth', {username, password});
+    try {
+      const res = await this.api.post('token-auth', { username, password });
       localStorage.setItem('authToken', res.data.token);
       toast.info('Logging in...');
       let func = this.props.history;
-      window.setTimeout(function(){
+      window.setTimeout(function() {
         func.push('/home');
       }, 3500);
-    }
-    catch (e)
-    {
+    } catch (e) {
       this.setState({ errors: errors_to_array(e), clicked: '' });
       toast.error(<ToastError errors={errors_to_array(e)} />);
     }
@@ -93,14 +89,18 @@ class Login extends React.Component {
                     </div>
                   </div>
                   {this.state.errors.map((error, index) => (
-                    <p key={'login_error ' + index} className="help is-danger is-size-5">
+                    <p
+                      key={'login_error ' + index}
+                      className="help is-danger is-size-5"
+                    >
                       {error}
                     </p>
                   ))}
                   <button
                     type="submit"
                     className={
-                      "button is-fullwidth is-info is-large " + this.state.clicked
+                      'button is-fullwidth is-info is-large ' +
+                      this.state.clicked
                     }
                     disabled={
                       this.state.username === '' || this.state.password === ''
@@ -117,7 +117,7 @@ class Login extends React.Component {
             </div>
           </div>
         </div>
-        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
+        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER} />
       </section>
     );
   }
