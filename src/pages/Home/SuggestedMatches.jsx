@@ -10,13 +10,13 @@ const SuggestedMatches = ({
 }) => {
   let rendering;
   if (isLoaded) {
-    rendering =
+    rendering = (
       <div className="columns is-multiline">
 
         {matches.map((match, index) => (
-          <div className="column is-4">
+        <div key={'match ' + index} className="column is-4">
 
-            <div key={'match ' + index} className="box has-text-centered">
+            <div className="box has-text-centered">
               <div>
                 <h4 className="subtitle">{match.school1}</h4>
                 <br />
@@ -38,7 +38,7 @@ const SuggestedMatches = ({
         ))}
 
       </div>
-
+    )
   } else {
     rendering = (
       <div title="Reload" className="has-text-centered">

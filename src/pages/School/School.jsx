@@ -21,9 +21,8 @@ class School extends Component {
       toastId: null,
       errors: [],
       notFound: false,
-      googleMapAPIKey: process.env.GOOGLE_MAP_API_KEY
     };
-    this.toastId = toast();
+    this.googleMapAPIKey = process.env.GOOGLE_MAP_API_KEY;
     this.componentDidMount = this.componentDidMount.bind(this);
   }
 
@@ -113,7 +112,7 @@ class School extends Component {
     if (this.state.isLoaded) {
       rendering =
         <div>
-          <Heading school={this.state.school} />
+        <Heading school={this.state.school} google_api_key={this.googleMapAPIKey} />
 
           <Highlights
             school={this.state.school}

@@ -74,7 +74,7 @@ class Reviews extends Component {
         <div className="section">
           <div className="columns is-multiline">
             {this.state.reviews.map(review => (
-              <div className="column is-4">
+            <div className="column is-4" key={'school_review ' + review.id}>
 
                 <div className="box">
                   <article className="media">
@@ -83,29 +83,33 @@ class Reviews extends Component {
                       <div className="content">
                         <p>
                           <strong>Anonymous</strong> <small>@anonymous</small>
-
+                        </p>
+                        <p>
+                          <strong>
+                            "{review.content.substring(0, 150).trim() +
+                              (review.content.length > 150 ?
+                                ('...') : ('')
+                              )
+                            }"
+                        </strong>
                           <br />
-                          {review.content.substr(0, 280)}
-
-                          <br /><br />
-
                           <small><em><Link to={"/review/" + review.id}>Read more</Link></em></small>
                         </p>
                       </div>
-
                       <hr />
-
                       <nav className="level is-mobile">
                         <div className="level-left">
                           <a className="level-item has-text-dark">
-                            <span className="icon is-small has-text-success">
-                              <i class="fa fa-thumbs-up"></i></span>
+                            <span className="icon is-small has-text-success" title="upvotes">
+                              <i className="fa fa-thumbs-up"></i></span>
                             &nbsp;{review.upvotes}
                           </a>
 
                           &nbsp;&nbsp;
                           <a className="level-item has-text-dark">
-                            <span className="icon is-small has-text-warning"><i class="fas fa-comment"></i></span>
+                          <span className="icon is-small has-text-warning" title="comments">
+                            <i className="fas fa-comment"></i>
+                            </span>
                             &nbsp;{review.comments_count}
                           </a>
                         </div>
@@ -124,7 +128,7 @@ class Reviews extends Component {
           <div>
             {this.state.reviews.length === 0 ? (
               <div className="has-text-centered">
-                <i class="fas fa-file-alt has-text-light fa-5x"></i>
+                <i className="fas fa-file-alt has-text-light fa-5x"></i>
                 <br /><br />
                 <h1 className="subtitle">No reviews yet!</h1>
               </div>
@@ -137,14 +141,14 @@ class Reviews extends Component {
                       onClick={this.prevPage}
                       disabled={!this.hasPrevPage}
                     >
-                      <i class="fas fa-arrow-left"></i>&nbsp;Previous
+                      <i className="fas fa-arrow-left"></i>&nbsp;Previous
                   </button>
                     <button
                       className="button is-default"
                       onClick={this.nextPage}
                       disabled={!this.hasNextPage}
                     >
-                      Next &nbsp;&nbsp;<i class="fas fa-arrow-right"></i>
+                      Next &nbsp;&nbsp;<i className="fas fa-arrow-right"></i>
                     </button>
                   </nav>
                 </div>

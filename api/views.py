@@ -138,20 +138,29 @@ class SuggestedMatchesView(APIView):
 
     def get(self, request):
         matches = []
-        schools = School.objects.all()
+        user_comparisons = request.user.comparisons.all()
+        user_schools = []
+        for x in user_comparisons:
+            user_schools += x.schools()
+        user_schools = set(user_schools)
+        # exlude schools that the user has already compared
+        schools = School.objects.exclude(pk__in=user_schools)\
+            .order_by('-id').values_list('id', 'name')
+        selected_schools = []
         for school1 in schools:
-            for school2 in schools.order_by('-id'):
-                # school1 and school2 must not have been compared (rated) by the current user.
-                if not Comparison.objects.filter(Q(school1=school1, school2=school2) | Q(school1=school2, school2=school1), comparer=request.user).exists():
-                    # school1 and school2 must not be the same.
-                    if not school1 == school2:
-                        # Avoid duplicates i.e school1 vs school2 and school2 vs school1
-                        match_a = {'school1_id': school1.id, 'school2_id': school2.id, 'school1': school1.name, 'school2': school2.name}
-                        match_b = {'school1_id': school2.id, 'school2_id': school1.id, 'school1': school2.name, 'school2': school1.name}
-                        if match_a not in matches and match_b not in matches:
-                            matches.append(match_a)
+            for school2 in set(schools):
+                if len(matches) == 5:
+                        break
+                if not school1[0] == school2[0] and not school1[0] in selected_schools and not school2[0] in selected_schools:
+                    # Avoid duplicates i.e school1 vs school2 and school2 vs school1
+                    match_a = {'school1_id': school1[0], 'school2_id': school2[0], 'school1': school1[1], 'school2': school2[1]}
+                    match_b = {'school1_id': school2[0], 'school2_id': school1[0], 'school1': school2[1], 'school2': school1[1]}                
+                    selected_schools.append(school1[0])
+                    selected_schools.append(school2[0])
+                    if match_a not in matches and match_b not in matches:
+                        matches.append(match_a)
         shuffle(matches)
-        return Response(matches[:5])
+        return Response(matches)
 
 
 class RatingView(APIView):

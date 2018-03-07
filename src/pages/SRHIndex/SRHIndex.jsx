@@ -58,12 +58,14 @@ class SRHIndex extends Component {
     if (this.hasPrevPage) {
       this.getSchools(this.state.page - 1);
     }
+    window.scrollTo(0, 0);
   };
 
   nextPage = () => {
     if (this.hasNextPage) {
       this.getSchools(this.state.page + 1);
     }
+    window.scrollTo(0, 0);
   };
 
   render() {

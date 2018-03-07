@@ -100,8 +100,8 @@ class ReviewForm extends Component {
                 onChange={this.handleChange}
                 required
               />
-              {this.state.errors.map(error => (
-                <p className="help is-danger is-size-5">
+              {this.state.errors.map((error, index) => (
+              <p key={'review_form_error ' + index} className="help is-danger is-size-5">
                   {error}
                 </p>
               ))}
