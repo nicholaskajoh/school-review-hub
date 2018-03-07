@@ -23,12 +23,14 @@ const Heading = (props) => (
             </div>
           </div>
           <div className="media-right">
+            <div className="is-hidden-mobile">
             <iframe title="School map" width="auto" height="auto" frameBorder="1" style={{ border: 1 }}
               src={
                 'https://www.google.com/maps/embed/v1/place?key=' + props.google_api_key + '&q='
                 + encodeURI(props.school.name)
               } allowFullScreen>
             </iframe>
+            </div>
           </div>
         </article>
       </div>
