@@ -147,8 +147,10 @@ class SuggestedMatchesView(APIView):
         schools = School.objects.exclude(pk__in=user_schools)\
             .order_by('-id').values_list('id', 'name')
         selected_schools = []
+        schools = list(schools)
+        shuffle(schools)
         for school1 in schools:
-            for school2 in set(schools):
+            for school2 in schools:
                 if len(matches) == 5:
                         break
                 if not school1[0] == school2[0] and not school1[0] in selected_schools and not school2[0] in selected_schools:
