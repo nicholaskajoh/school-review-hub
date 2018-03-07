@@ -139,7 +139,7 @@ class Profile extends Component {
 
           <div className="notification is-light">
             Your profile is private. Only you can see it!
-      </div>
+          </div>
 
           <hr />
           <br /><br />
@@ -150,10 +150,9 @@ class Profile extends Component {
           <div className="columns multiline">
 
             {this.state.ratings.map(rating => (
-              <div className="column is-4">
+            <div className="column is-4" key={'profile_rating ' + rating[0] + ' ' + rating[1]}>
 
-                <div className="box has-text-centered"
-                  key={'profile_rating ' + rating[0] + ' ' + rating[1]}>
+                <div className="box has-text-centered">
 
                   <h3 className="subtitle">
                     <Link
@@ -174,7 +173,7 @@ class Profile extends Component {
                   <Link
                     className="button is-info is-small"
                     to={"/rate/" + rating[0] + "/" + rating[1]}>
-                    <i class="far fa-check-circle"></i>
+                    <i className="far fa-check-circle"></i>
 
                     Update
                   </Link>
@@ -182,7 +181,7 @@ class Profile extends Component {
                   <button
                     className="button is-warning is-small"
                     onClick={() => this.deleteRating(rating[0], rating[1])}>
-                    <i class="far fa-trash-alt"></i>
+                    <i className="far fa-trash-alt"></i>
 
                     &nbsp;&nbsp;Delete
                   </button>

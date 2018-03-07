@@ -31,7 +31,8 @@ class Review extends Component {
       commenting: '',
       toastId: null,
       errors: [],
-      notFound: false
+      notFound: false,
+      key: 0
     };
     this.componentDidMount = this.componentDidMount.bind(this);
   }
@@ -371,15 +372,15 @@ class Review extends Component {
 
                         <br />
 
-                        <div className="field is-grouped is-grouped-left">
+                        <div className="field is-grouped is-grouped-centered">
                           <p className="control">
                             <button type="submit" className={"button is-success is-small " + this.state.submitting_edit}>
-                              <i class="far fa-check-circle"></i>&nbsp;Submit
+                              <i className="far fa-check-circle"></i>&nbsp;Submit
                           </button>
                           </p>
                           <p className="control">
                             <button onClick={this.cancelEdit} className="button is-small is-warning">
-                              <i class="fas fa-ban"></i>&nbsp;Cancel
+                              <i className="fas fa-ban"></i>&nbsp;Cancel
                           </button>
                           </p>
                         </div>
@@ -393,44 +394,41 @@ class Review extends Component {
                       </p>
                     )}
                 </div>
+                <hr />
+                <nav className="level">
+                  <div className="level-left">
+                    <div className="level-item has-text-dark">
+                      {this.state.upvoted ? (
+                        <button
+                          className={"button is-default is-medium" + this.state.upvoting}
+                          onClick={this.handleUpvote} key={this.state.key}>
+                          <i className="fa fa-thumbs-down fa has-text-danger"></i>
+                        </button>
+                      ) : (
+                          <button className={"button is-default is-medium " + this.state.upvoting}
+                            onClick={this.handleUpvote} key={this.state.key}>
+                            <i className="fa fa-thumbs-up fa has-text-success"></i>
+                          </button>
+                        )}
+                      &nbsp;{this.state.review.upvotes}
+                    </div>
+                  </div>
 
-                <div className="card-footer">
-
-                  <nav className="level">
+                  {this.state.own_review ? (
                     <div className="level-right">
                       <div className="level-item has-text-dark">
-                        {this.state.upvoted ? (
-                          <button
-                            className={"button is-default is-medium" + this.state.upvoting}
-                            onClick={this.handleUpvote} key={this.state.key}>
-                            <i className="fa fa-thumbs-down fa has-text-danger"></i>
-                          </button>
-                        ) : (
-                            <button className={"button is-default is-medium " + this.state.upvoting}
-                              onClick={this.handleUpvote} key={this.state.key}>
-                              <i className="fa fa-thumbs-up fa has-text-success"></i>
-                            </button>
-                          )}
-                        &nbsp;{this.state.review.upvotes}
-                      </div>
-
-                      <div className="level-item has-text-centered has-text-dark">
-                        {this.state.own_review ? (
-                          <div className="card-footer-item">
-                            <button title="Edit this review"
-                              className={"button is-default is-medium " + this.state.editing}
-                              onClick={this.handleEdit}>
-                              <i class="far fa-edit"></i>
-                            </button>
-                          </div>
-                        ) : (
-                            ''
-                          )}
+                      <button title="Edit this review"
+                        className={"button is-default is-medium " + this.state.editing}
+                        onClick={this.handleEdit}>
+                        <i className="far fa-edit"></i>
+                      </button>
                       </div>
                     </div>
+                  ) : (
+                      ''
+                    )}
                   </nav>
                 </div>
-              </div>
             </div>
 
             <div className="gap-medium"></div>
@@ -479,7 +477,7 @@ class Review extends Component {
               <div className="gap-medium"></div>
 
               <h3 className="title">Comments
-                {/* {this.state.review.comments_count} */}
+                ({this.state.review.comments_count})
               </h3>
 
               <hr />
@@ -504,7 +502,7 @@ class Review extends Component {
               </div>
             ) : (
                 <div className="has-text-centered">
-                  <i class="fab fa-pied-piper-alt fa-7x"></i>
+                  <i className="fab fa-pied-piper-alt fa-7x"></i>
                   <br /><br />
 
                   <p>

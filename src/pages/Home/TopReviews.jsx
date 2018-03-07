@@ -11,15 +11,15 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
       <div className="columns is-multiline">
 
         {reviews.map(review => (
-          <div className="column is-4">
+        <div key={'top_review ' + review.id} className="column is-4">
 
-            <div key={'top_review ' + review.id} className="box">
+            <div className="box">
               <article className="media">
                 <div className="media-content">
 
                   <div className="has-text-centered">
                     <Link
-                      className="has-text-black-ter has-text-weight-bold"
+                      className="has-text-black-ter"
                       to={"/school/" + review.school.id}>
                       {review.school.name}
                     </Link>
@@ -29,13 +29,13 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
 
                   <div className="content">
                     <p>
-                      <em>
-                        {review.content.substring(0, 150).trim() +
+                      <strong>
+                        "{review.content.substring(0, 150).trim() +
                           (review.content.length > 150 ?
                             ('...') : ('')
                           )
                         }"
-                      </em>
+                      </strong>
                       <br /><br />
 
                       <small><em><Link to={"/review/" + review.id}>Read more</Link></em></small>
@@ -44,15 +44,15 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
                   <hr />
                   <nav className="level is-mobile">
                     <div className="level-left">
-                      <a className="level-item has-text-dark">
+                      <a className="level-item has-text-dark" title="upvotes">
                         <span className="icon is-small has-text-success">
-                          <i class="fa fa-thumbs-up"></i></span>
+                          <i className="fa fa-thumbs-up"></i></span>
                         &nbsp;{review.upvotes}
                       </a>
 
                       &nbsp;&nbsp;
-                          <a className="level-item has-text-dark">
-                        <span className="icon is-small has-text-warning"><i class="fas fa-comment"></i></span>
+                          <a className="level-item has-text-dark" title="comments">
+                        <span className="icon is-small has-text-warning"><i className="fas fa-comment"></i></span>
                         &nbsp;{review.comments_count}
                       </a>
                     </div>

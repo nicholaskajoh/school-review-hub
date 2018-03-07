@@ -30,7 +30,8 @@ class ReviewAdmin(admin.ModelAdmin):
         'reviewer__last_name', 'reviewer__email', 'school__name',
         'content'
     )
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('upvotes', 'comments', 'reviewer_',
+        'school_', 'created_at', 'updated_at')
     ordering = ('-created_at',)
 
     def content_(self, obj):
@@ -63,7 +64,7 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ('commenter__username', 'commenter__first_name',
         'commenter__last_name', 'commenter__email', 'comment', 'entity'
     )
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('upvotes', 'commenter_', 'created_at', 'updated_at')
     ordering = ('-created_at',)
     
     def comment_(self, obj):
@@ -98,6 +99,8 @@ class ComparisonAdmin(admin.ModelAdmin):
         'comparer__last_name', 'comparer__email', 'criterion__description',
         'school1__name', 'school2__name', 'choice__name'
     )
+    readonly_fields = ('school1_', 'school2_', 'comparer_',
+        'criterion_',)
     ordering = ('choice', )
 
     def school1_(self, obj):
@@ -145,8 +148,9 @@ class ReportAdmin(admin.ModelAdmin):
     search_fields = ('reporter__username', 'reporter__first_name',
         'reporter__last_name', 'reporter__email', 'content', 'school__name'
     )
-    readonly_fields = ('created_at', 'updated_at')
-    ordering = ('-created_at', )
+    readonly_fields = ('upvotes', 'comments', 'reporter_',
+        'school_', 'created_at', 'updated_at')
+    ordering = ('-created_at',)
 
     def content_(self, obj):
         if len(obj.content ) > 50:
@@ -178,38 +182,37 @@ class UpvoteAdmin(admin.ModelAdmin):
     search_fields = ('upvoter__username', 'upvoter__first_name',
         'upvoter__last_name', 'upvoter__email', 'entity'
     )
-    readonly_fields = ('created_at',)
+    readonly_fields = ('content_of_entity', 'created_at')
     ordering = ('-created_at', )
 
     def content_of_entity(self, obj):
         entity = obj.entity
-        url = reverse('admin:api_{}_change'.format(entity), args=(obj.entity_id,))
-        entity = obj.entity
-        if entity == 'review':
-            review = Review.objects.get(pk=obj.entity_id)
-            if len(review.content ) > 50:
+        url = reverse('admin:api_{}_change'.format(entity), args=(obj.entity_id,)   )        
+        cls = Review
+        if entity == Upvote.REPORT:
+            cls = Report
+        if entity == Upvote.COMMENT:
+            cls = Comment
+        entity_obj = cls.objects.get(pk=obj.entity_id)
+        if cls == Comment:
+            if len(entity_obj.comment ) > 50:
                 return format_html(
                     '<a href="{}" target="_blank">{}</a>', url,
-                    review.content[:50] + '...'
+                    entity_obj.comment[:50] + '...'
                 )
-            return format_html('<a href="{}" target="_blank">{}</a>', url, review.content)
-        if entity == 'report':
-            report = Report.objects.get(pk=obj.entity_id)
-            if len(report.content ) > 50:
-                return format_html(
+            return format_html(
                     '<a href="{}" target="_blank">{}</a>', url,
-                    report.content[:50] + '...'
-                )
-            return format_html('<a href="{}" target="_blank">{}</a>', url, report.content)
-        if entity == 'comment':
-            comment = Comment.objects.get(pk=obj.entity_id)
-            if len(comment.content ) > 50:
-                return format_html(
+                    entity_obj.comment[:50] + '...'
+                )        
+        if len(entity_obj.content ) > 50:
+            return format_html(
                     '<a href="{}" target="_blank">{}</a>', url,
-                    comment.content[:50] + '...'
+                    entity_obj.content[:50] + '...'
                 )
-            return format_html('<a href="{}" target="_blank">{}</a>', url, comment.content)
-        return ''
+        return format_html(
+            '<a href="{}" target="_blank">{}</a>', url,
+            entity_obj.content + '...'
+        )
 
     def entity_(self, obj):
         entity = obj.entity

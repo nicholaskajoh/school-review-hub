@@ -11,8 +11,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class SchoolSerializer(serializers.ModelSerializer):
-    reviews_count = serializers.IntegerField(source='schools_reviewed.count', read_only=True)
-    reports_count = serializers.IntegerField(source='schools_reported.count', read_only=True)
+    reviews_count = serializers.IntegerField(source='reviews.count', read_only=True)
+    reports_count = serializers.IntegerField(source='reports.count', read_only=True)
 
     class Meta:
         model = School
@@ -53,7 +53,7 @@ class CommentSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created_at')
 
     def get_upvotes(self, obj):
-        return Upvote.objects.filter(entity='report', entity_id=obj.id).count()
+        return Upvote.objects.filter(entity='comment', entity_id=obj.id).count()
 
 
 class CriterionSerializer(serializers.ModelSerializer):
