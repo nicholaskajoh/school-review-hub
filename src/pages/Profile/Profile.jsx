@@ -147,7 +147,7 @@ class Profile extends Component {
           <h4 className="title">Ratings</h4>
 
           <hr />
-          <div className="columns multiline">
+          <div className="columns is-multiline">
 
             {this.state.ratings.map(rating => (
             <div className="column is-4" key={'profile_rating ' + rating[0] + ' ' + rating[1]}>
