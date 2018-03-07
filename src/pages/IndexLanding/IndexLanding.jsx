@@ -105,10 +105,11 @@ class IndexLanding extends Component {
                   </Link>
                 </div>
               ) : (
-                <Link className="button is-info is-success" to="/home">
-                  Get Started
+                  <Link className="button is-info is-success" to="/home">
+                    <i className="fas fa-rocket has-text-white-bis" />
+                    &nbsp;Get Started
                 </Link>
-              )}
+                )}
             </div>
           </div>
         </section>

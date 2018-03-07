@@ -20,7 +20,8 @@ class School extends Component {
       isLoaded: false,
       toastId: null,
       errors: [],
-      notFound: false
+      notFound: false,
+      googleMapAPIKey: process.env.GOOGLE_MAP_API_KEY
     };
     this.toastId = toast();
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -45,21 +46,18 @@ class School extends Component {
   }
 
   async getSchool(id) {
-    try
-    {
+    try {
       const res = await this.api.get(`school/${id}`);
       const school = res.data;
-      this.setState({ school:school });
+      this.setState({ school: school });
     }
-    catch (e)
-    {
+    catch (e) {
       let errors = errors_to_array(e);
       this.setState({ errors: errors, isLoaded: false });
       if (errors === 404) {
         this.setState({ notFound: true });
       }
-      if (toast.isActive(this.state.toastId))
-      {
+      if (toast.isActive(this.state.toastId)) {
         toast.update(
           this.state.toastId,
           {
@@ -68,31 +66,28 @@ class School extends Component {
           }
         )
       }
-      else
-      {
-        this.setState({ 
-          toastId:toast.error(`${this.state.errors}`)
+      else {
+        this.setState({
+          toastId: toast.error(`${this.state.errors}`)
         });
       }
     }
   }
 
   async getLowerRatedSchools(id) {
-    try
-    {
+    try {
       const res = await this.api.get(`rated-higher-than/${id}`);
       let lowerRatedSchools = res.data;
       const numLowerRatedSchools = lowerRatedSchools.length;
       lowerRatedSchools = lowerRatedSchools.slice(0, 3);
-      this.setState({ lowerRatedSchools:lowerRatedSchools,
-        numLowerRatedSchools:numLowerRatedSchools, isLoaded:true
-       });
+      this.setState({
+        lowerRatedSchools: lowerRatedSchools,
+        numLowerRatedSchools: numLowerRatedSchools, isLoaded: true
+      });
     }
-    catch (e)
-    {
+    catch (e) {
       this.setState({ errors: errors_to_array(e), isLoaded: false });
-      if (toast.isActive(this.state.toastId) || this.state.toastId)
-      {
+      if (toast.isActive(this.state.toastId) || this.state.toastId) {
         toast.update(
           this.state.toastId,
           {
@@ -101,52 +96,48 @@ class School extends Component {
           }
         )
       }
-      else
-      {
-        this.setState({ 
-          toastId:toast.error(`${this.state.errors}`)
+      else {
+        this.setState({
+          toastId: toast.error(`${this.state.errors}`)
         });
       }
     }
   }
 
   render() {
-    if (this.state.notFound)
-    {
+    if (this.state.notFound) {
       return <ObjectNotFound object_model="School" />;
     }
 
     let rendering;
-    if (this.state.isLoaded)
-    {
-      rendering = 
-      <div>
-      <Heading school={this.state.school} />
+    if (this.state.isLoaded) {
+      rendering =
+        <div>
+          <Heading school={this.state.school} />
 
-        <Highlights
-          school={this.state.school}
-          lowerRatedSchools={this.state.lowerRatedSchools}
-          numLowerRatedSchools={this.state.numLowerRatedSchools}
-        />
-        <Reviews schoolId={this.props.match.params.id} />
+          <Highlights
+            school={this.state.school}
+            lowerRatedSchools={this.state.lowerRatedSchools}
+            numLowerRatedSchools={this.state.numLowerRatedSchools}
+          />
+          <Reviews schoolId={this.props.match.params.id} />
 
-        <Reports schoolId={this.props.match.params.id} />
-        </div>
+          <Reports schoolId={this.props.match.params.id} />
+        </div >
     }
-    else
-    {
-    rendering = 
-      <div title="Reload" className="has-text-centered">
-      <button className="reload-btn" onClick={this.componentDidMount}>
-        <i className="fa fa-redo-alt fa-2x" />
-      </button>
-      </div>
+    else {
+      rendering =
+        <div title="Reload" className="has-text-centered" >
+          <br />
+          <button className="reload-btn" onClick={this.componentDidMount}>
+            <i className="fa fa-redo-alt fa-2x" />
+          </button>
+        </div >
     }
     return (
       <div>
-        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
-        <br />
-        { rendering }
+        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER} />
+        {rendering}
       </div>
     );
   }

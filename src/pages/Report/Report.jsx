@@ -13,7 +13,7 @@ class Report extends Component {
     super(props);
     this.api = new APIHelper();
     this.state = {
-      report: {created_at: ''},
+      report: { created_at: '' },
       own_report: false,
       editing: false,
       edited_report_content: '',
@@ -53,15 +53,13 @@ class Report extends Component {
       this.checkOwner(reportId);
       window.scrollTo(0, 0);
     }
-    else
-    {
+    else {
       this.setState({ notFound: true });
     }
   }
 
   async getReport(id) {
-    try
-    {
+    try {
       const res = await this.api.get(`report/${id}`);
       const report = res.data;
       const school_name = res.data.school.name;
@@ -72,18 +70,16 @@ class Report extends Component {
         edited_report_content: report.content,
         school_id: school_id,
         isLoaded: true,
-        errors:[]
+        errors: []
       });
     }
-    catch (e)
-    {
+    catch (e) {
       let errors = errors_to_array(e);
       this.setState({ errors: errors, isLoaded: false });
       if (errors === 404) {
         this.setState({ notFound: true });
       }
-      if (toast.isActive(this.state.toastId))
-      {
+      if (toast.isActive(this.state.toastId)) {
         toast.update(
           this.state.toastId,
           {
@@ -92,36 +88,32 @@ class Report extends Component {
           }
         )
       }
-      else
-      {
-        this.setState({ 
-          toastId:toast.error(`${this.state.errors}`)
+      else {
+        this.setState({
+          toastId: toast.error(`${this.state.errors}`)
         });
       }
     }
   }
 
   async getComments(id) {
-    try
-    {
+    try {
       const res = await this.api.get(`report/${id}/comments/1`);
       const comments = res.data;
       const has_more_comments =
-      res.headers['x-has-next'].toLowerCase() === 'true';
+        res.headers['x-has-next'].toLowerCase() === 'true';
       const current_page = 1;
 
       this.setState({
         comments: comments,
         current_page: current_page,
         has_more_comments: has_more_comments,
-        isLoaded:true, errors:[]
+        isLoaded: true, errors: []
       });
     }
-    catch (e)
-    {
-      this.setState({ errors: errors_to_array(e), isLoaded:false });
-      if (toast.isActive(this.state.toastId) || this.state.toastId)
-      {
+    catch (e) {
+      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      if (toast.isActive(this.state.toastId) || this.state.toastId) {
         toast.update(
           this.state.toastId,
           {
@@ -130,23 +122,20 @@ class Report extends Component {
           }
         )
       }
-      else
-      {
-        this.setState({ 
-          toastId:toast.error(`${this.state.errors}`)
+      else {
+        this.setState({
+          toastId: toast.error(`${this.state.errors}`)
         });
       }
     }
   }
 
-  async checkUpvote(id){
-    try
-    {
+  async checkUpvote(id) {
+    try {
       await this.api.get(`check-upvote/${id}/report`, true);
       this.setState({ upvoted: true });
     }
-    catch (e)
-    {
+    catch (e) {
       this.setState({ upvoted: false });
     }
   }
@@ -162,28 +151,25 @@ class Report extends Component {
   }
 
   async getMoreComments(id, page) {
-    try
-    {
+    try {
       const res = await this.api.get(`report/${id}/comments/${page}`);
 
       let comments = res.data;
       let old_comments = this.state.comments;
       comments = old_comments.concat(comments);
       const has_more_comments =
-      res.headers['x-has-next'].toLowerCase() === 'true';
+        res.headers['x-has-next'].toLowerCase() === 'true';
       const current_page = page;
       this.setState({
         comments: comments,
         current_page: current_page,
         has_more_comments: has_more_comments,
-        isLoading: '', errors:[]
+        isLoading: '', errors: []
       });
     }
-    catch (e)
-    {
+    catch (e) {
       this.setState({ errors: errors_to_array(e) });
-      if (toast.isActive(this.state.toastId) || this.state.toastId)
-      {
+      if (toast.isActive(this.state.toastId) || this.state.toastId) {
         toast.update(
           this.state.toastId,
           {
@@ -192,10 +178,9 @@ class Report extends Component {
           }
         )
       }
-      else
-      {
-        this.setState({ 
-          toastId:toast.error(`${this.state.errors}`)
+      else {
+        this.setState({
+          toastId: toast.error(`${this.state.errors}`)
         });
       }
     }
@@ -226,23 +211,21 @@ class Report extends Component {
     this.submitComment(data);
     event.preventDefault();
   };
-  
+
   handleEditSubmit = event => {
-    if(this.state.edited_report_content === this.state.report.content)
-    { 
+    if (this.state.edited_report_content === this.state.report.content) {
       toast.error('You have not made any change');
       event.preventDefault();
     }
-    else
-    {
-    this.setState({ submitting_edit: 'is-loading' });
-    const data = {
-      id: this.state.report.id,
-      content: this.state.edited_report_content,
-      school: this.state.school_id
-    };
-    this.submitEditedReport(data);
-    event.preventDefault();
+    else {
+      this.setState({ submitting_edit: 'is-loading' });
+      const data = {
+        id: this.state.report.id,
+        content: this.state.edited_report_content,
+        school: this.state.school_id
+      };
+      this.submitEditedReport(data);
+      event.preventDefault();
     }
   };
 
@@ -252,25 +235,22 @@ class Report extends Component {
   };
 
   cancelEdit = () => {
-    this.setState({ editing: false, edited_report_content:this.state.report.content });
+    this.setState({ editing: false, edited_report_content: this.state.report.content });
   };
 
   async submitComment(data) {
-    try
-    {
+    try {
       await this.api.post('add-comment', data, true);
 
       const reportId = this.state.report['id'];
       toast.info('Comment added');
       this.getReport(reportId);
       this.getComments(reportId);
-      this.setState({ comment: '', errors:[], commenting:'' });
+      this.setState({ comment: '', errors: [], commenting: '' });
     }
-    catch (e)
-    {
-      this.setState({ errors: errors_to_array(e), commenting:'' });
-      if (toast.isActive(this.state.toastId) || this.state.toastId)
-      {
+    catch (e) {
+      this.setState({ errors: errors_to_array(e), commenting: '' });
+      if (toast.isActive(this.state.toastId) || this.state.toastId) {
         toast.update(
           this.state.toastId,
           {
@@ -279,10 +259,9 @@ class Report extends Component {
           }
         )
       }
-      else
-      {
-        this.setState({ 
-          toastId:toast.error('An error occured')
+      else {
+        this.setState({
+          toastId: toast.error('An error occured')
         });
       }
     }
@@ -301,30 +280,26 @@ class Report extends Component {
     }
   }
 
-  toggleUpvote()
-  {
+  toggleUpvote() {
     if (this.state.upvoted === true)
       return false;
     return true;
   }
 
   async upVote(data) {
-    try
-    {
+    try {
       await this.api.get(`upvote/${data.report['id']}/report`, true);
 
-      if (this.toggleUpvote() === true){toast.info('Upvoted');}
-      else{toast.info('Removed Upvote');}
+      if (this.toggleUpvote() === true) { toast.info('Upvoted'); }
+      else { toast.info('Removed Upvote'); }
 
       const reportId = this.state.report['id'];
       this.getReport(reportId);
-      this.setState({ upvoted: this.toggleUpvote(), errors:[], upvoting:'' });
+      this.setState({ upvoted: this.toggleUpvote(), errors: [], upvoting: '' });
     }
-    catch(e)
-    {
-      this.setState({ errors: errors_to_array(e), upvoting:'' });
-      if (toast.isActive(this.state.toastId) || this.state.toastId)
-      {
+    catch (e) {
+      this.setState({ errors: errors_to_array(e), upvoting: '' });
+      if (toast.isActive(this.state.toastId) || this.state.toastId) {
         toast.update(
           this.state.toastId,
           {
@@ -333,49 +308,45 @@ class Report extends Component {
           }
         )
       }
-      else
-      {
-        this.setState({ 
-          toastId:toast.error(`${this.state.errors}`)
+      else {
+        this.setState({
+          toastId: toast.error(`${this.state.errors}`)
         });
       }
     }
   }
 
   render() {
-    if (this.state.notFound)
-    {
+    if (this.state.notFound) {
       return <ObjectNotFound object_model="Report" />;
     }
 
     let rendering;
-    if (this.state.isLoaded)
-    {
-        rendering = 
+    if (this.state.isLoaded) {
+      rendering =
         <div className="container">
-        <div className="columns">
-          <div className="column" />
+          <div className="columns">
+            <div className="column" />
 
-          <div className="column is-half">
-            <div className="content">
-                <p className="title">
+            <div className="column is-half">
+              <div className="content">
+                <p className="title has-text-centered">
                   <Link
                     className="has-text-black"
                     to={"/school/" + this.state.school_id}
                   >{this.state.school_name}</Link>
                   {' '}Report
-            </p>
+                </p>
+              </div>
             </div>
+
+            <div className="column" />
           </div>
 
-          <div className="column" />
-        </div>
-
-        <div className="report-body">
-          <div className="box">
-            <div className="media-content">
-              <div className="content has-text-centered">
-                <p className="report-content">
+          <div className="report-body">
+            <div className="box">
+              <div className="media-content">
+                <div className="content has-text-centered">
                   {this.state.editing ? (
                     <form onSubmit={this.handleEditSubmit}>
                       <div className="field">
@@ -395,134 +366,160 @@ class Report extends Component {
                             {error}
                           </p>
                         ))}
+
                         <br />
-                        <div className="field is-grouped is-grouped-centered">
+
+                        <div className="field is-grouped is-grouped-left">
                           <p className="control">
-                              <button type="submit" className={"button is-danger is-small " + this.state.submitting_edit}>
-                              Submit
+                            <button type="submit" className={"button is-success is-small " + this.state.submitting_edit}>
+                              <i class="far fa-check-circle"></i>&nbsp;Submit
                             </button>
                           </p>
-                            <p className="control">
-                              <button onClick={this.cancelEdit} className="button is-small is-danger">
-                                Cancel
+                          <p className="control">
+                            <button onClick={this.cancelEdit} className="button is-small is-warning">
+                              <i class="fas fa-ban"></i>&nbsp;Cancel
                             </button>
-                            </p>
+                          </p>
                         </div>
+                        <br />
+
                       </div>
                     </form>
                   ) : (
-                      <p className="report-content">
+                      <p className="subtitle has-text-weight-light">
                         "{this.state.report.content}"
                       </p>
                     )}
-                </p>
-              </div>
-              <div className="card-footer">
-                <div className="card-footer-item">
-                  Upvotes ({this.state.report.upvotes})
+
                 </div>
-                <div className="card-footer-item">
-                  {/* <TimeAgo>{new Date(this.state.report.created_at)}</TimeAgo> */}
-                </div>
-              </div>
-              <div className="card-footer">
-                <div className="card-footer-item">
-                {this.state.upvoted ? (
-                  <button
-                    className={"button is-danger is-small " + this.state.upvoting}
-                    onClick={this.handleUpvote}>
-                    Remove Upvote
-                  </button>
-                ) : (
-                  <button className={"button is-danger is-small " + this.state.upvoting}
-                    onClick={this.handleUpvote}>
-                    Upvote
-                  </button>
-                )}
-              </div>
-                  {this.state.own_report ? (
-                    <div className="card-footer-item">
-                      <button title="you can edit your own report"
-                        className={"button is-danger is-small " + this.state.editing}
-                        onClick={this.handleEdit}>
-                        Edit
-                  </button>
+                <div className="card-footer">
+                  <nav className="level">
+                    <div className="level-right">
+                      <div className="level-item has-text-dark">
+                        {this.state.upvoted ? (
+                          <button
+                            className={"button is-default is-medium" + this.state.upvoting}
+                            onClick={this.handleUpvote} key={this.state.key}>
+                            <i className="fa fa-thumbs-down fa has-text-danger"></i>
+                          </button>
+                        ) : (
+                            <button className={"button is-default is-medium " + this.state.upvoting}
+                              onClick={this.handleUpvote} key={this.state.key}>
+                              <i className="fa fa-thumbs-up fa has-text-success"></i>
+                            </button>
+                          )}
+                        &nbsp;{this.state.report.upvotes}
+                      </div>
+
+                      <div className="level-item has-text-centered has-text-dark">
+                        {this.state.own_report ? (
+                          <div className="card-footer-item">
+                            <button title="Edit this report"
+                              className={"button is-default is-medium " + this.state.editing}
+                              onClick={this.handleEdit}>
+                              <i class="far fa-edit"></i>
+                            </button>
+                          </div>
+                        ) : (
+                            ''
+                          )}
+                      </div>
                     </div>
-                  ) : (
-                      ''
-                    )}
+                  </nav>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="report-section">
-            <h3 className="title">Your view?</h3>
-            <p>
-              What's your opinion? Do you feel this report is rightly
+
+
+            <div className="gap-medium"></div>
+
+            <div className="report-section">
+              <h3 className="title">Your view?</h3>
+
+              <hr />
+
+              <p>
+                What's your opinion? Do you feel this review is rightly
               spoken? Why not let others see the other side of the coin
               through your perspective.
-            </p>
-            <br />
-            <form onSubmit={this.handleSubmit}>
-              <div className="field">
-                <div className="control">
-                  <textarea
-                    className="textarea"
-                    type="text"
-                    name="comment"
-                    value={this.state.comment}
-                    onChange={this.handleChange}
-                    placeholder="Write a comment"
-                    required
-                  />
-                </div>
-                {this.state.errors.map((error, index) => (
-                  <p key={'report_error ' + index} className="help is-danger is-size-5">
-                    {error}
-                  </p>
-                ))}
-                <br />
-                <div className="field is-grouped is-grouped-centered">
-                  <p className="control">
-                    <button type="submit" className={"button is-danger " + this.state.commenting}>
-                      Post Comment
-                    </button>
-                  </p>
-                </div>
-              </div>
-            </form>
-            <br />
-            <h3 className="title">Comments ({this.state.report.comments_count}):</h3>
-            <br />
-            {this.state.comments.map(comment => (
-              <CommentCard key={'report_comment ' + comment.id} comment={comment} />
-            ))}
-          </div>
-          {this.state.has_more_comments ? (
-            <div className="field is-grouped is-grouped-centered">
-              <p className="control">
-                <button
-                  className={"button is-danger " + this.state.isLoading}
-                  id="post-comment-btn"
-                  onClick={this.handleClick}
-                >
-                  Load more comment
-                </button>
               </p>
+
+              <br />
+              <form onSubmit={this.handleSubmit}>
+                <div className="field">
+                  <div className="control">
+                    <textarea
+                      className="textarea"
+                      type="text"
+                      name="comment"
+                      value={this.state.comment}
+                      onChange={this.handleChange}
+                      placeholder="Write a comment"
+                      required
+                    />
+                  </div>
+                  {this.state.errors.map((error, index) => (
+                    <p key={'report_error ' + index} className="help is-danger is-size-5">
+                      {error}
+                    </p>
+                  ))}
+                  <br />
+                  <div className="field is-grouped is-grouped-centered">
+                    <p className="control">
+                      <button type="submit" className={"button is-warning " + this.state.commenting}>
+                        <i className="fa fa-comment"></i> &nbsp;Post Comment
+                    </button>
+                    </p>
+                  </div>
+                </div>
+              </form>
+
+              <div className="gap-medium"></div>
+
+              <h3 className="title">Comments
+                {/* {this.state.report.comments_count} */}
+              </h3>
+
+              <hr />
+              <br />
+
+              {this.state.comments.map(comment => (
+                <CommentCard key={'report_comment ' + comment.id} comment={comment} />
+              ))}
+
             </div>
-          ) : (
-            <p className="has-text-centered">end of comments</p>
-          )}
-        </div>
-      </div>
+            {this.state.has_more_comments ? (
+              <div className="field is-grouped is-grouped-centered">
+                <p className="control">
+                  <button
+                    className={"button is-danger " + this.state.isLoading}
+                    id="post-comment-btn"
+                    onClick={this.handleClick}
+                  >
+                    Load more comment
+                </button>
+                </p>
+              </div>
+            ) : (
+                <div className="has-text-centered">
+                  <i class="fab fa-pied-piper-alt fa-7x"></i>
+                  <br /><br />
+
+                  <p>
+                    <em>The end...</em>
+                  </p>
+                </div>
+              )}
+          </div>
+        </div >
     }
-    else 
-    {
-        rendering = 
-          <div title="Reload" className="has-text-centered">
+    else {
+      rendering =
+        <div title="Reload" className="has-text-centered">
           <button className="reload-btn" onClick={this.componentDidMount}>
             <i className="fa fa-redo-alt fa-2x" />
           </button>
-          </div> 
+        </div>
     }
 
     return (
@@ -530,7 +527,7 @@ class Report extends Component {
         <section className="hero is-small is-warning is-bold">
           <div className="hero-body">
             <div className="container">
-              <h1 className="title"><i className="fa fa-comment-alt" /> Report</h1>
+              <h1 className="title"><i className="fa fa-microphone" /> Report</h1>
             </div>
           </div>
           <ToastContainer
@@ -539,7 +536,7 @@ class Report extends Component {
           />
         </section>
         <div className="section">
-          { rendering }
+          {rendering}
         </div>
       </div>
     );

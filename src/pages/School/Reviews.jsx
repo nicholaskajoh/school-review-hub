@@ -29,19 +29,16 @@ class Reviews extends Component {
   }
 
   async getReviews(id, page) {
-    try
-    {
+    try {
       const res = await this.api.get(`school/${id}/reviews/${page}`);
       const reviews = res.data;
       this.hasPrevPage = res.headers['x-has-previous'].toLowerCase() === 'true';
       this.hasNextPage = res.headers['x-has-next'].toLowerCase() === 'true';
-      this.setState({ reviews:reviews, page:page, isLoaded:true });
+      this.setState({ reviews: reviews, page: page, isLoaded: true });
     }
-    catch (e)
-    {
-      this.setState({ errors: errors_to_array(e), isLoaded:false });
-      if (toast.isActive(this.state.toastId))
-      {
+    catch (e) {
+      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      if (toast.isActive(this.state.toastId)) {
         toast.update(
           this.state.toastId,
           {
@@ -50,10 +47,9 @@ class Reviews extends Component {
           }
         )
       }
-      else
-      {
-        this.setState({ 
-          toastId:toast.error('An error occured while loading reviews')
+      else {
+        this.setState({
+          toastId: toast.error('An error occured while loading reviews')
         });
       }
     }
@@ -73,94 +69,133 @@ class Reviews extends Component {
 
   render() {
     let rendering;
-    if (this.state.isLoaded)
-    {
-      rendering = 
-      <div className="columns is-centered">
-      <section className="column is-6 section">
-        <Link
-          to={`/add-review/${this.props.schoolId}`}
-          className="button is-danger"
-        >
-          <span className="icon">
-            <i className="fa fa-file-alt" />
-          </span>
-          <span>Publish Review on school</span>
-        </Link>
-        <br />
-        <br />
-        {this.state.reviews.map(review => (
-            <div key={'school_review ' + review.id} className="card review">
-            <header className="card-header">
-              <p className="card-header-title">
-                <strong><TimeAgo>{new Date(review.created_at)}</TimeAgo></strong>
-              </p>
-            </header>
-            <div className="card-content">
-              <div className="content">{review.content}</div>
-            </div>
-            <footer className="card-footer">
-              <div className="card-footer-item">
-                <Link to={"/review/" + review.id}>Full review</Link>
+    if (this.state.isLoaded) {
+      rendering =
+        <div className="section">
+          <div className="columns is-multiline">
+            {this.state.reviews.map(review => (
+              <div className="column is-4">
+
+                <div className="box">
+                  <article className="media">
+
+                    <div className="media-content">
+                      <div className="content">
+                        <p>
+                          <strong>Anonymous</strong> <small>@anonymous</small>
+
+                          <br />
+                          {review.content.substr(0, 280)}
+
+                          <br /><br />
+
+                          <small><em><Link to={"/review/" + review.id}>Read more</Link></em></small>
+                        </p>
+                      </div>
+
+                      <hr />
+
+                      <nav className="level is-mobile">
+                        <div className="level-left">
+                          <a className="level-item has-text-dark">
+                            <span className="icon is-small has-text-success">
+                              <i class="fa fa-thumbs-up"></i></span>
+                            &nbsp;{review.upvotes}
+                          </a>
+
+                          &nbsp;&nbsp;
+                          <a className="level-item has-text-dark">
+                            <span className="icon is-small has-text-warning"><i class="fas fa-comment"></i></span>
+                            &nbsp;{review.comments_count}
+                          </a>
+                        </div>
+                        <div className="level-right">
+                          <small className="media-right"><TimeAgo>{new Date(review.created_at)}</TimeAgo></small>
+                        </div>
+                      </nav>
+                    </div>
+                  </article>
+                </div>
+
               </div>
-              <div className="card-footer-item">
-                Upvotes ({review.upvotes})
-              </div>
-              <div className="card-footer-item">
-                Comments ({review.comments_count})
-              </div>
-            </footer>
+            ))}
           </div>
-        ))}
-        <br />
-        {this.state.reviews.length === 0 ? (
-          <p className="has-text-centered">No reviews yet!</p>
-        ) : (
-          <nav className="pagination">
-            <button
-              className="button is-link"
-              onClick={this.prevPage}
-              disabled={!this.hasPrevPage}
-            >
-              Previous
-            </button>
-            <button
-              className="button is-link"
-              onClick={this.nextPage}
-              disabled={!this.hasNextPage}
-            >
-              Next
-            </button>
-          </nav>
-        )}
-      </section>
-    </div>
-    }
-    else 
-    {
-      rendering = 
-        <div title="Reload reviews" className="has-text-centered">
-        <br />
-        <button className="reload-btn" onClick={this.componentDidMount}>
-          <i className="fa fa-redo-alt fa-2x" />
-        </button>
-        <br />
+
+          <div>
+            {this.state.reviews.length === 0 ? (
+              <div className="has-text-centered">
+                <i class="fas fa-file-alt has-text-light fa-5x"></i>
+                <br /><br />
+                <h1 className="subtitle">No reviews yet!</h1>
+              </div>
+            ) : (
+                <div>
+                  <br />
+                  <nav className="pagination">
+                    <button
+                      className="button is-default"
+                      onClick={this.prevPage}
+                      disabled={!this.hasPrevPage}
+                    >
+                      <i class="fas fa-arrow-left"></i>&nbsp;Previous
+                  </button>
+                    <button
+                      className="button is-default"
+                      onClick={this.nextPage}
+                      disabled={!this.hasNextPage}
+                    >
+                      Next &nbsp;&nbsp;<i class="fas fa-arrow-right"></i>
+                    </button>
+                  </nav>
+                </div>
+              )}
+            <div className="gap-small"></div>
+          </div>
         </div>
     }
-    
+    else {
+      rendering =
+        <div title="Reload reviews" className="has-text-centered">
+          <br />
+          <button className="reload-btn" onClick={this.componentDidMount}>
+            <i className="fa fa-redo-alt fa-2x" />
+          </button>
+          <br />
+        </div>
+    }
+
     return (
       <div>
-        <section className="hero is-link">
+        <div className="gap-small"></div>
+        <section className="hero star-pattern is-light">
           <div className="hero-body">
             <div className="container">
-              <h1 className="title">
-                <i className="fa fa-users" /> Reviews
-              </h1>
+
+              <article className="media">
+                <div className="media-left">
+                  <h1 className="title has-text-darkblue">
+                    <i className="fa fa-users" /> Reviews
+                  </h1>
+                </div>
+                <div className="media-content"></div>
+                <div className="media-right">
+                  <Link
+                    to={`/add-review/${this.props.schoolId}`}
+                    className="button is-danger"
+                  >
+                    <span className="icon">
+                      <i className="fa fa-comment" />
+                    </span>
+                    <span>New Review</span>
+                  </Link>
+                </div>
+              </article>
+
             </div>
           </div>
-          <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
+          <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER} />
         </section>
-        { rendering }
+        {rendering}
       </div>
     );
   }

@@ -15,11 +15,11 @@ const Highlights = (props) => (
                         </div>
                         <div className="tile is-parent is-vertical">
                             <article className="tile is-child notification is-warning">
-                                <h4 className="subtitle"><i className="fa fa-trophy"></i> Rank</h4>
+                                <h4 className="subtitle"><i className="fa fa-trophy"></i> Rank:</h4>
                                 <p className="title has-text-centered">{props.school.rank}</p>
                             </article>
                             <article className="tile is-child notification is-info">
-                                <h4 className="subtitle"><i className="fa fa-star"></i> Rating</h4>
+                                <h4 className="subtitle"><i className="fa fa-star"></i> Rating:</h4>
                                 <p className="title has-text-centered">{props.school.rating}</p>
                             </article>
                         </div>
@@ -28,35 +28,35 @@ const Highlights = (props) => (
                 <div className="tile is-parent">
                     <article className="tile is-child notification is-success">
                         <div className="content">
-                            <h4 className="title">Rated higher than</h4>
+                            <h4 className="subtitle"><i className="fa fa-thumbs-up"></i> Rated higher than:</h4>
                             <div className="content">
                                 {props.lowerRatedSchools.map(school =>
-                                    <article key={'highlight_school ' + school.id } className="media">
+                                    <article key={'highlight_school ' + school.id} className="media">
                                         <div className="media-left">
                                             <figure className="image is-32x32">
                                                 <Link to={"/school/" + school.id}>
-                                                <img src={school.logo_url} alt={school.name + ' logo'} />
+                                                    <img src={school.logo_url} alt={school.name + ' logo'} />
                                                 </Link>
                                             </figure>
                                         </div>
-                                        <div className="media-content">
+                                        <div className="media-left">
                                             <Link to={"/school/" + school.id}>{school.name}</Link>
                                         </div>
-                                    </article> 
+                                    </article>
                                 )}
 
                                 {props.numLowerRatedSchools > 3 ?
                                     <p className="has-text-right">
-                                        <br/>
+                                        <br />
                                         And {props.numLowerRatedSchools - 3} other(s).
                                     </p>
-                                : ''}
+                                    : ''}
 
                                 {props.numLowerRatedSchools === 0 ?
                                     <div className="has-text-center">
                                         This school is rated the least on our Index.
                                     </div>
-                                : ''}
+                                    : ''}
                             </div>
                         </div>
                     </article>

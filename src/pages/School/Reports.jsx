@@ -29,19 +29,16 @@ class Reports extends Component {
   }
 
   async getReports(id, page) {
-    try
-    {
+    try {
       const res = await this.api.get(`school/${id}/reports/${page}`);
       const reports = res.data;
       this.hasPrevPage = res.headers['x-has-previous'].toLowerCase() === 'true';
       this.hasNextPage = res.headers['x-has-next'].toLowerCase() === 'true';
-      this.setState({ reports:reports, page:page, isLoaded:true });
+      this.setState({ reports: reports, page: page, isLoaded: true });
     }
-    catch (e)
-    {
-      this.setState({ errors: errors_to_array(e), isLoaded:false });
-      if (toast.isActive(this.state.toastId))
-      {
+    catch (e) {
+      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      if (toast.isActive(this.state.toastId)) {
         toast.update(
           this.state.toastId,
           {
@@ -50,10 +47,9 @@ class Reports extends Component {
           }
         )
       }
-      else
-      {
-        this.setState({ 
-          toastId:toast.error('An error occured while loading reports')
+      else {
+        this.setState({
+          toastId: toast.error('An error occured while loading reports')
         });
       }
     }
@@ -73,96 +69,137 @@ class Reports extends Component {
 
   render() {
     let rendering;
-    if (this.state.isLoaded)
-    {
-      rendering = 
-      <div className="columns is-centered">
-      <section className=" column is-6 section">
-        <Link
-          to={`/add-report/${this.props.schoolId}`}
-          className="button is-danger"
-        >
-          <span className="icon">
-            <i className="fa fa-file-alt" />
-          </span>
-          <span>Publish Report on school</span>
-        </Link>
-        <br />
-        <br />
-        {this.state.reports.map(report => (
-          <div key={'school_report ' + report.id} className="card report">
-            <header className="card-header">
-              <p className="card-header-title">
-                <strong><TimeAgo>{new Date(report.created_at)}</TimeAgo></strong>
-              </p>
-            </header>
-            <div className="card-content">
-              <div className="content">{report.content}</div>
-            </div>
-            <footer className="card-footer">
-              <div className="card-footer-item">
-                <Link to={"/report/" + report.id}>Full report</Link>
+    if (this.state.isLoaded) {
+      rendering =
+        <div className="section">
+          <div className="columns is-multiline">
+            {this.state.reports.map(report => (
+              <div className="column is-4">
+
+                <div className="box">
+                  <article className="media">
+
+                    <div className="media-content">
+                      <div className="content">
+                        <p>
+                          <strong>Anonymous</strong> <small>@anonymous</small>
+
+                          <br />
+                          {report.content.substr(0, 280)}
+
+                          <br /><br />
+
+                          <small><em><Link to={"/report/" + report.id}>Read more</Link></em></small>
+                        </p>
+                      </div>
+
+                      <hr />
+
+                      <nav className="level is-mobile">
+                        <div className="level-left">
+                          <a className="level-item has-text-dark">
+                            <span className="icon is-small has-text-success">
+                              <i class="fa fa-thumbs-up"></i></span>
+                            &nbsp;{report.upvotes}
+                          </a>
+
+                          &nbsp;&nbsp;
+                          <a className="level-item has-text-dark">
+                            <span className="icon is-small has-text-warning"><i class="fas fa-comment"></i></span>
+                            &nbsp;{report.comments_count}
+                          </a>
+                        </div>
+                        <div className="level-right">
+                          <small className="media-right"><TimeAgo>{new Date(report.created_at)}</TimeAgo></small>
+                        </div>
+                      </nav>
+                    </div>
+                  </article>
+                </div>
+
               </div>
-              <div className="card-footer-item">
-                Upvotes ({report.upvotes})
+            ))}
+          </div>
+
+          {
+            this.state.reports.length === 0 ? (
+              <div className="has-text-centered">
+                <i class="fas fa-flag-checkered has-text-light fa-5x"></i>
+                <br /><br />
+                <h1 className="subtitle">No Reports yet!</h1>
               </div>
-              <div className="card-footer-item">
-                Comments ({report.comments_count})
-              </div>
-            </footer>
-          </div>              
-        ))}
-        <br />
-        {this.state.reports.length === 0 ? (
-          <p className="has-text-centered">No Reports yet!</p>
-        ) : (
-          
-          <nav className="pagination">
-            <button
-              className="button is-link"
-              onClick={this.prevPage}
-              disabled={!this.hasPrevPage}
-            >
-              Previous
+            ) : (
+                <div>
+                  <br />
+                  <nav className="pagination">
+                    <button
+                      className="button is-default"
+                      onClick={this.prevPage}
+                      disabled={!this.hasPrevPage}
+                    >
+                      <i class="fas fa-arrow-left"></i>&nbsp;Previous
             </button>
-            <button
-              className="button is-link"
-              onClick={this.nextPage}
-              disabled={!this.hasNextPage}
-            >
-              Next
-            </button>
-          </nav>
-        )}
-      </section>
-    </div>
+                    <button
+                      className="button is-default"
+                      onClick={this.nextPage}
+                      disabled={!this.hasNextPage}
+                    >
+                      Next &nbsp;&nbsp;<i class="fas fa-arrow-right"></i>
+                    </button>
+                  </nav>
+                </div>
+              )}
+
+        </div>
     }
-    else 
-    {
-      rendering = 
+    else {
+      rendering =
         <div title="Reload reports" className="has-text-centered">
-        <br />
-        <button className="reload-btn" onClick={this.componentDidMount}>
-          <i className="fa fa-redo-alt fa-2x" />
-        </button>
-        <br />
+          <br />
+          <button className="reload-btn" onClick={this.componentDidMount}>
+            <i className="fa fa-redo-alt fa-2x" />
+          </button>
+          <br />
         </div>
     }
 
     return (
       <div>
-        <section className="hero is-link">
+        <section className="hero is-light star-pattern">
           <div className="hero-body">
             <div className="container">
-              <h1 className="title">
-                <i className="fa fa-users" /> Reports
-              </h1>
+
+              <article className="media">
+                <div className="media-left">
+                  <h1 className="title">
+                    <i className="fa fa-users" /> Reports
+                </h1>
+                </div>
+
+                <div className="media-content"></div>
+
+                <div className="media-right">
+                  <Link
+                    to={`/add-report/${this.props.schoolId}`}
+                    className="button is-danger"
+                  >
+                    <span className="icon">
+                      <i className="fa fa-microphone" />
+                    </span>
+                    <span>Publish Report</span>
+                  </Link>
+                </div>
+              </article>
+
             </div>
           </div>
-          <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
+          <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER} />
         </section>
-        { rendering }
+        {rendering}
+
+        <div className="gap-small"></div>
       </div>
+
     );
   }
 }

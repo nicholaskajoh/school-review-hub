@@ -10,37 +10,35 @@ const SuggestedMatches = ({
 }) => {
   let rendering;
   if (isLoaded) {
-    rendering = matches.map((match, index) => (
-      <div key={'match ' + index} className="box">
-        <div className="columns has-text-centered">
-          <div className="column is-5">
-            <div>
-              <h4 className="subtitle">{match.school1}</h4>
+    rendering =
+      <div className="columns is-multiline">
+
+        {matches.map((match, index) => (
+          <div className="column is-4">
+
+            <div key={'match ' + index} className="box has-text-centered">
+              <div>
+                <h4 className="subtitle">{match.school1}</h4>
+                <br />
+
+                <h3 className="title">vs</h3>
+                <br />
+
+                <h4 className="subtitle">{match.school2}</h4>
+
+                <hr />
+                <Link
+                  className="button is-success is-medium"
+                  to={"/rate/" + match.school1_id + "/" + match.school2_id}>
+                  <i className="fa fa-star  golden-star" />&nbsp;Rate
+                </Link>
+              </div>
             </div>
           </div>
-          <div className="column is-2">
-            <span
-              className="tag is-link is-rounded"
-              style={{ marginBottom: 10 }}
-            >
-              vs
-            </span>
-            <br />
-            <Link
-              className="button is-success is-small"
-              to={"/rate/" + match.school1_id + "/" + match.school2_id}
-            >
-              Rate
-            </Link>
-          </div>
-          <div className="column is-5">
-            <div>
-              <h4 className="subtitle">{match.school2}</h4>
-            </div>
-          </div>
-        </div>
+        ))}
+
       </div>
-    ));
+
   } else {
     rendering = (
       <div title="Reload" className="has-text-centered">
@@ -59,7 +57,7 @@ const SuggestedMatches = ({
     <section className="section" style={{ paddingTop: 0 }}>
       <div className="container">
         <h1 className="title">
-          <i className="fa fa-flag has-text-danger" /> Suggested matches
+          <i className="fa fa-flag" /> Suggested matches
         </h1>
         <hr />
         <br />

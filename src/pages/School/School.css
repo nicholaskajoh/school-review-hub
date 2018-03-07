@@ -1,3 +1,21 @@
-.card.review, .card.report {
+/* .card.review,
+.card.report {
     margin-bottom: 10px;
+} */
+
+.star-pattern {
+    background-image: url("https://www.transparenttextures.com/patterns/gradient-squares.png");
+}
+
+.has-text-darkblue {
+    color: #011627 !important;
+}
+
+.pull-right {
+    float: right !important;
+    right: 0px;
+}
+
+.white-border {
+    border: 2px solid #fff;
 }
