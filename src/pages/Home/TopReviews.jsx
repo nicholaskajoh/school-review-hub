@@ -8,15 +8,15 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
     rendering = (
       <div className="columns is-multiline">
         {reviews.map(review => (
-          <div key={'top_review ' + review.id} className="column is-4">
-
+          <div key={review.id} className="column is-4">
             <div className="box">
               <article className="media">
                 <div className="media-content">
                   <div className="has-text-centered">
                     <Link
                       className="has-text-black-ter"
-                      to={"/school/" + review.school.id}>
+                      to={'/school/' + review.school.id}
+                    >
                       {review.school.name}
                     </Link>
 
@@ -27,12 +27,10 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
                     <p>
                       <strong>
                         "{review.content.substring(0, 150).trim() +
-                          (review.content.length > 150 ?
-                            ('...') : ('')
-                          )
-                        }"
+                          (review.content.length > 150 ? '...' : '')}"
                       </strong>
-                      <br /><br />
+                      <br />
+                      <br />
 
                       <small>
                         <em>
@@ -46,12 +44,15 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
                     <div className="level-left">
                       <a className="level-item has-text-dark" title="upvotes">
                         <span className="icon is-small has-text-success">
-                          <i className="fa fa-thumbs-up"></i></span>
+                          <i className="fa fa-thumbs-up" />
+                        </span>
                         &nbsp;{review.upvotes}
                       </a>
                       &nbsp;&nbsp;
-                          <a className="level-item has-text-dark" title="comments">
-                        <span className="icon is-small has-text-warning"><i className="fas fa-comment"></i></span>
+                      <a className="level-item has-text-dark" title="comments">
+                        <span className="icon is-small has-text-warning">
+                          <i className="fas fa-comment" />
+                        </span>
                         &nbsp;{review.comments_count}
                       </a>
                     </div>
