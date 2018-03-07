@@ -22,7 +22,7 @@ class School extends Component {
       errors: [],
       notFound: false,
     };
-    this.googleMapAPIKey = process.env.GOOGLE_MAP_API_KEY;
+    this.googleMapAPIKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY;    
     this.componentDidMount = this.componentDidMount.bind(this);
   }
 

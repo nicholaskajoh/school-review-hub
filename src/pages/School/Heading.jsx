@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const Heading = (props, google_api_key) => (
+const Heading = (props) => (
   <section className="hero is-light star-pattern">
     <div className="hero-body">
       <div className="container">
@@ -25,7 +25,7 @@ const Heading = (props, google_api_key) => (
           <div className="media-right">
             <iframe title="School map" width="auto" height="auto" frameBorder="1" style={{ border: 1 }}
               src={
-                'https://www.google.com/maps/embed/v1/place?key=' + google_api_key + '&q='
+                'https://www.google.com/maps/embed/v1/place?key=' + props.google_api_key + '&q='
                 + encodeURI(props.school.name)
               } allowFullScreen>
             </iframe>
