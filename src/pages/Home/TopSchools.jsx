@@ -8,11 +8,11 @@ const TopSchools = ({ schools, isLoaded, errorLoading, spinner, reload }) => {
       <div className="column is-3 has-text-centered" key={'top_school ' + school.id}>
         <div className="box top-school-box">
           <Link to={"/school/" + school.id}>
-          <img
-            className="box-image image is-96x96"
-            src={school.logo_url}
-            alt={school.name + " logo"}
-          />
+            <img
+              className="box-image image is-96x96"
+              src={school.logo_url}
+              alt={school.name + " logo"}
+            />
           </Link>
 
           <div className="content has-text-centered">
@@ -72,7 +72,7 @@ const TopSchools = ({ schools, isLoaded, errorLoading, spinner, reload }) => {
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="container">
           <h1 className="title">
-            <i className="fa fa-trophy has-text-danger" /> Top Schools
+            <i className="fa fa-trophy" /> Top Schools
           </h1>
           <hr />
           <br />

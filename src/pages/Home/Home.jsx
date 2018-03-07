@@ -136,7 +136,7 @@ class Home extends Component {
   render() {
     return (
       <div>
-      <section className="hero is-small is-warning is-bold">
+        <section className="hero is-small is-warning is-bold">
           <div className="hero-body">
             <div className="container">
               <h1 className="title">
@@ -145,70 +145,73 @@ class Home extends Component {
             </div>
           </div>
         </section>
-      <Tabs>
-        <div
-          className="tabs is-toggle columns is-centered"
-          style={{ margin: 0 }}
-        >
-          <ul>
-            <TabList>
-              <Tab>
-                <a>
-                  <span className="icon">
-                    <i className="fas fa-trophy has-text-danger" />
-                  </span>
-                  <span>Top Schools</span>
-                </a>
-              </Tab>
-              <Tab>
-                <a>
-                  <span className="icon">
-                    <i className="fas fa-flag has-text-danger" />
-                  </span>
-                  <span>Suggested Matches</span>
-                </a>
-              </Tab>
-              <Tab>
-                <a>
-                  <span className="icon">
-                    <i className="fas fa-comment-alt has-text-danger" />
-                  </span>
-                  <span>Top Reviews</span>
-                </a>
-              </Tab>
-            </TabList>
-          </ul>
-        </div>
+        <br />
+        <Tabs>
+          <div
+            className="tabs is-toggle is-centered"
+            style={{ margin: 0 }}
+          >
+            <ul>
+              <TabList>
+                <Tab>
+                  <a>
+                    <span className="icon">
+                      <i className="fas fa-trophy has-text-danger" />
+                    </span>
+                    <span>Top Schools</span>
+                  </a>
+                </Tab>
+                <Tab>
+                  <a>
+                    <span className="icon">
+                      <i className="fas fa-flag has-text-danger" />
+                    </span>
+                    <span>Suggested Matches</span>
+                  </a>
+                </Tab>
+                <Tab>
+                  <a>
+                    <span className="icon">
+                      <i className="fas fa-comment-alt has-text-danger" />
+                    </span>
+                    <span>Top Reviews</span>
+                  </a>
+                </Tab>
+              </TabList>
+            </ul>
+          </div>
 
-        <TabPanel>
-          <TopSchools
-            schools={this.state.topSchools}
-            isLoaded={this.state.schoolsHaveLoaded}
-            errorLoading={this.state.schoolsErrorLoading}
-            spinner={this.state.schoolsSpinner}
-            reload={this.getSchools}
-          />
-        </TabPanel>
-        <TabPanel>
-          <SuggestedMatches
-            matches={this.state.suggestedMatches}
-            isLoaded={this.state.matchesHaveLoaded}
-            errorLoading={this.state.matchesErrorLoading}
-            spinner={this.state.matchesSpinner}
-            reload={this.getMatches}
-          />
-        </TabPanel>
-        <TabPanel>
-          <TopReviews
-            reviews={this.state.topReviews}
-            isLoaded={this.state.reviewsHaveLoaded}
-            errorLoading={this.state.reviewsErrorLoading}
-            spinner={this.state.reviewsSpinner}
-            reload={this.getReviews}
-          />
-        </TabPanel>
-        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER} />
-      </Tabs>
+          <br />
+
+          <TabPanel>
+            <TopSchools
+              schools={this.state.topSchools}
+              isLoaded={this.state.schoolsHaveLoaded}
+              errorLoading={this.state.schoolsErrorLoading}
+              spinner={this.state.schoolsSpinner}
+              reload={this.getSchools}
+            />
+          </TabPanel>
+          <TabPanel>
+            <SuggestedMatches
+              matches={this.state.suggestedMatches}
+              isLoaded={this.state.matchesHaveLoaded}
+              errorLoading={this.state.matchesErrorLoading}
+              spinner={this.state.matchesSpinner}
+              reload={this.getMatches}
+            />
+          </TabPanel>
+          <TabPanel>
+            <TopReviews
+              reviews={this.state.topReviews}
+              isLoaded={this.state.reviewsHaveLoaded}
+              errorLoading={this.state.reviewsErrorLoading}
+              spinner={this.state.reviewsSpinner}
+              reload={this.getReviews}
+            />
+          </TabPanel>
+          <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER} />
+        </Tabs>
       </div>
     );
   }
