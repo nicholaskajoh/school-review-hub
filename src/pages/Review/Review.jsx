@@ -3,7 +3,6 @@ import './Review.css';
 import { ToastContainer, toast } from 'react-toastify';
 import CommentCard from './../../partials/CommentCard/CommentCard';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
-import TimeAgo from 'react-time-ago';
 import ObjectNotFound from './../ObjectNotFound/ObjectNotFound';
 import { Link } from "react-router-dom";
 
@@ -233,7 +232,7 @@ class Review extends Component {
   handleUpvote = event => {
     this.setState({ upvoting: 'is-loading' });
     this.upVote(this.state);
-    this.setState({ key: Math.random() });
+    //this.setState({ key: Math.random() });
   };
 
   cancelEdit = () => {
@@ -401,13 +400,13 @@ class Review extends Component {
                       {this.state.upvoted ? (
                         <button
                           className={"button is-default is-medium" + this.state.upvoting}
-                          onClick={this.handleUpvote} key={this.state.key}>
-                          <i className="fa fa-thumbs-down fa has-text-danger"></i>
+                          onClick={this.handleUpvote}>
+                          Upvoted
                         </button>
                       ) : (
                           <button className={"button is-default is-medium " + this.state.upvoting}
-                            onClick={this.handleUpvote} key={this.state.key}>
-                            <i className="fa fa-thumbs-up fa has-text-success"></i>
+                            onClick={this.handleUpvote}>
+                            Upvote
                           </button>
                         )}
                       &nbsp;{this.state.review.upvotes}
@@ -417,18 +416,18 @@ class Review extends Component {
                   {this.state.own_review ? (
                     <div className="level-right">
                       <div className="level-item has-text-dark">
-                      <button title="Edit this review"
-                        className={"button is-default is-medium " + this.state.editing}
-                        onClick={this.handleEdit}>
-                        <i className="far fa-edit"></i>
-                      </button>
+                        <button title="Edit this review"
+                          className={"button is-default is-medium " + this.state.editing}
+                          onClick={this.handleEdit}>
+                          <i className="far fa-edit"></i>
+                        </button>
                       </div>
                     </div>
                   ) : (
                       ''
                     )}
-                  </nav>
-                </div>
+                </nav>
+              </div>
             </div>
 
             <div className="gap-medium"></div>
