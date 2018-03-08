@@ -73,3 +73,11 @@ p {
     cursor: pointer;
     padding: 8px;
 }
+
+.gap-small {
+    margin-top: 9% !important;
+}
+
+.gap-medium {
+    margin-top: 12% !important;
+}

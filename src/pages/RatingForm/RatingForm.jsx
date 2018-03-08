@@ -193,10 +193,10 @@ class RatingForm extends Component {
               </div>
             </article>
           ))}
-          {this.state.errors.map(error => (
-              <p className="help has-text-centered is-danger is-size-5">
+          {this.state.errors.map((error, index) => (
+            <p key={'rating_form_error ' + index} className="help has-text-centered is-danger is-size-5">
                 {error}
-              </p>
+            </p>
           ))}
           <div className="has-text-right buttons is-centered">
                 <button

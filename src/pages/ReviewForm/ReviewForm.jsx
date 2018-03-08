@@ -13,7 +13,7 @@ class ReviewForm extends Component {
       content: '',
       isLoaded: false,
       toastId: null,
-      errors:[]
+      errors: []
     };
     this.componentDidMount = this.componentDidMount.bind(this);
   }
@@ -30,17 +30,14 @@ class ReviewForm extends Component {
   }
 
   async getSchool(id) {
-    try
-    {
+    try {
       const res = await this.api.get(`school/${id}`);
       const school = res.data;
-      this.setState({ school:school, isLoaded:true, error:[] });
+      this.setState({ school: school, isLoaded: true, error: [] });
     }
-    catch (e)
-    {
-      this.setState({ errors: errors_to_array(e), isLoaded:false });
-      if (toast.isActive(this.state.toastId))
-      {
+    catch (e) {
+      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      if (toast.isActive(this.state.toastId)) {
         toast.update(
           this.state.toastId,
           {
@@ -49,10 +46,9 @@ class ReviewForm extends Component {
           }
         )
       }
-      else
-      {
-        this.setState({ 
-          toastId:toast.error(`${this.state.errors}`)
+      else {
+        this.setState({
+          toastId: toast.error(`${this.state.errors}`)
         });
       }
     }
@@ -69,18 +65,16 @@ class ReviewForm extends Component {
   };
 
   async submitReview(data) {
-    try
-    {
+    try {
       const res = await this.api.post('add-review', data, true);
 
       toast.info('Review published, redirecting...');
       let func = this.props.history;
-      window.setTimeout(function(){
+      window.setTimeout(function () {
         func.push(`../review/${res.data['id']}`);
       }, 3500);
     }
-    catch (e)
-    {
+    catch (e) {
       this.setState({ errors: errors_to_array(e) });
       toast.error('An error occured');
     }
@@ -88,49 +82,50 @@ class ReviewForm extends Component {
 
   render() {
     let rendering;
-    if (this.state.isLoaded)
-    {
+    if (this.state.isLoaded) {
       rendering =
-        <div className="section columns is-centered">
-        <div className="column is-6">
-          <p>
-            You are about to publish a review on
+        <div className="section columns has-text-centered is-centered">
+          <div className="column is-6">
+            <p className="subtitle">
+              You are about to publish a review on
             <b> {this.state.school.name}</b>
-          </p>
-          <br />
-          <form onSubmit={this.handleSubmit}>
-            <textarea
-              className="textarea"
-              placeholder="Your Review"
-              rows="10"
-              value={this.state.content}
-              onChange={this.handleChange}
-              required
-            />
-            {this.state.errors.map(error => (
-              <p className="help is-danger is-size-5">
-                {error}
-              </p>
-            ))}
-            <br/ >
-            <div className="field is-grouped is-grouped-centered">
-              <p className="control">
-                <button type="submit" className="button is-danger">
-                  Publish
+            </p>
+            <br />
+            <form onSubmit={this.handleSubmit}>
+              <textarea
+                className="textarea"
+                placeholder="Your Review"
+                rows="10"
+                value={this.state.content}
+                onChange={this.handleChange}
+                required
+              />
+              {this.state.errors.map((error, index) => (
+              <p key={'review_form_error ' + index} className="help is-danger is-size-5">
+                  {error}
+                </p>
+              ))}
+              <br />
+              <div className="field is-grouped is-grouped-centered">
+                <p className="control">
+                  <button type="submit" className="button is-success">
+                    <i className="fa fa-comment"></i>&nbsp;&nbsp;Publish
                 </button>
-              </p>
-            </div>
-          </form>
+                </p>
+              </div>
+            </form>
+
+            <div className="gap-small"></div>
+            <div className="gap-small"></div>
+          </div>
         </div>
-      </div>
     }
-    else 
-    {
-      rendering = 
+    else {
+      rendering =
         <div title="Reload" className="has-text-centered">
-        <button className="reload-btn" onClick={this.componentDidMount}>
-          <i className="fa fa-redo-alt fa-2x" />
-        </button>
+          <button className="reload-btn" onClick={this.componentDidMount}>
+            <i className="fa fa-redo-alt fa-2x" />
+          </button>
         </div>
     }
 
@@ -139,13 +134,13 @@ class ReviewForm extends Component {
         <section className="hero is-small is-warning is-bold">
           <div className="hero-body">
             <div className="container">
-              <h1 className="title">Publish Review</h1>
+              <h1 className="title"><i className="fa fa-comment"></i> Publish Review</h1>
             </div>
           </div>
-          <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
+          <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER} />
         </section>
         <br />
-        { rendering }
+        {rendering}
       </div>
     );
   }

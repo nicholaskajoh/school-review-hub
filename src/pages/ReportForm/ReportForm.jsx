@@ -106,8 +106,8 @@ class ReportForm extends Component {
               onChange={this.handleChange}
               required    
             />
-            {this.state.errors.map(error => (
-              <p className="help is-danger is-size-5">
+            {this.state.errors.map((error, index) => (
+              <p key={'report_form_error ' + index} className="help is-danger is-size-5">
                 {error}
               </p>
             ))}
@@ -115,11 +115,14 @@ class ReportForm extends Component {
             <div className="field is-grouped is-grouped-centered">
               <p className="control">
                 <button type="submit" className="button is-danger">
-                  Publish
+                  <i className="fa fa-microphone"></i>&nbsp;&nbsp;Publish
                 </button>
               </p>
             </div>
           </form>
+          <div className="gap-small"></div>
+          <div className="gap-small"></div>
+          
         </div>
       </div>
     }
@@ -138,7 +141,7 @@ class ReportForm extends Component {
         <section className="hero is-small is-warning is-bold">
           <div className="hero-body">
             <div className="container">
-              <h1 className="title">Publish Report</h1>
+              <h1 className="title"><i className="fa fa-microphone" /> Publish Report</h1>
             </div>
           </div>
           <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>

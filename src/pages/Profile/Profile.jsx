@@ -34,21 +34,18 @@ class Profile extends Component {
   }
 
   welcomeUser() {
-    this.setState({ toastId : toast.info('Welcome, You are anonymous!') });
+    this.setState({ toastId: toast.info('Welcome, You are anonymous!') });
   }
 
   async getUserInfo() {
-    try
-    {
+    try {
       const res = await this.api.get('profile', true);
       const user = res.data;
-      this.setState({ user:user, isLoaded:true });
+      this.setState({ user: user, isLoaded: true });
     }
-    catch (e)
-    {
-      this.setState({ errors: errors_to_array(e), isLoaded:false });
-      if (toast.isActive(this.state.toastId) || this.state.toastId)
-      {
+    catch (e) {
+      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      if (toast.isActive(this.state.toastId) || this.state.toastId) {
         toast.update(
           this.state.toastId,
           {
@@ -61,27 +58,23 @@ class Profile extends Component {
           }
         )
       }
-      else
-      {
-        this.setState({ 
-          toastId:toast.error(`${this.state.errors}`)
+      else {
+        this.setState({
+          toastId: toast.error(`${this.state.errors}`)
         });
       }
     }
   }
 
   async getUserRatings(page) {
-    try
-    {
+    try {
       const res = await this.api.get(`profile/ratings/${page}`, true);
       const ratings = res.data;
-      this.setState({ ratings:ratings, isLoaded:true });
+      this.setState({ ratings: ratings, isLoaded: true });
     }
-    catch (e)
-    {
-      this.setState({ errors: errors_to_array(e), isLoaded:false });
-      if (toast.isActive(this.state.toastId) || this.state.toastId)
-      {
+    catch (e) {
+      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      if (toast.isActive(this.state.toastId) || this.state.toastId) {
         toast.update(
           this.state.toastId,
           {
@@ -94,10 +87,9 @@ class Profile extends Component {
           }
         )
       }
-      else
-      {
-        this.setState({ 
-          toastId:toast.error(`${this.state.errors}`)
+      else {
+        this.setState({
+          toastId: toast.error(`${this.state.errors}`)
         });
       }
     }
@@ -105,16 +97,13 @@ class Profile extends Component {
 
   async deleteRating(school1Id, school2Id) {
     if (window.confirm('Are you sure you want to delete this?')) {
-      try
-      {
+      try {
         await this.api.delete(`rating/${school1Id}/${school2Id}`, true);
         this.getUserRatings(1);
       }
-      catch (e)
-      {
+      catch (e) {
         this.setState({ errors: errors_to_array(e) });
-        if (toast.isActive(this.state.toastId) || this.state.toastId)
-        {
+        if (toast.isActive(this.state.toastId) || this.state.toastId) {
           toast.update(
             this.state.toastId,
             {
@@ -127,10 +116,9 @@ class Profile extends Component {
             }
           )
         }
-        else
-        {
-          this.setState({ 
-            toastId:toast.error(`${this.state.errors}`)
+        else {
+          this.setState({
+            toastId: toast.error(`${this.state.errors}`)
           });
         }
       }
@@ -139,53 +127,77 @@ class Profile extends Component {
 
   render() {
     let rendering;
-    if (this.state.isLoaded)
-    {
-      rendering = 
-      <div className="container">
-      <div className="notification is-light">
-        Your profile is private. Only you can see it!
-      </div>
+    if (this.state.isLoaded) {
+      rendering =
+        <div className="container">
 
-      <h2 className="title">
-        {this.state.user.first_name}{' '}
-        <small>@{this.state.user.username}</small>
-      </h2>
-      <h4 className="subtitle">{this.state.user.email}</h4>
+          <h2 className="title">
+            {this.state.user.first_name}{' '}
+            <small>@{this.state.user.username}</small>
+          </h2>
+          <h4 className="subtitle">{this.state.user.email}</h4>
 
-      <hr />
+          <div className="notification is-light">
+            Your profile is private. Only you can see it!
+          </div>
 
-      <h4 className="subtitle">Ratings</h4>
+          <hr />
+          <br /><br />
 
-      {this.state.ratings.map(rating => (
-          <div className="box" key={'profile_rating ' + rating[0] + ' ' + rating[1]}>
-            <Link to={"/school/" + rating[0]}>{rating[2]}</Link>
-            <strong> vs </strong>
-            <Link to={"/school/" + rating[1]}>{rating[3]}</Link>&nbsp;
-          <Link
-            className="button is-info is-small"
-            to={"/rate/" + rating[0] + "/" + rating[1]}
-          >
-            Update
-          </Link>{' '}
-          &nbsp;
-          <button
-            className="button is-danger is-small"
-            onClick={() => this.deleteRating(rating[0], rating[1])}
-          >
-            Delete
-          </button>
+          <h4 className="title">Ratings</h4>
+
+          <hr />
+          <div className="columns is-multiline">
+
+            {this.state.ratings.map(rating => (
+            <div className="column is-4" key={'profile_rating ' + rating[0] + ' ' + rating[1]}>
+
+                <div className="box has-text-centered">
+
+                  <h3 className="subtitle">
+                    <Link
+                      to={"/school/" + rating[0]}>
+                      {rating[2]}
+                    </Link>
+                  </h3>
+                  <br />
+
+                  <h3 className="title">vs</h3>
+                  <br />
+
+                  <h3 className="subtitle">
+                    <Link className="subtitle" to={"/school/" + rating[1]}>{rating[3]}</Link>
+                  </h3>
+
+                  <hr />
+                  <Link
+                    className="button is-info is-small"
+                    to={"/rate/" + rating[0] + "/" + rating[1]}>
+                    <i className="far fa-check-circle"></i>
+
+                    Update
+                  </Link>
+                  {"   "}
+                  <button
+                    className="button is-warning is-small"
+                    onClick={() => this.deleteRating(rating[0], rating[1])}>
+                    <i className="far fa-trash-alt"></i>
+
+                    &nbsp;&nbsp;Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
         </div>
-      ))}
-    </div>
     }
-    else 
-    {
-      rendering = 
+    else {
+      rendering =
         <div title="Reload" className="has-text-centered">
-        <button className="reload-btn" onClick={this.componentDidMount}>
-          <i className={"fa fa-redo-alt fa-2x"} />
-        </button>
+          <button className="reload-btn" onClick={this.componentDidMount}>
+            <i className={"fa fa-redo-alt fa-2x"} />
+          </button>
         </div>
     }
 
@@ -200,9 +212,9 @@ class Profile extends Component {
         </section>
 
         <div className="section">
-          { rendering }
+          {rendering}
         </div>
-        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER}/>
+        <ToastContainer autoClose={3000} position={toast.POSITION.TOP_CENTER} />
       </div>
     );
   }

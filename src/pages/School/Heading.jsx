@@ -2,13 +2,13 @@ import React from 'react';
 
 
 const Heading = (props) => (
-  <section className="hero is-light">
+  <section className="hero is-light star-pattern">
     <div className="hero-body">
       <div className="container">
         <article className="media">
           <div className="media-left">
-            <figure className="image is-128x128">
-              <img src={props.school.logo_url} alt={props.school.name + ' logo'}/>
+            <figure className="white-border">
+              <img className="image is-128x128" src={props.school.logo_url} alt={props.school.name + ' logo'} />
             </figure>
           </div>
           <div className="media-content">
@@ -22,11 +22,20 @@ const Heading = (props) => (
               </p>
             </div>
           </div>
-          <div className="media-right"></div>
+          <div className="media-right">
+            <div className="is-hidden-mobile">
+            <iframe title="School map" width="auto" height="auto" frameBorder="1" style={{ border: 1 }}
+              src={
+                'https://www.google.com/maps/embed/v1/place?key=' + props.google_api_key + '&q='
+                + encodeURI(props.school.name)
+              } allowFullScreen>
+            </iframe>
+            </div>
+          </div>
         </article>
       </div>
-    </div>	
-  </section>
+    </div>
+  </section >
 );
 
 export default Heading;

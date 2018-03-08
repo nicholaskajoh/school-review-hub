@@ -58,12 +58,14 @@ class SRHIndex extends Component {
     if (this.hasPrevPage) {
       this.getSchools(this.state.page - 1);
     }
+    window.scrollTo(0, 0);
   };
 
   nextPage = () => {
     if (this.hasNextPage) {
       this.getSchools(this.state.page + 1);
     }
+    window.scrollTo(0, 0);
   };
 
   render() {
@@ -82,7 +84,7 @@ class SRHIndex extends Component {
                     <i className="fa fa-shield-alt is-custom-yellow" /> Crest
                   </th>
                   <th>
-                    <i className="fa fa-graduation-cap is-custom-yellow" /> Name
+                    <i className="fa fa-graduation-cap is-custom-yellow" />Name
                   </th>
                   <th>
                     <i className="fa fa-star is-custom-yellow" /> Rating
@@ -104,10 +106,10 @@ class SRHIndex extends Component {
                       <Link
                         to={"/school/" + school.id}
                       >
-                      <img className="image is-48x48 rounded-img"
-                        src={school.logo_url}
-                        alt={school.name + " logo"} />
-                        </Link>
+                        <img className="image is-48x48 rounded-img"
+                          src={school.logo_url}
+                          alt={school.name + " logo"} />
+                      </Link>
                     </td>
                     <td>
                       <Link to={"/school/" + school.id}>{school.name}</Link>

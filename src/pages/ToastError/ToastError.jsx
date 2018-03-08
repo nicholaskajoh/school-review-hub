@@ -11,7 +11,7 @@ class ToastError extends Component {
         <span key={'toast_error ' + index}>
             {error}
             <br/ >
-      </span>
+        </span>
       ))}
       </div>
     )

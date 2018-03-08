@@ -6,9 +6,9 @@ class School(models.Model):
     description = models.TextField(blank=True)
     location = models.CharField(max_length=200)
     logo_url = models.URLField(max_length=300, default='')
-    website = models.URLField()
-    rank = models.IntegerField()
-    rating = models.DecimalField(max_digits=12, decimal_places=2)
+    website = models.URLField(blank=True, null=True)
+    rank = models.IntegerField(blank=True, null=True)
+    rating = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -17,9 +17,9 @@ class School(models.Model):
 
 
 class Review(models.Model):
-    school = models.ForeignKey('School', related_name='schools_reviewed', on_delete=models.CASCADE)
+    school = models.ForeignKey('School', related_name='reviews', on_delete=models.CASCADE)
     content = models.TextField()
-    reviewer = models.ForeignKey(User, related_name='reviewer', on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -28,11 +28,15 @@ class Review(models.Model):
 
 
 class Comparison(models.Model):
-    criterion = models.ForeignKey('Criterion', related_name='criteria', on_delete=models.CASCADE)
-    school1 = models.ForeignKey('School', related_name='school1', on_delete=models.CASCADE)
-    school2 = models.ForeignKey('School', related_name='school2', on_delete=models.CASCADE)
-    choice = models.ForeignKey('School', related_name='choice', on_delete=models.CASCADE)
-    comparer = models.ForeignKey(User, related_name='comparer', null=True, on_delete=models.SET_NULL)
+    criterion = models.ForeignKey('Criterion', related_name='comparisons', on_delete=models.CASCADE)
+    school1 = models.ForeignKey('School', related_name='sch1_comparisons', on_delete=models.CASCADE)
+    school2 = models.ForeignKey('School', related_name='sch2_comparisons', on_delete=models.CASCADE)
+    choice = models.ForeignKey('School', related_name='choice_comparisons', on_delete=models.CASCADE)
+    comparer = models.ForeignKey(User, related_name='comparisons', null=True, on_delete=models.SET_NULL)
+
+    def schools(self):
+        pks = [self.school1.pk, self.school2.pk]
+        return pks
 
     def __str__(self):
         return ('{0} (vs) {1} [{2}], {3}'
@@ -47,6 +51,9 @@ class Comparison(models.Model):
         # school1 and school2 must not be the same
         if self.school1 == self.school2:
             raise ValueError('Cannot compare the same school!')
+        # choice must either be school1 or school2
+        if self.choice != self.school1 and self.choice != self.school2:
+            raise ValueError('Choice must be either school1 or school2!')
         super(Comparison, self).save(*args, **kwargs)
 
 
@@ -60,9 +67,9 @@ class Criterion(models.Model):
 
 
 class Report(models.Model):
-    school = models.ForeignKey('School', related_name='schools_reported', on_delete=models.CASCADE)
+    school = models.ForeignKey('School', related_name='reports', on_delete=models.CASCADE)
     content = models.TextField()
-    reporter = models.ForeignKey(User, related_name='reporter', null=True, on_delete=models.SET_NULL)
+    reporter = models.ForeignKey(User, related_name='reports', null=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -80,7 +87,7 @@ class Comment(models.Model):
     entity = models.CharField(max_length=15, choices=ENTITY_CHOICES)
     entity_id = models.IntegerField()
     comment = models.TextField()
-    commenter = models.ForeignKey(User, related_name='commenter', on_delete=models.CASCADE)
+    commenter = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -99,5 +106,22 @@ class Upvote(models.Model):
     )
     entity = models.CharField(max_length=15, choices=ENTITY_CHOICES)
     entity_id = models.IntegerField()
-    upvoter = models.ForeignKey(User, related_name='upvoter', on_delete=models.CASCADE)
+    upvoter = models.ForeignKey(User, related_name='upvotes', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        entity = self.entity
+        cls = Review
+        if entity == Upvote.REPORT:
+            cls = Report
+        elif entity == Upvote.COMMENT:
+            cls = Comment
+        entity_obj = cls.objects.get(pk=self.entity_id)
+        if cls == Comment:
+            if len(entity_obj.comment ) > 10:
+                return '{} upvotes {}: \'{}...\''.format(self.upvoter.username, entity, entity_obj.comment[:10])
+            return '{} upvotes {}: \'{}\''.format(self.upvoter.username, entity, entity_obj.comment)
+        
+        if len(entity_obj.content ) > 10:
+            return '{} upvotes {}: \'{}...\''.format(self.upvoter.username, entity, entity_obj.content[:10])
+        return '{} upvotes {}: \'{}\''.format(self.upvoter.username, entity, entity_obj.content)

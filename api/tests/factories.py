@@ -1,8 +1,9 @@
 import factory
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-from random import randint
+from faker import Faker
 
+fake = Faker()
 class UserFactory(factory.django.DjangoModelFactory):
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
@@ -15,13 +16,13 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 
 class SchoolFactory(factory.django.DjangoModelFactory):
-    name = factory.Faker('name')
+    name = factory.Faker('company')
     description = factory.Faker('text')
-    location = '{}, {}'.format(factory.Faker('city'), factory.Faker('state'))
-    logo_url = '{}{}'.format(factory.Faker('domain_name'), factory.Faker('file_path'))
-    website = factory.Faker('domain_name')
-    rating = float(randint(10, 200))
-    rank = randint(1, 30)
+    location = '{}, {}'.format(fake.city(), fake.state())
+    logo_url = factory.Faker('image_url')
+    website = factory.Faker('url')
+    # rating = fake.random_int(10, 200)
+    # rank = fake.random_int(1, 30)
 
     class Meta:
         model = 'api.School'
@@ -55,13 +56,15 @@ class ComparisonFactory(factory.django.DjangoModelFactory):
 
 
 class CommentFactory(factory.django.DjangoModelFactory):
-    ENTITY_CHOICES = (
-        ('review', 'Review'),
-        ('report', 'Report'),
-    )
+    # REVIEW = 'review'
+    # REPORT = 'report'
+    # ENTITY_CHOICES = (
+    #     (REVIEW, 'Review'),
+    #     (REPORT, 'Report'),
+    # )
     # entity = models.CharField(max_length=15, choices=ENTITY_CHOICES)
     # entity_id = models.IntegerField()
-    content = factory.Faker('text')
+    comment = factory.Faker('text')
     commenter = factory.SubFactory(UserFactory)
 
     class Meta:
@@ -79,11 +82,14 @@ class ReportFactory(factory.django.DjangoModelFactory):
 
 class UpvoteFactory(factory.django.DjangoModelFactory):
     upvoter = factory.SubFactory(UserFactory)
-    ENTITY_CHOICES = (
-        ('review', 'Review'),
-        ('report', 'Report'),
-        ('comment', 'Comment'),
-    )
+    # REVIEW = 'review'
+    # REPORT = 'report'
+    # COMMENT = 'comment'
+    # ENTITY_CHOICES = (
+    #     (REVIEW, 'Review'),
+    #     (REPORT, 'Report'),
+    #     (COMMENT, 'Comment'),
+    # )
     # entity_id
     # entity = models.CharField(max_length=15, choices=ENTITY_CHOICES)
 
