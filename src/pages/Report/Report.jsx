@@ -32,7 +32,7 @@ class Report extends Component {
       toastId: null,
       errors: [],
       notFound: false,
-      key: 0
+      key: Math.random()
     };
     this.componentDidMount = this.componentDidMount.bind(this);
   }
@@ -392,8 +392,8 @@ class Report extends Component {
                         "{this.state.report.content}"
                       </p>
                     )}
-
                 </div>
+                <hr />
               <nav className="level">
                 <div className="level-left">
                   <div className="level-item has-text-dark">

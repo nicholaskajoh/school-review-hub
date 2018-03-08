@@ -39,9 +39,7 @@ const Highlights = (props) => (
                                                 </Link>
                                             </figure>
                                         </div>
-                                        <div className="media-left">
                                             <Link to={"/school/" + school.id}>{school.name}</Link>
-                                        </div>
                                     </article>
                                 )}
 

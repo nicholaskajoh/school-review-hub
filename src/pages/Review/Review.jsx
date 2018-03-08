@@ -32,7 +32,7 @@ class Review extends Component {
       toastId: null,
       errors: [],
       notFound: false,
-      key: 0
+      key: Math.random()
     };
     this.componentDidMount = this.componentDidMount.bind(this);
   }
