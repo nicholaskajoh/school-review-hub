@@ -401,7 +401,7 @@ class Review extends Component {
                         <button
                           className={"button is-default is-medium" + this.state.upvoting}
                           onClick={this.handleUpvote}>
-                          Upvoted
+                          Remove upvote
                         </button>
                       ) : (
                           <button className={"button is-default is-medium " + this.state.upvoting}
