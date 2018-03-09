@@ -281,7 +281,8 @@ class AddReviewView(APIView):
                 review.save()
             else:
                 review = Review.objects.create(
-                    reviewer=reviewer,school=school,
+                    reviewer=reviewer,
+                    school=school,
                     content=content
                 )
             return Response(data=ReviewSerializer(review).data,status=status.HTTP_200_OK)

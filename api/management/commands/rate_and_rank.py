@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from api.models import School, Comparison
 from django.db.models import Q
-from django.db.models import Count, FloatField, Avg
+from django.db.models import Count, FloatField, Avg, Sum
 from django.db.models.functions import Cast
 
 class Command(BaseCommand):
@@ -20,7 +20,15 @@ class Command(BaseCommand):
             rating = rating.annotate(wins=Cast(Count('comparer', filter=Q(choice__id=school.id)), FloatField()))
             # Calculate the average wins of the school, multiplied by 10; 10 is arbitrary.
             rating = rating.aggregate(score=Avg('wins') * 10)['score']
-            school.rating = rating if rating != None else 0
+            # Set rating to zero if null.
+            rating = rating if rating != None else 0
+            # Add sentiment analysis aggregate score for reviews and reports of the school.
+            sa_aggr_rev = school.reviews.all().aggregate(sentiment=Sum('sentiment'))['sentiment']
+            rating += sa_aggr_rev if sa_aggr_rev != None else 0
+            sa_aggr_rep = school.reports.all().aggregate(sentiment=Sum('sentiment'))['sentiment']
+            rating += sa_aggr_rep if sa_aggr_rep != None else 0
+
+            school.rating = rating
 
         # Sort the schools in descending order of rating rating.
         schools = sorted(schools, key=lambda s: s.rating, reverse=True)
