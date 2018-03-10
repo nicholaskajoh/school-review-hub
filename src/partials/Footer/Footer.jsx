@@ -8,14 +8,12 @@ const hashtags = '&hashtags=schoolreviewhub,teamcodesauce,saucecode2018';
 const twitter_text =
   'https://twitter.com/intent/tweet?' + intent_text + url + hashtags;
 const facebook_text = 'http://www.facebook.com/sharer/sharer.php?';
-const instagram_text = '';
 const Footer = () => (
   <footer className="footer is-dark">
     <div className="container">
       <nav className="level has-text-centered">
         <div className="level-left">
           <small>
-            <em>
               &copy; SchoolReviewHub, {new Date().getFullYear()}. Built with
               {" "}<i className="fa fa-heart has-text-danger" /> by{' '}
               <a
@@ -43,7 +41,6 @@ const Footer = () => (
               >
                 Awo{' '}
               </a>.
-            </em>
           </small>
         </div>
         <br />
@@ -56,10 +53,6 @@ const Footer = () => (
           &nbsp;&nbsp;
           <Link target="_blank" to={twitter_text} data-size="large">
             <i className="fab fa-twitter fa-2x  footer-glyph" />
-          </Link>
-          &nbsp;&nbsp;
-          <Link target="_blank" to={instagram_text} data-size="large">
-            <i className="fab fa-instagram fa-2x  footer-glyph" />
           </Link>
         </div>
       </nav>

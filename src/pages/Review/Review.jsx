@@ -23,6 +23,7 @@ class Review extends Component {
       comment: '',
       isloading: '',
       isLoaded: false,
+      errorLoading: false,
       current_page: 0,
       has_more_comments: false,
       upvoted: false,
@@ -31,22 +32,29 @@ class Review extends Component {
       toastId: null,
       errors: [],
       notFound: false,
-      key: Math.random()
     };
     this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    const reviewId = nextProps.match.params.id;
-    this.getReview(reviewId);
-    this.getComments(reviewId);
-    this.checkUpvote(reviewId);
-    this.checkOwner(reviewId);
+    const reviewId = this.props.match.params.id;
+    if (!isNaN(Number(reviewId))) {
+      this.setState({ errorLoading: false });
+      this.getReview(reviewId);
+      this.getComments(reviewId);
+      this.checkUpvote(reviewId);
+      this.checkOwner(reviewId);
+      window.scrollTo(0, 0);
+    }
+    else {
+      this.setState({ notFound: true });
+    }
   }
 
   componentDidMount() {
     const reviewId = this.props.match.params.id;
     if (!isNaN(Number(reviewId))) {
+      this.setState({ errorLoading: false });
       this.getReview(reviewId);
       this.getComments(reviewId);
       this.checkUpvote(reviewId);
@@ -70,12 +78,13 @@ class Review extends Component {
         school_name: school_name,
         school_id: school_id,
         isLoaded: true,
+        errorLoading: false,
         errors: []
       });
     }
     catch (e) {
       let errors = errors_to_array(e);
-      this.setState({ errors: errors, isLoaded: false });
+      this.setState({ errors: errors, isLoaded: false, errorLoading: true });
       if (errors === 404) {
         this.setState({ notFound: true });
       }
@@ -108,11 +117,11 @@ class Review extends Component {
         comments: comments,
         current_page: current_page,
         has_more_comments: has_more_comments,
-        isLoaded: true, errors: []
+        isLoaded: true, errors: [], errorLoading: false
       });
     }
     catch (e) {
-      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      this.setState({ errors: errors_to_array(e), isLoaded: false, errorLoading: true });
       if (toast.isActive(this.state.toastId) || this.state.toastId) {
         toast.update(
           this.state.toastId,
@@ -164,7 +173,7 @@ class Review extends Component {
         comments: comments,
         current_page: current_page,
         has_more_comments: has_more_comments,
-        isLoading: '', errors: []
+        isLoading: '', errors: [], errorLoading: false
       });
     }
     catch (e) {
@@ -198,7 +207,8 @@ class Review extends Component {
   };
 
   handleEdit = event => {
-    this.setState({ editing: true });
+    if (this.state.own_review)
+      this.setState({ editing: true });
   }
 
   handleSubmit = event => {
@@ -232,7 +242,6 @@ class Review extends Component {
   handleUpvote = event => {
     this.setState({ upvoting: 'is-loading' });
     this.upVote(this.state);
-    //this.setState({ key: Math.random() });
   };
 
   cancelEdit = () => {
@@ -350,7 +359,7 @@ class Review extends Component {
               <div className="media-content">
                 <div className="content has-text-centered">
                   {this.state.editing ? (
-                    <form onSubmit={this.handleEditSubmit}>
+                  <form onSubmit={this.handleEditSubmit}>
                       <div className="field">
                         <div className="control">
                           <textarea
@@ -383,12 +392,10 @@ class Review extends Component {
                           </button>
                           </p>
                         </div>
-
-                        <br />
                       </div>
                     </form>
                   ) : (
-                      <p className="subtitle has-text-weight-light">
+                    <p className="subtitle has-text-weight-light" onClick={this.handleEdit}>
                         <em>"{this.state.review.content}"</em>
                       </p>
                     )}
@@ -399,12 +406,12 @@ class Review extends Component {
                     <div className="level-item has-text-dark">
                       {this.state.upvoted ? (
                         <button
-                          className={"button is-default is-medium" + this.state.upvoting}
+                          className={"button is-default is-small " + this.state.upvoting}
                           onClick={this.handleUpvote}>
                           Remove upvote
                         </button>
                       ) : (
-                          <button className={"button is-default is-medium " + this.state.upvoting}
+                          <button className={"button is-danger is-small " + this.state.upvoting}
                             onClick={this.handleUpvote}>
                             Upvote
                           </button>
@@ -417,7 +424,7 @@ class Review extends Component {
                     <div className="level-right">
                       <div className="level-item has-text-dark">
                         <button title="Edit this review"
-                          className={"button is-default is-medium " + this.state.editing}
+                          className={"button is-default is-small " + this.state.editing}
                           onClick={this.handleEdit}>
                           <i className="far fa-edit"></i>
                         </button>
@@ -500,24 +507,37 @@ class Review extends Component {
                 </p>
               </div>
             ) : (
-                <div className="has-text-centered">
-                  <i className="fab fa-pied-piper-alt fa-7x"></i>
-                  <br /><br />
-
-                  <p>
-                    <em>The end...</em>
-                  </p>
-                </div>
+              <div className="field is-grouped is-grouped-centered">
+                <p className="control">
+                  {/* <button
+                    className="button is-danger"
+                    id="post-comment-btn" disabled
+                  >
+                    Load more comment
+                  </button> */}
+                  <div className="has-text-centered">
+                    <i className="fab fa-pied-piper-alt fa-7x"></i>
+                    <br /><br />
+                    <p>
+                      <em>The end...</em>
+                    </p>
+                  </div>
+                </p>
+              </div>
               )}
           </div>
         </div>
     }
+    else if (this.state.errorLoading) {
+      rendering =
+        <div className="has-text-centered">
+          <button title="Reload" className="reload-btn" onClick={this.componentDidMount}>retry</button>
+        </div>
+    }
     else {
       rendering =
-        <div title="Reload" className="has-text-centered">
-          <button className="reload-btn" onClick={this.componentDidMount}>
-            <i className="fa fa-redo-alt fa-2x" />
-          </button>
+        <div className="has-text-centered">
+          <button className="reload-btn loading">...</button>
         </div>
     }
 

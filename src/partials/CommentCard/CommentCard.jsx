@@ -10,9 +10,9 @@ const CommentCard = ({ comment }) => (
 
       <div className="media-content">
         <div className="content">
-          <p>
+          {/* <p>
             <strong>Anonymous</strong> <small>@anonymous</small>
-          </p>
+          </p> */}
           <p className="has-text-weight-light has-text-centered">
             <em>{comment.comment}</em>
           </p>

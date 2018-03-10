@@ -175,6 +175,9 @@ class RatingView(APIView):
         school1_id = data['schools']['school1_id']
         school2_id = data['schools']['school2_id']
         choices = data['choices']
+        if len(choices) <= 0:
+            return Response(data={'choices': ['You did not select any choice']},
+                status=status.HTTP_400_BAD_REQUEST)
 
         if school1_id != school2_id:
             # school1 id must be less than school2 id
@@ -275,7 +278,8 @@ class AddReviewView(APIView):
             content = form.cleaned_data['content']
             school = form.cleaned_data['school']
             reviewer = form.cleaned_data['reviewer']
-            review = Review.objects.filter(pk=request.data.get('id')).first()
+            review = Review.objects.filter(pk=request.data.get('id'),
+            reviewer=reviewer).first()
             if review:
                 review.content = content
                 review.save()
@@ -303,7 +307,8 @@ class AddReportView(APIView):
             content = form.cleaned_data['content']
             school = form.cleaned_data['school']
             reporter = form.cleaned_data['reporter']
-            report = Report.objects.filter(pk=request.data.get('id')).first()
+            report = Report.objects.filter(pk=request.data.get('id'),
+            reporter=reporter).first()
             if report:
                 report.content = content
                 report.save()

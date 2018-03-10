@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken', # api auth
     'corsheaders',
     'django_extensions',
+    'django_nose',
 
     # django
     'django.contrib.admin',
@@ -165,3 +166,11 @@ CORS_EXPOSE_HEADERS = ['X-Has-Previous', 'X-Has-Next']
 SHELL_PLUS = "ipython"
 
 PARALLEL_DOTS_API_KEY = os.getenv('PARALLEL_DOTS_API_KEY')
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=api',
+    '--cover-html'
+]

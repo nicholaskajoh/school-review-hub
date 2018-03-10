@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import TimeAgo from 'react-time-ago';
 
-const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
+const TopReviews = ({ reviews, isLoaded, errorLoading, reload }) => {
   let rendering;
   if (isLoaded) {
     rendering = (
@@ -69,18 +69,17 @@ const TopReviews = ({ reviews, isLoaded, errorLoading, spinner, reload }) => {
         ))}
       </div>
     );
-  } else {
-    rendering = (
-      <div title="Reload" className="has-text-centered">
-        <button
-          className="reload-btn"
-          disabled={errorLoading === false}
-          onClick={reload}
-        >
-          <i className={'fa ' + spinner + ' fa-2x'} />
-        </button>
+  } else if (errorLoading) {
+    rendering =
+      <div className="has-text-centered">
+        <button title="Reload" className="reload-btn" onClick={reload}>retry</button>
       </div>
-    );
+  }
+  else {
+    rendering =
+      <div className="has-text-centered">
+        <button className="reload-btn loading">...</button>
+      </div>
   }
 
   return (

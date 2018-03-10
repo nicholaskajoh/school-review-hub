@@ -15,6 +15,7 @@ class Profile extends Component {
       ratings: [],
       ratingsPage: 1,
       isLoaded: false,
+      errorLoading: false,
       toastId: null,
       errors: []
     };
@@ -27,6 +28,7 @@ class Profile extends Component {
   }
 
   componentDidMount() {
+    this.setState({ errorLoading: false });
     this.welcomeUser();
     this.getUserInfo();
     this.getUserRatings(1);
@@ -41,10 +43,10 @@ class Profile extends Component {
     try {
       const res = await this.api.get('profile', true);
       const user = res.data;
-      this.setState({ user: user, isLoaded: true });
+      this.setState({ user: user, isLoaded: true, errorLoading:false });
     }
     catch (e) {
-      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      this.setState({ errors: errors_to_array(e), isLoaded: false, errorLoading: true });
       if (toast.isActive(this.state.toastId) || this.state.toastId) {
         toast.update(
           this.state.toastId,
@@ -70,10 +72,10 @@ class Profile extends Component {
     try {
       const res = await this.api.get(`profile/ratings/${page}`, true);
       const ratings = res.data;
-      this.setState({ ratings: ratings, isLoaded: true });
+      this.setState({ ratings: ratings, isLoaded: true, errorLoading:false });
     }
     catch (e) {
-      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      this.setState({ errors: errors_to_array(e), isLoaded: false, errorLoading: true });
       if (toast.isActive(this.state.toastId) || this.state.toastId) {
         toast.update(
           this.state.toastId,
@@ -192,12 +194,16 @@ class Profile extends Component {
 
         </div>
     }
+    else if (this.state.errorLoading) {
+      rendering =
+        <div className="has-text-centered">
+        <button title="Reload" className="reload-btn" onClick={this.componentDidMount}>retry</button>
+        </div>
+    }
     else {
       rendering =
-        <div title="Reload" className="has-text-centered">
-          <button className="reload-btn" onClick={this.componentDidMount}>
-            <i className={"fa fa-redo-alt fa-2x"} />
-          </button>
+        <div className="has-text-centered">
+        <button className="reload-btn loading">...</button>
         </div>
     }
 

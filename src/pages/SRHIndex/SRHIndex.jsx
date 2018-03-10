@@ -4,6 +4,7 @@ import './SRHIndex.css';
 import { toast, ToastContainer } from 'react-toastify';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
 
+
 class SRHIndex extends Component {
   constructor(props) {
     super(props);
@@ -12,6 +13,7 @@ class SRHIndex extends Component {
       schools: [],
       page: 1,
       isLoaded: false,
+      errorLoading: false,
       toastId: null,
       errors: []
     };
@@ -37,10 +39,11 @@ class SRHIndex extends Component {
       this.setState({
         schools: schools,
         page: page,
-        isLoaded: true
+        isLoaded: true,
+        errorLoading:false
       });
     } catch (e) {
-      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      this.setState({ errors: errors_to_array(e), isLoaded: false, errorLoading: true });
       if (toast.isActive(this.state.toastId)) {
         toast.update(this.state.toastId, {
           render: `${this.state.errors}`,
@@ -58,14 +61,14 @@ class SRHIndex extends Component {
     if (this.hasPrevPage) {
       this.getSchools(this.state.page - 1);
     }
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
   };
 
   nextPage = () => {
     if (this.hasNextPage) {
       this.getSchools(this.state.page + 1);
     }
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
   };
 
   render() {
@@ -146,16 +149,17 @@ class SRHIndex extends Component {
           <br />
         </div>
       );
-    } else {
-      rendering = (
-        <div title="Reload" className="has-text-centered">
-          <br />
-          <button className="reload-btn" onClick={this.componentDidMount}>
-            <i className="fa fa-redo-alt fa-2x" />
-          </button>
-          <br />
+    } else if (this.state.errorLoading) {
+      rendering =
+        <div className="has-text-centered">
+          <button title="Reload" className="reload-btn" onClick={this.componentDidMount}>retry</button>
         </div>
-      )
+    }
+    else {
+      rendering =
+        <div className="has-text-centered">
+          <button className="reload-btn loading">...</button>
+        </div>
     }
 
     return (

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import './ReportForm.css';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
+import ObjectNotFound from './../ObjectNotFound/ObjectNotFound';
 
 
 class ReportForm extends Component {
@@ -11,7 +12,10 @@ class ReportForm extends Component {
     this.state = {
       school: [],
       content: '',
+      submitting: false,
       isLoaded: false,
+      errorLoading: false,
+      notFound: false,
       errors:[]
     };
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -19,13 +23,26 @@ class ReportForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     const id = nextProps.match.params.id;
-    this.getSchool(id);
+    if (!isNaN(Number(id))) {
+      this.setState({ errorLoading: false });
+      this.getSchool(id);
+      window.scrollTo(0, 0);
+    }
+    else {
+      this.setState({ notFound: true });
+    }
   }
 
   componentDidMount() {
     const id = this.props.match.params.id;
-    this.getSchool(id);
-    window.scrollTo(0, 0);
+    if (!isNaN(Number(id))) {
+      this.setState({ errorLoading: false });
+      this.getSchool(id);
+      window.scrollTo(0, 0);
+    }
+    else {
+      this.setState({ notFound: true });
+    }
   }
 
   async getSchool(id) {
@@ -33,11 +50,15 @@ class ReportForm extends Component {
     {
       const res = await this.api.get(`school/${id}`);
       const school = res.data;
-      this.setState({ school:school, isLoaded:true, errors:[] });
+      this.setState({ school: school, isLoaded: true, errors: [], errorLoading: false });
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e), isLoaded:false });
+      let errors = errors_to_array(e);
+      this.setState({ errors: errors, isLoaded: false, errorLoading:true });
+      if (errors === 404) {
+        this.setState({ notFound: true });
+      }
       if (toast.isActive(this.state.toastId))
       {
         toast.update(
@@ -68,10 +89,11 @@ class ReportForm extends Component {
   };
 
   async submitReport(data) {
+    this.setState({ submitting: true });
     try
     {
       const res = await this.api.post('add-report', data, true);
-
+      this.setState({ errors: [] });
       toast.info('Report published, redirecting...');
       let func = this.props.history;
       window.setTimeout(function(){
@@ -80,20 +102,24 @@ class ReportForm extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
+      this.setState({ errors: errors_to_array(e), submitting:false });
       toast.error('An error occured');
     }
   }
 
   render() {
+    if (this.state.notFound) {
+      return <ObjectNotFound object_model="Publish Report on School" />;
+    }
+
     let rendering;
     if (this.state.isLoaded)
     {
       rendering =
-        <div className="section columns is-centered">
+        <div className="section has-text-centered columns is-centered">
         <div className="column is-6">
-          <p>
-            You are about to publish a Report on
+          <p className="subtitle">
+            You are about to publish a report on
             <b> {this.state.school.name}</b>
           </p>
           <br />
@@ -101,7 +127,6 @@ class ReportForm extends Component {
             <textarea
               className="textarea"
               placeholder="Your Report"
-              rows="10"
               value={this.state.content}
               onChange={this.handleChange}
               required    
@@ -114,7 +139,7 @@ class ReportForm extends Component {
             <br/ >
             <div className="field is-grouped is-grouped-centered">
               <p className="control">
-                <button type="submit" className="button is-danger">
+                <button type="submit" className="button is-danger" disabled={this.state.submitting}>
                   <i className="fa fa-microphone"></i>&nbsp;&nbsp;Publish
                 </button>
               </p>
@@ -126,14 +151,17 @@ class ReportForm extends Component {
         </div>
       </div>
     }
-    else 
-    {
-        rendering = 
-          <div title="Reload" className="has-text-centered">
-          <button className="reload-btn" onClick={this.componentDidMount}>
-            <i className="fa fa-redo-alt fa-2x" />
-          </button>
-          </div>     
+    else if (this.state.errorLoading) {
+      rendering =
+        <div className="has-text-centered">
+          <button title="Reload" className="reload-btn" onClick={this.componentDidMount}>retry</button>
+        </div>
+    }
+    else {
+      rendering =
+        <div className="has-text-centered">
+          <button className="reload-btn loading">...</button>
+        </div>
     }
 
     return (

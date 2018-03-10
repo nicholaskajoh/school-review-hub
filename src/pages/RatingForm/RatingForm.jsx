@@ -5,6 +5,7 @@ import './RatingForm.css';
 import '../../assets/css/pretty-checkbox.min.css';
 import 'mdi/css/materialdesignicons.min.css';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
+import ObjectNotFound from './../ObjectNotFound/ObjectNotFound';
 
 
 class RatingForm extends Component {
@@ -16,7 +17,10 @@ class RatingForm extends Component {
       school1: {},
       school2: {},
       formData: {},
+      submitting: false,
       isLoaded: false,
+      errorLoading: false,
+      notFound:false,
       toastId: null,
       errors: [],
     };
@@ -24,12 +28,17 @@ class RatingForm extends Component {
   }
 
   componentDidMount() {
-    this.getCriteria();
-    this.getSchools(
-      this.props.match.params.school1Id,
-      this.props.match.params.school2Id
-    );
-    window.scrollTo(0, 0);
+    const id1 = this.props.match.params.school1Id;
+    const id2 = this.props.match.params.school2Id;
+    if ( !isNaN(Number(id1)) && !isNaN(Number(id2)) ) {
+      this.setState({ errorLoading: false });
+      this.getCriteria();
+      this.getSchools(id1, id2);
+      window.scrollTo(0, 0);
+    }
+    else {
+      this.setState({ notFound: true });
+    }
   }
 
   async getCriteria() {
@@ -37,11 +46,11 @@ class RatingForm extends Component {
     {
       const res = await this.api.get('criteria');
       const criteria = res.data;
-      this.setState({ criteria:criteria, isLoaded: true, errors:[] });
+      this.setState({ criteria:criteria, isLoaded: true, errors:[], errorLoading:false });
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      this.setState({ errors: errors_to_array(e), isLoaded: false, errorLoading: true });
       if (toast.isActive(this.state.toastId))
       {
         toast.update(
@@ -68,11 +77,16 @@ class RatingForm extends Component {
       const res2 = this.api.get(`school/${school2Id}`);
 
       const [res3, res4] = await Promise.all([res1, res2]);
-      this.setState({ school1: res3.data, school2: res4.data, errors: []  });      
+      this.setState({ school1: res3.data, school2: res4.data, errors: [], errorLoading: false  });      
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      let errors = errors_to_array(e);
+      this.setState({ errors: errors, isLoaded: false, errorLoading: true });
+      if (errors === 404) {
+        this.setState({ notFound: true });
+      }
+
       if (toast.isActive(this.state.toastId) || this.state.toastId)
       {
         toast.update(
@@ -93,6 +107,7 @@ class RatingForm extends Component {
   }
 
   async submitRating(data) {
+    this.setState({ submitting: true });
     try
     {
       await this.api.post(
@@ -100,6 +115,7 @@ class RatingForm extends Component {
         qs.stringify({ data: JSON.stringify(data) }),
         true
       );
+      this.setState({ errors: [] });
       toast.info('Rating submitted. Redirecting to profile...');
       let func = this.props.history;
       window.setTimeout(function(){
@@ -108,13 +124,13 @@ class RatingForm extends Component {
     }
     catch (e)
     {
-      this.setState({ errors: errors_to_array(e) });
+      this.setState({ errors: errors_to_array(e), submitting: false });
       if (toast.isActive(this.state.toastId))
       {
         toast.update(
           this.state.toastId,
           {
-            render: 'An error occured',
+            render: `${this.state.errors}`,
             type: toast.TYPE.ERROR,
           }
         )
@@ -122,7 +138,7 @@ class RatingForm extends Component {
       else
       {
         this.setState({ 
-          toastId:toast.error('An error occured')
+          toastId:toast.error(`${this.state.errors}`)
         });
       }
     }
@@ -151,16 +167,48 @@ class RatingForm extends Component {
     event.preventDefault();
   };
 
+  removeCriterion(id)
+  {
+    let criteria = this.state.criteria;
+    let index = -1;
+    for (let i = 0; i < criteria.length; i++) {
+      if (id === criteria[i]['id']){
+        index = i;
+        break;
+      }      
+    }
+    let formData = this.state.formData;
+    delete formData[id];
+    criteria.splice(index, 1);
+
+    if (criteria.length <= 0) {
+      this.setState({ submitting: true });
+    }
+
+    this.setState({ criteria: criteria, formData: formData})
+  }
+
   render() {
+    if (this.state.notFound) {
+      return <ObjectNotFound object_model="Matching School" />;
+    }
+
     let rendering;
     if (this.state.isLoaded)
     {
       rendering = (
         <form onSubmit={this.handleSubmit}>
+          <div className="notification is-default">
+            You do not have to select all the criteria
+                </div>
           {this.state.criteria.map(criterion => (
             <article className="message is-info" key={'criterion ' + criterion.id}>
               <div className="message-header">
                 <p>{criterion.description}</p>
+                <button title="remove this criterion" type="button" className="delete"
+                onClick={(e) => this.removeCriterion(criterion.id)}
+                >
+                </button>
               </div>
               <div className="message-body">
                 <div className="control">
@@ -202,10 +250,11 @@ class RatingForm extends Component {
                 <button
                   className="button is-large is-success"
                   type="submit"
-                  disabled={
-                    Object.keys(this.state.formData).length !==
-                    this.state.criteria.length
-                  }
+                  // disabled={
+                  //   Object.keys(this.state.formData).length !==
+                  //   this.state.criteria.length
+                  // }
+                  disabled={this.state.submitting}
                 >
                   <i className="fa fa-star golden-star" aria-hidden="true" />&nbsp;
                   Submit Ratings
@@ -214,13 +263,16 @@ class RatingForm extends Component {
           </form>
         )
     }
-    else 
-    {
-      rendering = 
-        <div title="Reload" className="has-text-centered">
-        <button className="reload-btn" onClick={this.componentDidMount}>
-          <i className="fa fa-redo-alt fa-2x" />
-        </button>
+    else if (this.state.errorLoading) {
+      rendering =
+        <div className="has-text-centered">
+          <button title="Reload" className="reload-btn" onClick={this.componentDidMount}>retry</button>
+        </div>
+    }
+    else {
+      rendering =
+        <div className="has-text-centered">
+          <button className="reload-btn loading">...</button>
         </div>
     }
 
@@ -230,13 +282,11 @@ class RatingForm extends Component {
           <div className="hero-body">
             <div className="container">
               <h1 className="title">
-                Rate:
-                <a className="subtitle">Select the school that best fits</a>
+                Rate: <span className="subtitle">Select the school that best fits criteria that you know about</span>
               </h1>
             </div>
           </div>
         </section>
-
         <br />
         <br />
 
