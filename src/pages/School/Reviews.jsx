@@ -13,6 +13,7 @@ class Reviews extends Component {
       reviews: [],
       page: 1,
       isLoaded: false,
+      errorLoading: false,
       toastId: null,
       errors: []
     };
@@ -21,6 +22,7 @@ class Reviews extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.getReviews(nextProps.schoolId, 1);
+    window.scrollTo(0, 0);
   }
 
   componentDidMount() {
@@ -34,10 +36,10 @@ class Reviews extends Component {
       const reviews = res.data;
       this.hasPrevPage = res.headers['x-has-previous'].toLowerCase() === 'true';
       this.hasNextPage = res.headers['x-has-next'].toLowerCase() === 'true';
-      this.setState({ reviews: reviews, page: page, isLoaded: true });
+      this.setState({ reviews: reviews, page: page, isLoaded: true, errorLoading:false });
     }
     catch (e) {
-      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      this.setState({ errors: errors_to_array(e), isLoaded: false, errorLoading: true });
       if (toast.isActive(this.state.toastId)) {
         toast.update(
           this.state.toastId,
@@ -81,9 +83,9 @@ class Reviews extends Component {
 
                     <div className="media-content">
                       <div className="content">
-                        <p>
-                          <strong>Anonymous</strong> <small>@anonymous</small>
-                        </p>
+                      {/* <p>
+                        <strong>Anonymous</strong> <small>@anonymous</small>
+                      </p> */}
                         <p>
                           <strong>
                             "{review.content.substring(0, 150).trim() +
@@ -157,14 +159,16 @@ class Reviews extends Component {
           </div>
         </div>
     }
+    else if (this.state.errorLoading) {
+      rendering =
+        <div className="has-text-centered">
+          <button title="Reload" className="reload-btn" onClick={this.componentDidMount}>retry</button>
+        </div>
+    }
     else {
       rendering =
-        <div title="Reload reviews" className="has-text-centered">
-          <br />
-          <button className="reload-btn" onClick={this.componentDidMount}>
-            <i className="fa fa-redo-alt fa-2x" />
-          </button>
-          <br />
+        <div className="has-text-centered">
+          <button className="reload-btn loading">...</button>
         </div>
     }
 

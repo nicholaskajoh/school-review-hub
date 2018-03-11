@@ -23,6 +23,7 @@ class Report extends Component {
       comment: '',
       isloading: '',
       isLoaded: false,
+      errorLoading: false,
       current_page: 0,
       has_more_comments: false,
       upvoted: false,
@@ -31,22 +32,30 @@ class Report extends Component {
       toastId: null,
       errors: [],
       notFound: false,
-      key: Math.random()
     };
     this.componentDidMount = this.componentDidMount.bind(this);
+    this.upvoteComment = this.upvoteComment.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     const reportId = nextProps.match.params.id;
-    this.getReport(reportId);
-    this.getComments(reportId);
-    this.checkUpvote(reportId);
-    this.checkOwner(reportId);
+    if (!isNaN(Number(reportId))) {
+      this.setState({ errorLoading: false });
+      this.getReport(reportId);
+      this.getComments(reportId);
+      this.checkUpvote(reportId);
+      this.checkOwner(reportId);
+      window.scrollTo(0, 0);
+    }
+    else {
+      this.setState({ notFound: true });
+    }
   }
 
   componentDidMount() {
     const reportId = this.props.match.params.id;
     if (!isNaN(Number(reportId))) {
+      this.setState({ errorLoading: false });
       this.getReport(reportId);
       this.getComments(reportId);
       this.checkUpvote(reportId);
@@ -70,12 +79,13 @@ class Report extends Component {
         edited_report_content: report.content,
         school_id: school_id,
         isLoaded: true,
+        errorLoading: false,
         errors: []
       });
     }
     catch (e) {
       let errors = errors_to_array(e);
-      this.setState({ errors: errors, isLoaded: false });
+      this.setState({ errors: errors, isLoaded: false, errorLoading:true });
       if (errors === 404) {
         this.setState({ notFound: true });
       }
@@ -108,11 +118,12 @@ class Report extends Component {
         comments: comments,
         current_page: current_page,
         has_more_comments: has_more_comments,
-        isLoaded: true, errors: []
+        isLoaded: true, errors: [],
+        errorLoading: false
       });
     }
     catch (e) {
-      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      this.setState({ errors: errors_to_array(e), isLoaded: false, errorLoading: true });
       if (toast.isActive(this.state.toastId) || this.state.toastId) {
         toast.update(
           this.state.toastId,
@@ -164,7 +175,7 @@ class Report extends Component {
         comments: comments,
         current_page: current_page,
         has_more_comments: has_more_comments,
-        isLoading: '', errors: []
+        isLoading: '', errors: [], errorLoading: false
       });
     }
     catch (e) {
@@ -198,7 +209,8 @@ class Report extends Component {
   };
 
   handleEdit = event => {
-    this.setState({ editing: true });
+    if (this.state.own_report)
+      this.setState({ editing: true });
   }
 
   handleSubmit = event => {
@@ -232,7 +244,6 @@ class Report extends Component {
   handleUpvote = event => {
     this.setState({ upvoting: 'is-loading' });
     this.upVote(this.state);
-    //this.setState({ key: Math.random() });
   };
 
   cancelEdit = () => {
@@ -317,6 +328,44 @@ class Report extends Component {
     }
   }
 
+  async upvoteComment(comment_id)
+  {
+    try {
+      const res = await this.api.get(`upvote/${comment_id}/comment`, true);
+      let comments = this.state.comments;
+      for (let i = 0; i < comments.length; i++) {
+        if (comment_id === comments[i]['id']) {
+          comments[i]['upvotes'] += res.data['type'];
+          break;
+        }
+      }
+      this.setState({ comments: comments });
+      // if (this.toggleUpvote() === true) { toast.info('Upvoted'); }
+      // else { toast.info('Removed Upvote'); }
+
+      // const reportId = this.state.report['id'];
+      // this.getReport(reportId);
+      // this.setState({ upvoted: this.toggleUpvote(), errors: [], upvoting: '' });
+    }
+    catch (e) {
+      this.setState({ errors: errors_to_array(e)});
+      if (toast.isActive(this.state.toastId) || this.state.toastId) {
+        toast.update(
+          this.state.toastId,
+          {
+            render: `${this.state.errors}`,
+            type: toast.TYPE.ERROR,
+          }
+        )
+      }
+      else {
+        this.setState({
+          toastId: toast.error(`${this.state.errors}`)
+        });
+      }
+    }
+  }
+
   render() {
     if (this.state.notFound) {
       return <ObjectNotFound object_model="Report" />;
@@ -349,7 +398,7 @@ class Report extends Component {
               <div className="media-content">
                 <div className="content has-text-centered">
                   {this.state.editing ? (
-                    <form onSubmit={this.handleEditSubmit}>
+                  <form onSubmit={this.handleEditSubmit}>
                       <div className="field">
                         <div className="control">
                           <textarea
@@ -382,12 +431,10 @@ class Report extends Component {
                             </button>
                           </p>
                         </div>
-                        <br />
-
                       </div>
                     </form>
                   ) : (
-                      <p className="subtitle has-text-weight-light">
+                    <p className="subtitle has-text-weight-light" onClick={this.handleEdit}>
                         "{this.state.report.content}"
                       </p>
                     )}
@@ -398,12 +445,12 @@ class Report extends Component {
                     <div className="level-item has-text-dark">
                       {this.state.upvoted ? (
                         <button
-                          className={"button is-default is-medium" + this.state.upvoting}
+                          className={"button is-default is-small " + this.state.upvoting}
                           onClick={this.handleUpvote}>
                           Remove upvote
                       </button>
                       ) : (
-                          <button className={"button is-default is-medium " + this.state.upvoting}
+                          <button className={"button is-danger is-small " + this.state.upvoting}
                             onClick={this.handleUpvote}>
                             Upvote
                         </button>
@@ -416,7 +463,7 @@ class Report extends Component {
                     <div className="level-right">
                       <div className="level-item has-text-dark">
                         <button title="Edit this report"
-                          className={"button is-default is-medium " + this.state.editing}
+                          className={"button is-default is-small " + this.state.editing}
                           onClick={this.handleEdit}>
                           <i className="far fa-edit"></i>
                         </button>
@@ -483,7 +530,7 @@ class Report extends Component {
               <br />
 
               {this.state.comments.map(comment => (
-                <CommentCard key={'report_comment ' + comment.id} comment={comment} />
+                <CommentCard key={'report_comment ' + comment.id} comment={comment} upvote={this.upvoteComment} />
               ))}
 
             </div>
@@ -500,24 +547,37 @@ class Report extends Component {
                 </p>
               </div>
             ) : (
-                <div className="has-text-centered">
-                  <i className="fab fa-pied-piper-alt fa-7x"></i>
-                  <br /><br />
-
-                  <p>
-                    <em>The end...</em>
-                  </p>
-                </div>
+              <div className="field is-grouped is-grouped-centered">
+                <p className="control">
+                  {/* <button
+                    className="button is-danger"
+                    id="post-comment-btn" disabled
+                  >
+                    Load more comment
+                  </button> */}
+                  <div className="has-text-centered">
+                    <i className="fab fa-pied-piper-alt fa-7x"></i>
+                    <br /><br />
+                    <p>
+                      <em>The end...</em>
+                    </p>
+                  </div>
+                </p>
+              </div>
               )}
           </div>
         </div >
     }
+    else if (this.state.errorLoading) {
+      rendering =
+        <div className="has-text-centered">
+          <button title="Reload" className="reload-btn" onClick={this.componentDidMount}>retry</button>
+        </div>
+    }
     else {
       rendering =
-        <div title="Reload" className="has-text-centered">
-          <button className="reload-btn" onClick={this.componentDidMount}>
-            <i className="fa fa-redo-alt fa-2x" />
-          </button>
+        <div className="has-text-centered">
+          <button className="reload-btn loading">...</button>
         </div>
     }
 

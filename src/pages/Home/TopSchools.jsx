@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const TopSchools = ({ schools, isLoaded, errorLoading, spinner, reload }) => {
+const TopSchools = ({ schools, isLoaded, errorLoading, reload }) => {
   let rendering;
   if (isLoaded) {
     rendering = schools.map(school => (
@@ -51,20 +51,22 @@ const TopSchools = ({ schools, isLoaded, errorLoading, spinner, reload }) => {
         </div>
       </div>
     ));
-  } else {
-    rendering = (
+  } else if (errorLoading) {
+    rendering =
       <div className="column has-text-centered">
-        <div title="Reload" className="has-text-centered">
-          <button
-            className="reload-btn"
-            disabled={errorLoading === false}
-            onClick={reload}
-          >
-            <i className={"fa " + spinner + " fa-2x"} />
-          </button>
-        </div>
+      <div className="has-text-centered">
+        <button title="Reload" className="reload-btn" onClick={reload}>retry</button>
       </div>
-    );
+    </div>
+  }
+  else {
+    rendering =
+        <div className="column has-text-centered">
+      <div className="has-text-centered">
+        <button className="reload-btn loading">...</button>
+      </div>
+        </div>
+
   }
 
   return (

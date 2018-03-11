@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import './ReviewForm.css';
 import APIHelper, { errors_to_array } from '../../api-helpers.js';
+import ObjectNotFound from './../ObjectNotFound/ObjectNotFound';
 
 
 class ReviewForm extends Component {
@@ -11,7 +12,9 @@ class ReviewForm extends Component {
     this.state = {
       school: [],
       content: '',
+      submitting: false,
       isLoaded: false,
+      errorLoading: false,
       toastId: null,
       errors: []
     };
@@ -20,23 +23,40 @@ class ReviewForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     const id = nextProps.match.params.id;
-    this.getSchool(id);
+    if (!isNaN(Number(id))) {
+      this.setState({ errorLoading: false });
+      this.getSchool(id);
+      window.scrollTo(0, 0);
+    }
+    else {
+      this.setState({ notFound: true });
+    }
   }
 
   componentDidMount() {
     const id = this.props.match.params.id;
-    this.getSchool(id);
-    window.scrollTo(0, 0);
+    if (!isNaN(Number(id))) {
+      this.setState({ errorLoading: false });
+      this.getSchool(id);
+      window.scrollTo(0, 0);
+    }
+    else {
+      this.setState({ notFound: true });
+    }
   }
 
   async getSchool(id) {
     try {
       const res = await this.api.get(`school/${id}`);
       const school = res.data;
-      this.setState({ school: school, isLoaded: true, error: [] });
+      this.setState({ school: school, isLoaded: true, errors: [], errorLoading:false });
     }
     catch (e) {
-      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      let errors = errors_to_array(e);
+      this.setState({ errors: errors, isLoaded: false, errorLoading:true });
+      if (errors === 404) {
+        this.setState({ notFound: true });
+      }
       if (toast.isActive(this.state.toastId)) {
         toast.update(
           this.state.toastId,
@@ -65,9 +85,10 @@ class ReviewForm extends Component {
   };
 
   async submitReview(data) {
+    this.setState({ submitting: true });
     try {
       const res = await this.api.post('add-review', data, true);
-
+      this.setState({ errors: [] });
       toast.info('Review published, redirecting...');
       let func = this.props.history;
       window.setTimeout(function () {
@@ -75,12 +96,16 @@ class ReviewForm extends Component {
       }, 3500);
     }
     catch (e) {
-      this.setState({ errors: errors_to_array(e) });
+      this.setState({ errors: errors_to_array(e), submitting:false });
       toast.error('An error occured');
     }
   }
 
   render() {
+    if (this.state.notFound) {
+      return <ObjectNotFound object_model="Publish Review on School" />;
+    }
+
     let rendering;
     if (this.state.isLoaded) {
       rendering =
@@ -95,7 +120,6 @@ class ReviewForm extends Component {
               <textarea
                 className="textarea"
                 placeholder="Your Review"
-                rows="10"
                 value={this.state.content}
                 onChange={this.handleChange}
                 required
@@ -108,7 +132,7 @@ class ReviewForm extends Component {
               <br />
               <div className="field is-grouped is-grouped-centered">
                 <p className="control">
-                  <button type="submit" className="button is-success">
+                <button type="submit" className="button is-danger" disabled={this.state.submitting}>
                     <i className="fa fa-comment"></i>&nbsp;&nbsp;Publish
                 </button>
                 </p>
@@ -120,12 +144,16 @@ class ReviewForm extends Component {
           </div>
         </div>
     }
+    else if (this.state.errorLoading) {
+      rendering =
+        <div className="has-text-centered">
+          <button title="Reload" className="reload-btn" onClick={this.componentDidMount}>retry</button>
+        </div>
+    }
     else {
       rendering =
-        <div title="Reload" className="has-text-centered">
-          <button className="reload-btn" onClick={this.componentDidMount}>
-            <i className="fa fa-redo-alt fa-2x" />
-          </button>
+        <div className="has-text-centered">
+          <button className="reload-btn loading">...</button>
         </div>
     }
 

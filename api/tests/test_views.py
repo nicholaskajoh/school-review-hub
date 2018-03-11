@@ -6,6 +6,11 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from api.management.commands import rate_and_rank
 # from unittest import mock
 import datetime
+from django.conf import settings
+
+# set PRODUCTION to false to prevent api calls to sentiment service
+settings.PRODUCTION = False
+
 
 def paginate(input_list, page, results_per_page=10):
     paginator = Paginator(input_list, results_per_page)

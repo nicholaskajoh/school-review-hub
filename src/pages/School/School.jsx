@@ -18,6 +18,7 @@ class School extends Component {
       lowerRatedSchools: [],
       numLowerRatedSchools: 0,
       isLoaded: false,
+      errorLoading: false,
       toastId: null,
       errors: [],
       notFound: false,
@@ -27,9 +28,15 @@ class School extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const schoolId = nextProps.match.params.id;
-    this.getSchool(schoolId);
-    this.getLowerRatedSchools(schoolId);
+    const schoolId = this.props.match.params.id;
+    if (!isNaN(Number(schoolId))) {
+      this.getSchool(schoolId);
+      this.getLowerRatedSchools(schoolId);
+      window.scrollTo(0, 0);
+    }
+    else {
+      this.setState({ notFound: true });
+    }
   }
 
   componentDidMount() {
@@ -48,11 +55,11 @@ class School extends Component {
     try {
       const res = await this.api.get(`school/${id}`);
       const school = res.data;
-      this.setState({ school: school });
+      this.setState({ school: school, errors: [], isLoaded: true, errorLoading: false });
     }
     catch (e) {
       let errors = errors_to_array(e);
-      this.setState({ errors: errors, isLoaded: false });
+      this.setState({ errors: errors, isLoaded: false, errorLoading: true });
       if (errors === 404) {
         this.setState({ notFound: true });
       }
@@ -81,11 +88,11 @@ class School extends Component {
       lowerRatedSchools = lowerRatedSchools.slice(0, 3);
       this.setState({
         lowerRatedSchools: lowerRatedSchools,
-        numLowerRatedSchools: numLowerRatedSchools, isLoaded: true
+        numLowerRatedSchools: numLowerRatedSchools, isLoaded: true, errorLoading:false
       });
     }
     catch (e) {
-      this.setState({ errors: errors_to_array(e), isLoaded: false });
+      this.setState({ errors: errors_to_array(e), isLoaded: false, errorLoading: true });
       if (toast.isActive(this.state.toastId) || this.state.toastId) {
         toast.update(
           this.state.toastId,
@@ -124,14 +131,17 @@ class School extends Component {
           <Reports schoolId={this.props.match.params.id} />
         </div >
     }
+    else if (this.state.errorLoading) {
+      rendering =
+        <div className="has-text-centered">
+          <button title="Reload" className="reload-btn" onClick={this.componentDidMount}>retry</button>
+        </div>
+    }
     else {
       rendering =
-        <div title="Reload" className="has-text-centered" >
-          <br />
-          <button className="reload-btn" onClick={this.componentDidMount}>
-            <i className="fa fa-redo-alt fa-2x" />
-          </button>
-        </div >
+        <div className="has-text-centered">
+          <button className="reload-btn loading">...</button>
+        </div>
     }
     return (
       <div>

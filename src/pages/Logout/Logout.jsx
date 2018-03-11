@@ -11,14 +11,15 @@ class Logout extends React.Component {
   }
 
   async logout() {
-    localStorage.removeItem('authToken');
     try
     {
       await this.api.get('logout', true);
+      localStorage.removeItem('authToken');
     }
     catch (e)
     {
-      console.log('I no actually get work do for here');
+      console.log('Logout is not working.. but we would log you out anyway');
+      localStorage.removeItem('authToken');
     }
   }
 

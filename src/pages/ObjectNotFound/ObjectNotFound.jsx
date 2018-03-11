@@ -9,7 +9,7 @@ class ObjectNotFound extends Component {
     return (
       <div className="section">
       <div className="container">
-        <h1 className="title has-text-centered">The {this.props.object_model} your looking for was not found</h1>
+        <h1 className="title has-text-centered">The {this.props.object_model} you are looking for was not found</h1>
         <br />
         <h1 className="subtitle has-text-centered">
         However you can check {' '}

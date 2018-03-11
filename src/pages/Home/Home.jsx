@@ -25,9 +25,6 @@ class Home extends Component {
       matchesErrorLoading: false,
       reviewsErrorLoading: false,
 
-      schoolsSpinner: 'fa-spinner fa-spin',
-      matchesSpinner: 'fa-spinner fa-spin',
-      reviewsSpinner: 'fa-spinner fa-spin',
       toastId: null,
       errors: []
     };
@@ -46,8 +43,7 @@ class Home extends Component {
   async getSchools() {
     this.setState({
       schoolsHaveLoaded: false,
-      schoolsErrorLoading: false,
-      schoolsSpinner: 'fa-spinner fa-spin'
+      schoolsErrorLoading: false
     });
     try {
       const res = await this.api.get('top-schools');
@@ -56,8 +52,7 @@ class Home extends Component {
     } catch (e) {
       this.setState({
         errors: errors_to_array(e),
-        schoolsErrorLoading: true,
-        schoolsSpinner: 'fa-redo-alt'
+        schoolsErrorLoading: true
       });
       if (toast.isActive(this.state.toastId)) {
         toast.update(this.state.toastId, {
@@ -75,8 +70,7 @@ class Home extends Component {
   async getMatches() {
     this.setState({
       matchesHaveLoaded: false,
-      matchesErrorLoading: false,
-      matchesSpinner: 'fa-spinner fa-spin'
+      matchesErrorLoading: false
     });
     try {
       const res = await this.api.get('suggested-matches', true);
@@ -88,8 +82,7 @@ class Home extends Component {
     } catch (e) {
       this.setState({
         errors: errors_to_array(e),
-        matchesErrorLoading: true,
-        matchesSpinner: 'fa-redo-alt'
+        matchesErrorLoading: true
       });
       if (toast.isActive(this.state.toastId)) {
         toast.update(this.state.toastId, {
@@ -107,8 +100,7 @@ class Home extends Component {
   async getReviews() {
     this.setState({
       reviewsHaveLoaded: false,
-      reviewsErrorLoading: false,
-      reviewsSpinner: 'fa-spinner fa-spin'
+      reviewsErrorLoading: false
     });
     try {
       const res = await this.api.get('top-reviews');
@@ -117,8 +109,7 @@ class Home extends Component {
     } catch (e) {
       this.setState({
         errors: errors_to_array(e),
-        reviewsErrorLoading: true,
-        reviewsSpinner: 'fa-redo-alt'
+        reviewsErrorLoading: true
       });
       if (toast.isActive(this.state.toastId)) {
         toast.update(this.state.toastId, {
@@ -188,7 +179,6 @@ class Home extends Component {
               schools={this.state.topSchools}
               isLoaded={this.state.schoolsHaveLoaded}
               errorLoading={this.state.schoolsErrorLoading}
-              spinner={this.state.schoolsSpinner}
               reload={this.getSchools}
             />
           </TabPanel>
@@ -197,7 +187,6 @@ class Home extends Component {
               matches={this.state.suggestedMatches}
               isLoaded={this.state.matchesHaveLoaded}
               errorLoading={this.state.matchesErrorLoading}
-              spinner={this.state.matchesSpinner}
               reload={this.getMatches}
             />
           </TabPanel>
@@ -206,7 +195,6 @@ class Home extends Component {
               reviews={this.state.topReviews}
               isLoaded={this.state.reviewsHaveLoaded}
               errorLoading={this.state.reviewsErrorLoading}
-              spinner={this.state.reviewsSpinner}
               reload={this.getReviews}
             />
           </TabPanel>

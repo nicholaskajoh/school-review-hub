@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 class School(models.Model):
     name = models.CharField(max_length=150)
@@ -20,11 +21,33 @@ class Review(models.Model):
     school = models.ForeignKey('School', related_name='reviews', on_delete=models.CASCADE)
     content = models.TextField()
     reviewer = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
+    sentiment = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.content
+
+    # Override models save method
+    def save(self, *args, **kwargs):
+        
+        # only make api calls if in production
+        if settings.PRODUCTION:
+            import paralleldots
+            from paralleldots import sentiment as pd_sentiment
+            # Setup ParallelDots.
+            paralleldots.set_api_key(settings.PARALLEL_DOTS_API_KEY)
+
+            # Get sentiment score.
+            sentiment_text = pd_sentiment(self.content)['sentiment']
+            if sentiment_text == "positive":
+                sentiment_score = 1
+            elif sentiment_text == "negative":
+                sentiment_score = -1
+            elif sentiment_text == "neutral":
+                sentiment_score = 0
+            self.sentiment = sentiment_score        
+        super(Review, self).save(*args, **kwargs)
 
 
 class Comparison(models.Model):
@@ -70,11 +93,34 @@ class Report(models.Model):
     school = models.ForeignKey('School', related_name='reports', on_delete=models.CASCADE)
     content = models.TextField()
     reporter = models.ForeignKey(User, related_name='reports', null=True, on_delete=models.SET_NULL)
+    sentiment = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.content
+
+    # Override models save method
+    def save(self, *args, **kwargs):
+        
+        # only make api calls if in production
+        if settings.PRODUCTION:
+            import paralleldots
+            from paralleldots import sentiment as pd_sentiment
+            # Setup ParallelDots.
+            paralleldots.set_api_key(settings.PARALLEL_DOTS_API_KEY)
+
+            # Get sentiment score.
+            sentiment_text = pd_sentiment(self.content)['sentiment']
+            if sentiment_text == "positive":
+                sentiment_score = 1
+            elif sentiment_text == "negative":
+                sentiment_score = -1
+            elif sentiment_text == "neutral":
+                sentiment_score = 0
+            self.sentiment = sentiment_score
+        
+        super(Report, self).save(*args, **kwargs)
 
 
 class Comment(models.Model):
