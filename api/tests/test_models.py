@@ -1,6 +1,12 @@
 from django.test import TestCase
 from .factories import *
 from api.models import Comment, Upvote
+from unittest import mock
+from django.conf import settings
+
+# set PRODUCTION to false to prevent api calls to sentiment service
+settings.PRODUCTION = False
+
 
 class SchoolTestCase(TestCase):
     
@@ -16,7 +22,7 @@ class ReviewTestCase(TestCase):
     
     def setUp(self):
         pass
-  
+    
     def test_review_string_representation(self):
         review = ReviewFactory()
         self.assertEqual(str(review), review.content)

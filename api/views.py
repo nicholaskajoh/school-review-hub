@@ -247,10 +247,11 @@ class UpvoteView(APIView):
             upvoter = request.user).first()
         if upvote:
             upvote.delete()
+            return Response(data={'type': -1}, status=status.HTTP_200_OK)
         else:
             Upvote.objects.create(entity = entity_type,entity_id = entity_id,
             upvoter = request.user)
-        return Response(status=status.HTTP_200_OK)
+            return Response(data={'type': 1}, status=status.HTTP_200_OK)
 
 
 class CheckUpvoteView(APIView):

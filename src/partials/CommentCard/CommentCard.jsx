@@ -4,7 +4,7 @@ import TimeAgo from 'react-time-ago';
 import 'react-time-ago/Tooltip.css';
 
 
-const CommentCard = ({ comment }) => (
+const CommentCard = ({ comment, upvote }) => (
   <div className="box">
     <article className="media">
 
@@ -21,7 +21,9 @@ const CommentCard = ({ comment }) => (
         <nav className="level is-mobile">
           <div className="level-left">
             <a className="level-item has-text-dark">
-              <span className="icon is-small has-text-success" title="upvotes">
+              <span className="icon is-small has-text-success" title="upvotes"
+                onClick={(e) => upvote(comment.id)}
+              >
                 <i className="fa fa-thumbs-up"></i>
               </span>
               &nbsp;{comment.upvotes}

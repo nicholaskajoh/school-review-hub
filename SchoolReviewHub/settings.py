@@ -29,6 +29,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.getenv('DEBUG', False)))
 
+# SECURITY WARNING: don't run with debug turned on in production!
+PRODUCTION = bool(int(os.getenv('PRODUCTION', False)))
+
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',') if os.getenv('ALLOWED_HOSTS') else []
 
 
@@ -42,7 +45,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken', # api auth
     'corsheaders',
     'django_extensions',
-    'django_nose',
 
     # django
     'django.contrib.admin',
@@ -165,12 +167,18 @@ CORS_EXPOSE_HEADERS = ['X-Has-Previous', 'X-Has-Next']
 
 SHELL_PLUS = "ipython"
 
-PARALLEL_DOTS_API_KEY = os.getenv('PARALLEL_DOTS_API_KEY')
+# use coverage if in debug mode
+if DEBUG:
+    INSTALLED_APPS += ['django_nose']
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+    TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=api',
-    '--cover-html'
-]
+    NOSE_ARGS = [
+        '--with-coverage',
+        '--cover-package=api',
+        '--cover-html'
+    ]
+
+# only activate sentiment analysis only if in production    
+if PRODUCTION:
+    PARALLEL_DOTS_API_KEY = os.getenv('PARALLEL_DOTS_API_KEY')

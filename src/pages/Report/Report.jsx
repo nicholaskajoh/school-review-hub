@@ -34,6 +34,7 @@ class Report extends Component {
       notFound: false,
     };
     this.componentDidMount = this.componentDidMount.bind(this);
+    this.upvoteComment = this.upvoteComment.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -327,6 +328,44 @@ class Report extends Component {
     }
   }
 
+  async upvoteComment(comment_id)
+  {
+    try {
+      const res = await this.api.get(`upvote/${comment_id}/comment`, true);
+      let comments = this.state.comments;
+      for (let i = 0; i < comments.length; i++) {
+        if (comment_id === comments[i]['id']) {
+          comments[i]['upvotes'] += res.data['type'];
+          break;
+        }
+      }
+      this.setState({ comments: comments });
+      // if (this.toggleUpvote() === true) { toast.info('Upvoted'); }
+      // else { toast.info('Removed Upvote'); }
+
+      // const reportId = this.state.report['id'];
+      // this.getReport(reportId);
+      // this.setState({ upvoted: this.toggleUpvote(), errors: [], upvoting: '' });
+    }
+    catch (e) {
+      this.setState({ errors: errors_to_array(e)});
+      if (toast.isActive(this.state.toastId) || this.state.toastId) {
+        toast.update(
+          this.state.toastId,
+          {
+            render: `${this.state.errors}`,
+            type: toast.TYPE.ERROR,
+          }
+        )
+      }
+      else {
+        this.setState({
+          toastId: toast.error(`${this.state.errors}`)
+        });
+      }
+    }
+  }
+
   render() {
     if (this.state.notFound) {
       return <ObjectNotFound object_model="Report" />;
@@ -491,7 +530,7 @@ class Report extends Component {
               <br />
 
               {this.state.comments.map(comment => (
-                <CommentCard key={'report_comment ' + comment.id} comment={comment} />
+                <CommentCard key={'report_comment ' + comment.id} comment={comment} upvote={this.upvoteComment} />
               ))}
 
             </div>
