@@ -222,12 +222,16 @@ class TopSchoolsViewTestCase(TestCase):
           name='Justice League',location='DC',logo_url='',website='jl.edu.ng',
           rank=7,rating=40.0,
         )
+        self.school8 = SchoolFactory(
+          name='Black Panther',location='Wakanda',logo_url='',website='tichala.edu.ng',
+          rank=8,rating=30.0,
+        )
 
-    def test_if_top_schools_endpoint_returns_5_top_schools(self):
+    def test_if_top_schools_endpoint_returns_8_top_schools(self):
         url = reverse('top_schools')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        schools = School.objects.all().order_by('rank')[:5]
+        schools = School.objects.all().order_by('rank')[:8]
         serialized = SchoolSerializer(schools, many=True)
 
         self.assertEqual(len(response.data), schools.count())
@@ -240,6 +244,7 @@ class TopSchoolsViewTestCase(TestCase):
         current_top = response.data[0]
         for top_school in response.data:
             self.assertTrue(top_school['rank'] >= current_top['rank'])
+            self.assertTrue(top_school['rating'] >= current_top['rating'])
 
 
 class SRHIndexViewTestCase(TestCase):
@@ -417,8 +422,8 @@ class TopReviewsViewTestCase(TestCase):
     
     # @mock.patch('api.views.datetime.timedelta')
     # @mock.patch('api.views.timezone.now')
-    def test_if_top_reviews_endpoint_returns_top_5_reviews(self):
-    # def test_if_top_review_endpoint_returns_top_5_reviews(self, mock_now, mock_timedelta):        
+    def test_if_top_reviews_endpoint_returns_top_6_reviews(self):
+    # def test_if_top_review_endpoint_returns_top_6_reviews(self, mock_now, mock_timedelta):        
         # def func(days):
         #     return datetime.datetime(days)            
         # mock_timedelta.return_value = func
@@ -462,8 +467,8 @@ class TopReportsViewTestCase(TestCase):
     
     # @mock.patch('api.ports.datetime.timedelta')
     # @mock.patch('api.ports.timezone.now')
-    def test_if_top_reports_endpoint_returns_top_5_reports(self):
-    # def test_if_top_report_endpoint_returns_top_5_reports(self, mock_now, mock_timedelta):        
+    def test_if_top_reports_endpoint_returns_top_6_reports(self):
+    # def test_if_top_report_endpoint_returns_top_6_reports(self, mock_now, mock_timedelta):        
         # def func(days):
         #     return datetime.datetime(days)            
         # mock_timedelta.return_value = func

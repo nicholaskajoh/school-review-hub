@@ -31,7 +31,7 @@ class Login extends React.Component {
 
   async login(username, password) {
     try {
-      const res = await this.api.post('token-auth', { username, password });
+      const res = await this.api.post('login', { username, password });
       localStorage.setItem('authToken', res.data.token);
       toast.info('Logging in...');
       let func = this.props.history;

@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
 from django.contrib.auth.models import User
 from api.models import *
 from api.serializers import *
@@ -64,7 +65,7 @@ class SchoolsListView(generics.ListAPIView):
 
 
 class TopSchoolsView(generics.ListAPIView):
-    queryset = School.objects.all().order_by('rank')[:5]
+    queryset = School.objects.all().order_by('rank')[:8]
     serializer_class = SchoolSerializer
 
 
@@ -112,14 +113,14 @@ class CriteriaListView(generics.ListAPIView):
 class TopReviewsView(generics.ListAPIView):
     queryset = Review.objects.filter(
         created_at__gt=timezone.now() - datetime.timedelta(days=30 * 3)
-    ).order_by('-created_at')[:5]
+    ).order_by('-created_at')[:6]
     serializer_class = ReviewSerializer
 
 
 class TopReportsView(generics.ListAPIView):
     queryset = Report.objects.filter(
         created_at__gt=timezone.now() - datetime.timedelta(days=30 * 3)
-    ).order_by('-created_at')[:5]
+    ).order_by('-created_at')[:6]
     serializer_class = ReportSerializer
 
 
@@ -151,7 +152,7 @@ class SuggestedMatchesView(APIView):
         shuffle(schools)
         for school1 in schools:
             for school2 in schools:
-                if len(matches) == 5:
+                if len(matches) == 6:
                         break
                 if not school1[0] == school2[0] and not school1[0] in selected_schools and not school2[0] in selected_schools:
                     # Avoid duplicates i.e school1 vs school2 and school2 vs school1
@@ -233,11 +234,23 @@ class RegisterView(APIView):
             email = form.cleaned_data['email'].lower()
             user = User(username=username, email=email)
             user.set_password(form.cleaned_data['password'])
+            user.last_login = timezone.now()
             user.save()
             token  = Token.objects.create(user=user)
             return Response(data={'token':token.key}, status=status.HTTP_201_CREATED)
         return Response(data=form.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
+
+class LoginView(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        user.last_login = timezone.now()
+        user.save(update_fields=['last_login'])
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
 
 class UpvoteView(APIView):
     permission_classes = (IsAuthenticated, )

@@ -1,7 +1,24 @@
 from django.contrib import admin
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
 from .models import *
 from django.utils.html import format_html
 from django.shortcuts import reverse
+
+
+class ModifiedUserAdmin(UserAdmin):
+    list_display = ('username', 'email', 'first_name', 'last_name', 'reviews', 'reports', 'comments','is_superuser', 'last_login')
+    def comments(self, obj):
+        url = url = reverse('admin:api_comment_changelist') + '?q={}'.format(obj.username)
+        return format_html('<a href="{}" target="_blank">{}</a>', url, obj.comments.count())
+    
+    def reviews(self, obj):
+        url = url = reverse('admin:api_review_changelist') + '?q={}'.format(obj.username)
+        return format_html('<a href="{}" target="_blank">{}</a>', url, obj.reviews.count())
+    
+    def reports(self, obj):
+        url = url = reverse('admin:api_report_changelist') + '?q={}'.format(obj.username)
+        return format_html('<a href="{}" target="_blank">{}</a>', url, obj.reports.count())
 
 
 class SchoolAdmin(admin.ModelAdmin):
@@ -224,7 +241,8 @@ class UpvoteAdmin(admin.ModelAdmin):
         url = reverse('admin:api_{}_change'.format(entity), args=(obj.entity_id,))
         return format_html('<a href="{}" target="_blank">{}</a>', url, obj.entity_id)
 
-
+admin.site.unregister(User)
+admin.site.register(User, ModifiedUserAdmin)
 admin.site.register(School, SchoolAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Comment, CommentAdmin)
