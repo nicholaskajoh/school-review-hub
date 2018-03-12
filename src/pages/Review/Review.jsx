@@ -179,7 +179,7 @@ class Review extends Component {
     }
     catch (e) {
       this.setState({ errors: errors_to_array(e) });
-      if (toast.isActive(this.state.toastId) || this.state.toastId) {
+      if (toast.isActive(this.state.toastId)) {
         toast.update(
           this.state.toastId,
           {
@@ -261,7 +261,7 @@ class Review extends Component {
     }
     catch (e) {
       this.setState({ errors: errors_to_array(e), commenting: '' });
-      if (toast.isActive(this.state.toastId) || this.state.toastId) {
+      if (toast.isActive(this.state.toastId)) {
         toast.update(
           this.state.toastId,
           {
@@ -286,8 +286,21 @@ class Review extends Component {
       this.setState({ editing: false, submitting_edit: false, review: res.data })
     }
     catch (e) {
-      this.setState({ submitting_edit: false });
-      toast.error(`${errors_to_array}`);
+      this.setState({ errors:errors_to_array(e), submitting_edit: false });
+      if (toast.isActive(this.state.toastId)) {
+        toast.update(
+          this.state.toastId,
+          {
+            render: `${this.state.errors}`,
+            type: toast.TYPE.ERROR,
+          }
+        )
+      }
+      else {
+        this.setState({
+          toastId: toast.error(`${this.state.errors}`)
+        });
+      }
     }
   }
 
@@ -411,14 +424,12 @@ class Review extends Component {
                             required
                           />
                         </div>
+                        <br />
                         {this.state.errors.map((error, index) => (
                           <p key={'edit_review_error ' + index} className="help is-danger is-size-5">
                             {error}
                           </p>
                         ))}
-
-                        <br />
-
                         <div className="field is-grouped is-grouped-centered">
                           <p className="control">
                             <button type="submit" className={"button is-success is-small " + this.state.submitting_edit}>

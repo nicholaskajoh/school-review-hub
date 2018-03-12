@@ -134,12 +134,14 @@ class School extends Component {
     else if (this.state.errorLoading) {
       rendering =
         <div className="has-text-centered">
+        <br />
           <button title="Reload" className="reload-btn" onClick={this.componentDidMount}>retry</button>
         </div>
     }
     else {
       rendering =
         <div className="has-text-centered">
+        <br />
           <button className="reload-btn loading">...</button>
         </div>
     }

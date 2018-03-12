@@ -15,7 +15,8 @@ class Register extends React.Component {
       email: '',
       password: '',
       clicked: '',
-      errors: []
+      errors: [],
+      toastId: null
     };
   }
 
@@ -60,7 +61,16 @@ class Register extends React.Component {
     catch (e)
     {
       this.setState({ errors: errors_to_array(e), clicked: '' });
-      toast.error(<ToastError errors={errors_to_array(e)}/>);
+      if (toast.isActive(this.state.toastId)) {
+        toast.update(this.state.toastId, {
+          render: <ToastError errors={this.state.errors} />,
+          type: toast.TYPE.ERROR
+        });
+      } else {
+        this.setState({
+          toastId: toast.error(<ToastError errors={this.state.errors} />)
+        });
+      }
     }
   }
 
