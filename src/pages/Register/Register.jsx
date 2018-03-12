@@ -75,6 +75,7 @@ class Register extends React.Component {
   }
 
   render() {
+    window.scrollTo(0, 0);
     if (localStorage.getItem('authToken')) {
       return <Redirect to="/home" push={true} />;
     }
@@ -85,7 +86,7 @@ class Register extends React.Component {
           <div className="container has-text-centered">
             <div className="column is-4 is-offset-4">
               <h3 className="title has-text-grey">Register</h3>
-
+              <h4 className="subtitle">Register to start reviewing schools</h4>
               <div className="box">
                 <form onSubmit={this.handleSubmit} autoComplete="off">
                   <div className="field">
@@ -152,7 +153,8 @@ class Register extends React.Component {
               </div>
 
               <p className="has-text-grey">
-                <Link to="/login">Login</Link>
+                Have an account? {' '}
+                <Link to="/login" style={{textDecoration: 'underline'}}>Login</Link>
               </p>
             </div>
           </div>

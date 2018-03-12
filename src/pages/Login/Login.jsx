@@ -58,6 +58,7 @@ class Login extends React.Component {
     if (localStorage.getItem('authToken')) {
       return <Redirect to="/home" push={true} />;
     }
+    window.scrollTo(0, 0);
 
     return (
       <section className="hero is-light">
@@ -65,9 +66,6 @@ class Login extends React.Component {
           <div className="container has-text-centered">
             <div className="column is-4 is-offset-4">
               <h2 className="title has-text-grey">Login</h2>
-
-              <h4 className="subtitle">Please, login to proceed</h4>
-
               <div className="box">
                 <form onSubmit={this.handleSubmit} autoComplete="off">
                   <div className="field">
@@ -122,7 +120,8 @@ class Login extends React.Component {
               </div>
 
               <p className="has-text-grey">
-                <Link to="/register">Sign Up</Link>
+              Don't have an account? {' '}
+                <Link to="/register" style={{textDecoration:'underline'}}>Register</Link>
               </p>
             </div>
           </div>

@@ -96,11 +96,11 @@ class Header extends Component {
                 <div className="field is-grouped">
                   <p className="control">
                     <Link className="button is-success" to="/register">
-                      Sign Up
+                      Register
                     </Link>
                   </p>
                   <p>
-                    <Link className="button is-warning" to="/login">
+                    <Link className="button is-primary" to="/login">
                       Login
                     </Link>
                   </p>
